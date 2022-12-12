@@ -1,0 +1,94 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Multi-az VPC set up for Doggy App 
+
+Parameters:
+  vpcCiderBlock: 
+    Type: String
+  publicSubnet0Cidr: 
+    Type: String 
+  publicSubnet1Cidr: 
+    Type: String 
+  privateSubnet0Cidr: 
+    Type: String 
+  privateSubnet1Cidr: 
+    Type: String 
+  protectedSubnet0Cidr: 
+    Type: String 
+  protectedSubnet1Cidr: 
+    Type: String
+  isPublic: 
+    Type: String 
+    Default: 'true'
+    AllowedValues:
+      - 'true'
+      - 'false'
+#Tag parameters 
+  name: 
+    Type: String 
+  owner: 
+    Type: String
+  ownerEmail: 
+    Type: String
+  environment: 
+    Type: String
+    AllowedValues: 
+      - production
+      - development
+  project: 
+    Type: String
+
+Conditions:
+  isPublic: !Equals [ !Ref isPublic, 'true']
+
+Resources: 
+#VPC
+  vpc0:
+    Type: AWS::EC2::VPC
+    Properties: 
+      CidrBlock: !Ref vpcCiderBlock
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags: 
+        - Key: Name 
+          Value: !Sub '${AWS::StackName}-${environment}-vpc'
+        - Key: Owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
+
+  igw0: 
+    Type: AWS::EC2::InternetGateway
+    Condition: isPublic 
+    Properties: 
+      Tags:
+        - Key: Name 
+          Value: !Sub '${AWS::StackName}-${environment}-igw'
+        - Key: Owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
+
+  igw0Attach:
+    Type: AWS::EC2::VPCGatewayAttachment
+    DependsOn:
+      - igw0
+      - vpc0
+    Properties: 
+      InternetGatewayId: !Ref igw0
+      VpcId: !Ref vpc0
+
+
+Outputs:
+  vpc0id: 
+    Value: !Ref vpc0
+    Export: 
+      Name: !Sub '${AWS::StackName}-vpc-id'
+

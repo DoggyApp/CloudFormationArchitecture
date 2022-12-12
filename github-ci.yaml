@@ -1,0 +1,30 @@
+variables: 
+  owner: idanzigm
+  ownerEmail: idanzigm@gmail.com
+  environment: development 
+  project: doggyApp 
+  profile: ian
+
+stages: 
+  - validate 
+  - deploy 
+
+##Validate 
+validate: 
+  stage: validate 
+  script: aws cloudformation validate-template --template-body file://vpc.yaml 
+
+vpc-deploy: 
+  stage: deploy 
+  variables: 
+    stackName: doggy-app
+    vpcCidrBlock: 10.98.0.0/16
+    isPublic: 'true'
+  script: 
+    - aws cloudformation deploy --template-file ./vpc.yaml 
+      --stack-name $StackName
+      --no-execute-changeset --no-fail-on-empty-changeset
+      --tags owner=$owner ownerEmail=$ownerEmail environment=$environment project=$project
+      --parameter-overrides owner=$owner ownerEmail=$ownerEmail environment=$environment project=$project
+        vpcCidrBlock=$vpcCidrBlock isPublic=$isPublic
+      --profile $profile
