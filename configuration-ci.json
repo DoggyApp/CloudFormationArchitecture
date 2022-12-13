@@ -1,15 +1,16 @@
 {
     "Parameters" : {
-      "Name" : "Ian Martin",
-      "Owner" : "idanzigm",
-      "OwnerEmail" : "idanzigm@gmail.com",
-      "Project" : "Doggy App"
+      "name" : "Ian Martin",
+      "owner" : "idanzigm",
+      "ownerEmail" : "idanzigm@gmail.com",
+      "project" : "DoggyApp",
+      "environment": "production"
     },
     "Tags" : {
         "Name" : "Ian Martin",
         "Owner" : "idanzigm",
         "OwnerEmail" : "idanzigm@gmail.com",
-        "Project" : "Doggy App"
+        "Project" : "DoggyApp"
     }, 
     "StackPolicy" : {
       "Statement" : [
