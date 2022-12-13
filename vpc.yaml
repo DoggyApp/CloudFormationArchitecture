@@ -4,18 +4,6 @@ Description: Multi-az VPC set up for Doggy App
 Parameters:
   vpcCiderBlock: 
     Type: String
-  publicSubnet0Cidr: 
-    Type: String 
-  publicSubnet1Cidr: 
-    Type: String 
-  privateSubnet0Cidr: 
-    Type: String 
-  privateSubnet1Cidr: 
-    Type: String 
-  protectedSubnet0Cidr: 
-    Type: String 
-  protectedSubnet1Cidr: 
-    Type: String
   isPublic: 
     Type: String 
     Default: 'true'
