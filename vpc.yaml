@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: Multi-az VPC set up for Doggy App 
 
 Parameters:
-  vpcCiderBlock: 
+  vpcCidrBlock: 
     Type: String
   isPublic: 
     Type: String 
