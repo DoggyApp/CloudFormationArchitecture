@@ -27,4 +27,4 @@ vpc-deploy:
       --tags owner=$owner ownerEmail=$ownerEmail environment=$environment project=$project
       --parameter-overrides owner=$owner ownerEmail=$ownerEmail environment=$environment project=$project
         vpcCidrBlock=$vpcCidrBlock isPublic=$isPublic
-      --profile $profile
+      --profile $profile 
