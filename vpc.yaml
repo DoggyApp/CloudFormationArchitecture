@@ -33,7 +33,7 @@ Resources:
   vpc0:
     Type: AWS::EC2::VPC
     Properties: 
-      CidrBlock: !Ref vpcCiderBlock
+      CidrBlock: !Ref vpcCidrBlock
       EnableDnsHostnames: true
       EnableDnsSupport: true
       Tags: 
