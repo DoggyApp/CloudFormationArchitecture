@@ -4,7 +4,8 @@
       "owner" : "idanzigm",
       "ownerEmail" : "idanzigm@gmail.com",
       "project" : "DoggyApp",
-      "environment": "production"
+      "environment": "production", 
+      "vpcCidrBlock": "10.98.0.0/16"
     },
     "Tags" : {
         "Name" : "Ian Martin",
