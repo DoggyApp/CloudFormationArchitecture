@@ -66,9 +66,9 @@ Resources:
 
   igw0Attach:
     Type: AWS::EC2::VPCGatewayAttachment
-    DependsOn:
-      - igw0
-      - vpc0
+#    DependsOn:
+#      - igw0
+#      - vpc0
     Properties: 
       InternetGatewayId: !Ref igw0
       VpcId: !Ref vpc0
