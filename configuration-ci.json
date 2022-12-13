@@ -12,12 +12,5 @@
         "Owner" : "idanzigm",
         "OwnerEmail" : "idanzigm@gmail.com",
         "Project" : "DoggyApp"
-    }, 
-    "StackPolicy" : {
-      "Statement" : [
-        {
-
-        }
-      ]
     }
   }
