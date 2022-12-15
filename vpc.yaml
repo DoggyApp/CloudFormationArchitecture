@@ -3,7 +3,7 @@ Description: Multi-az VPC set up for Doggy App
 
 Parameters:
   vpcCidrBlock: 
-    Type: String
+    Type: String 
   isPublic: 
     Type: String 
     Default: 'true'
