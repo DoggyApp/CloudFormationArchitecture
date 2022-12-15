@@ -248,14 +248,13 @@ Resources:
   natGw0: 
     Type: AWS::EC2::NatGateway
     DependsOn:
-      - eip0
-      - publicSubnet0 
+      - eip0 
     Properties: 
       AllocationId: !GetAtt eip0.AllocationId
       SubnetId: !Ref publicSubnet0
       Tags: 
         - Key: Owner
-          Value: !Ref Owner
+          Value: !Ref owner
         - Key: OwnerEmail 
           Value: !Ref ownerEmail
         - Key: Environment 
