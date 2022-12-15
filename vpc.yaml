@@ -4,6 +4,8 @@ Description: Multi-az VPC set up for Doggy App
 Parameters:
   vpcCidrBlock: 
     Type: String 
+  publicSubnet0Cidr: 
+    Type: String 
   isPublic: 
     Type: String 
     Default: 'true'
@@ -71,6 +73,29 @@ Resources:
 #      - vpc0
     Properties: 
       InternetGatewayId: !Ref igw0
+      VpcId: !Ref vpc0
+
+##Subnets 
+  publicSubnet0: 
+    Type: AWS::EC2::Subnet
+    DependsOn:
+      - vpc0
+    Condition: isPublic
+    Properties: 
+      AvailabilityZone: !Select [ 0, !GetAZs "" ]
+      CidrBlock: !Ref publicSubnet0Cidr
+      MapPublicIpOnLaunch: false
+      Tags: 
+        - Key: Name 
+          Value: !Join ['-', [!Ref 'AWS::StackName', public, !Select [ 0, !GetAZs "" ] ]]
+        - Key: Owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
       VpcId: !Ref vpc0
 
 
