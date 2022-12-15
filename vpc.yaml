@@ -161,7 +161,7 @@ Resources:
       MapPublicIpOnLaunch: false
       Tags: 
         - Key: Name 
-          Value: !Sub !Join ['-', [!Ref 'AWS::StackName', private, !Select [ 1, !GetAZs "" ] ]]
+          Value: !Join ['-', [!Ref 'AWS::StackName', private, !Select [ 1, !GetAZs "" ] ]]
         - Key: Owner
           Value: !Ref owner
         - Key: OwnerEmail 
