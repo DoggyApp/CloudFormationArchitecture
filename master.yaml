@@ -36,7 +36,7 @@ Resources:
   VpcStack:
     Type: "AWS::CloudFormation::Stack"
     Properties:
-      TemplateURL: Fn::Sub: "https://s3.amazonaws.com/${templatePath}/vpc.yaml"
+      TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/vpc.yaml"
       Parameters:
         vpcCidrBlock: !Ref vpcCidrBlock
         publicSubnet0Cidr: !Ref publicSubnet0Cidr
