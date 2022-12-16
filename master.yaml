@@ -1,6 +1,8 @@
 Description: Master stack which creates all required nested stacks
 
 Parameters:
+  templatePath: 
+    Type: String 
   vpcCidrBlock: 
     Type: String 
   publicSubnet0Cidr: 
@@ -15,12 +17,26 @@ Parameters:
     Type: String 
   protectedSubnet1Cidr: 
     Type: String
+#Tag parameters 
+  name: 
+    Type: String 
+  owner: 
+    Type: String
+  ownerEmail: 
+    Type: String
+  environment: 
+    Type: String
+    AllowedValues: 
+      - production
+      - development
+  project: 
+    Type: String
 
 Resources:
   VpcStack:
     Type: "AWS::CloudFormation::Stack"
     Properties:
-      TemplateURL: "vpc.yaml"
+      TemplateURL: Fn::Sub: "https://s3.amazonaws.com/${templatePath}/vpc.yaml"
       Parameters:
         vpcCidrBlock: !Ref vpcCidrBlock
         publicSubnet0Cidr: !Ref publicSubnet0Cidr
@@ -29,6 +45,12 @@ Resources:
         privateSubnet1Cidr: !Ref privateSubnet1Cidr
         protectedSubnet0Cidr: !Ref protectedSubnet0Cidr
         protectedSubnet1Cidr: !Ref protectedSubnet1Cidr
+        #Tag parameters 
+        name: !Ref name
+        owner: !Ref owner
+        ownerEmail: !Ref ownerEmail
+        environment: !Ref environment
+        project: !Ref project
       Tags:
         - Key: Name
           Value: VpcStack

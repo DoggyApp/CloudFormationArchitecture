@@ -11,7 +11,8 @@
       "privateSubnet0Cidr": "10.98.16.0/20", 
       "privateSubnet1Cidr": "10.98.80.0/20", 
       "protectedSubnet0Cidr": "10.98.8.0/21", 
-      "protectedSubnet1Cidr": "10.98.72.0/21"
+      "protectedSubnet1Cidr": "10.98.72.0/21", 
+      "templatePath": "doggy-template-build-terminal"
     },
     "Tags" : {
         "Name" : "Ian Martin",
