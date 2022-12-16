@@ -3,34 +3,47 @@ Description: Master stack which creates all required nested stacks
 Parameters:
   templatePath: 
     Type: String 
+    Default: doggy-template-build-terminal
   vpcCidrBlock: 
     Type: String 
+    Default: 10.98.0.0/16
   publicSubnet0Cidr: 
     Type: String 
+    Default: 10.98.0.0/21
   publicSubnet1Cidr: 
     Type: String 
+    Default: 10.98.64.0/21
   privateSubnet0Cidr: 
     Type: String 
+    Default: 10.98.16.0/20
   privateSubnet1Cidr: 
     Type: String 
+    Default: 10.98.80.0/20
   protectedSubnet0Cidr: 
     Type: String 
+    Default: 10.98.8.0/21
   protectedSubnet1Cidr: 
     Type: String
+    Default: 10.98.72.0/21
 #Tag parameters 
   name: 
     Type: String 
+    Default: Ian Martin
   owner: 
     Type: String
+    Default: idanzigm
   ownerEmail: 
     Type: String
+    Default: idanzigm@gmail.com
   environment: 
     Type: String
     AllowedValues: 
       - production
       - development
+    Default: production
   project: 
     Type: String
+    Default: DoggyApp
 
 Resources:
   VpcStack:
