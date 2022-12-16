@@ -264,9 +264,6 @@ Resources:
 
   natGw1: 
     Type: AWS::EC2::NatGateway
-    DependsOn:
-      - eip1
-      - publicSubnet1
     Properties: 
       AllocationId: !GetAtt eip1.AllocationId
       SubnetId: !Ref publicSubnet1

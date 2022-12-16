@@ -1,0 +1,11 @@
+version: 0.2
+env:
+  variables:
+    TEMPLATE_BUCKET: "doggy-template-build-terminal"
+phases:
+  build:
+    commands:
+      - aws cloudformation package --template master.yaml --s3-bucket $TEMPLATE_BUCKET --output-template-file packaged-root-template.yaml
+artifacts:
+  files:
+    - 'packaged-root-template.yaml'
