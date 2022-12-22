@@ -203,5 +203,3 @@ Resources:
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId: !Ref ngw1id
       RouteTableId: !Ref privateRouteTable1 
-
-Outputs:

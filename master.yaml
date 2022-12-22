@@ -48,7 +48,7 @@ Parameters:
     Default: DoggyApp
 
 Resources:
-  VpcStack:
+  vpcStack:
     Type: "AWS::CloudFormation::Stack"
     Properties:
       TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/vpc.yaml"
@@ -77,31 +77,31 @@ Resources:
       Parameters:
         vpc0id: 
           Fn::GetAtt: 
-          - VpcStack
+          - vpcStack
           - Outputs.vpc0id
         igw0id: 
           Fn::GetAtt: 
-          - VpcStack
+          - vpcStack
           - Outputs.igw0id
         publicSubnet0id: 
           Fn::GetAtt: 
-          - VpcStack
+          - vpcStack
           - Outputs.publicSubnet0id
         publicSubnet1id: 
           Fn::GetAtt: 
-          - VpcStack
+          - vpcStack
           - Outputs.publicSubnet1id
         privateSubnet0id: 
           Fn::GetAtt: 
-          - VpcStack
+          - vpcStack
           - Outputs.privateSubnet0id
         privateSubnet1id: 
           Fn::GetAtt: 
-          - VpcStack
+          - vpcStack
           - Outputs.privateSubnet1id
         protectedSubnet0id: 
           Fn::GetAtt: 
-          - VpcStack
+          - vpcStack
           - Outputs.protectedSubnet0id
         protectedSubnet1id: 
           Fn::GetAtt: 

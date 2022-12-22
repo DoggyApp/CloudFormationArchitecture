@@ -16,6 +16,7 @@ Parameters:
     Type: String 
   protectedSubnet1Cidr: 
     Type: String
+#Condition 
   isPublic: 
     Type: String 
     Default: 'true'
@@ -281,6 +282,9 @@ Outputs:
   vpc0id: 
     Value: !Ref vpc0
 
+  igw0id: 
+    Value: !Ref igw0
+
   publicSubnet0id: 
     Value: !Ref publicSubnet0
 
@@ -298,9 +302,6 @@ Outputs:
 
   protectedSubnet1id: 
     Value: !Ref protectedSubnet1
-
-  igw0id: 
-    Value: !Ref igw0
 
   ngw0id: 
     Value: !Ref ngw0
