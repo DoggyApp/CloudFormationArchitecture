@@ -70,7 +70,7 @@ Resources:
         - Key: Name
           Value: VpcStack
 
-  RouteTablesStack:
+  routeTablesStack:
     Type: "AWS::CloudFormation::Stack"
     Properties:
       TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/routeTables.yaml"
@@ -105,15 +105,15 @@ Resources:
           - Outputs.protectedSubnet0id
         protectedSubnet1id: 
           Fn::GetAtt: 
-          - VpcStack
+          - vpcStack
           - Outputs.protectedSubnet1id
         ngw0id: 
           Fn::GetAtt: 
-          - VpcStack
+          - vpcStack
           - Outputs.ngw0id
         ngw1id: 
           Fn::GetAtt: 
-          - VpcStack
+          - vpcStack
           - Outputs.ngw1id
         #Tag parameters 
         name: !Ref name
