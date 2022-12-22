@@ -245,7 +245,7 @@ Resources:
           Value: !Ref project 
 
 ###Gateways
-  natGw0: 
+  ngw0: 
     Type: AWS::EC2::NatGateway
     DependsOn:
       - eip0 
@@ -262,7 +262,7 @@ Resources:
         - Key: project 
           Value: !Ref project 
 
-  natGw1: 
+  ngw1: 
     Type: AWS::EC2::NatGateway
     Properties: 
       AllocationId: !GetAtt eip1.AllocationId
@@ -280,6 +280,30 @@ Resources:
 Outputs:
   vpc0id: 
     Value: !Ref vpc0
-    Export: 
-      Name: !Sub '${AWS::StackName}-vpc-id'
 
+  publicSubnet0id: 
+    Value: !Ref publicSubnet0
+
+  publicSubnet1id: 
+    Value: !Ref publicSubnet1
+
+  privateSubnet0id: 
+    Value: !Ref privateSubnet0
+
+  privateSubnet1id: 
+    Value: !Ref privateSubnet1
+
+  protectedSubnet0id: 
+    Value: !Ref protectedSubnet0
+
+  protectedSubnet1id: 
+    Value: !Ref protectedSubnet1
+
+  igw0id: 
+    Value: !Ref igw0
+
+  ngw0id: 
+    Value: !Ref ngw0
+
+  ngw1id: 
+    Value: !Ref ngw1

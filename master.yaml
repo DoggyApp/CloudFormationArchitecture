@@ -1,3 +1,4 @@
+AWSTemplateFormatVersion: "2010-09-09"
 Description: Master stack which creates all required nested stacks
 
 Parameters:
@@ -25,6 +26,7 @@ Parameters:
   protectedSubnet1Cidr: 
     Type: String
     Default: 10.98.72.0/21
+
 #Tag parameters 
   name: 
     Type: String 
@@ -68,3 +70,57 @@ Resources:
         - Key: Name
           Value: VpcStack
 
+  RouteTablesStack:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/routeTables.yaml"
+      Parameters:
+        vpc0id: 
+          Fn::GetAtt: 
+          - VpcStack
+          - Outputs.vpc0id
+        igw0id: 
+          Fn::GetAtt: 
+          - VpcStack
+          - Outputs.igw0id
+        publicSubnet0id: 
+          Fn::GetAtt: 
+          - VpcStack
+          - Outputs.publicSubnet0id
+        publicSubnet1id: 
+          Fn::GetAtt: 
+          - VpcStack
+          - Outputs.publicSubnet1id
+        privateSubnet0id: 
+          Fn::GetAtt: 
+          - VpcStack
+          - Outputs.privateSubnet0id
+        privateSubnet1id: 
+          Fn::GetAtt: 
+          - VpcStack
+          - Outputs.privateSubnet1id
+        protectedSubnet0id: 
+          Fn::GetAtt: 
+          - VpcStack
+          - Outputs.protectedSubnet0id
+        protectedSubnet1id: 
+          Fn::GetAtt: 
+          - VpcStack
+          - Outputs.protectedSubnet1id
+        ngw0id: 
+          Fn::GetAtt: 
+          - VpcStack
+          - Outputs.ngw0id
+        ngw1id: 
+          Fn::GetAtt: 
+          - VpcStack
+          - Outputs.ngw1id
+        #Tag parameters 
+        name: !Ref name
+        owner: !Ref owner
+        ownerEmail: !Ref ownerEmail
+        environment: !Ref environment
+        project: !Ref project
+      Tags:
+        - Key: Name
+          Value: RouteTablesStack

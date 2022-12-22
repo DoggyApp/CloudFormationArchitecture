@@ -1,0 +1,207 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Multi-az Route Tables set up for Doggy App 
+
+Parameters:
+#Stack Parameters 
+  vpc0id: 
+    Type: String
+  igw0id: 
+    Type: String 
+  publicSubnet0id: 
+    Type: String 
+  publicSubnet1id: 
+    Type: String 
+  privateSubnet0id: 
+    Type: String 
+  privateSubnet1id: 
+    Type: String 
+  protectedSubnet0id: 
+    Type: String 
+  protectedSubnet1id: 
+    Type: String 
+  ngw0id: 
+    Type: String 
+  ngw1id: 
+    Type: String 
+#Tag parameters 
+  Name: 
+    Type: String 
+  owner: 
+    Type: String
+  ownerEmail: 
+    Type: String
+  environment: 
+    Type: String
+    AllowedValues: 
+      - production
+      - development
+  project: 
+    Type: String
+
+Resources: 
+##Route Tables 
+  publicRouteTable0: 
+    Type: AWS::EC2::RouteTable
+    Properties: 
+      Tags: 
+        - Key: Name 
+          Value: !Join ['-', [!Ref 'AWS::StackName', public, !Select [ 0, !GetAZs "" ], rt ]]
+        - Key: owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
+      VpcId: !Ref vpc0id 
+
+  publicRouteTable1: 
+    Type: AWS::EC2::RouteTable
+    Properties: 
+      Tags: 
+        - Key: Name 
+          Value: !Join ['-', [!Ref 'AWS::StackName', public, !Select [ 1, !GetAZs "" ], rt ]]
+        - Key: owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
+      VpcId: !Ref vpc0id
+
+  privateRouteTable0: 
+    Type: AWS::EC2::RouteTable
+    Properties: 
+      Tags: 
+        - Key: Name 
+          Value: !Join ['-', [!Ref 'AWS::StackName', private, !Select [ 0, !GetAZs "" ], rt ]]
+        - Key: owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
+      VpcId: !Ref vpc0id
+
+  privateRouteTable1: 
+    Type: AWS::EC2::RouteTable
+    Properties: 
+      Tags: 
+        - Key: Name 
+          Value: !Join ['-', [!Ref 'AWS::StackName', private, !Select [ 1, !GetAZs "" ], rt ]]
+        - Key: owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
+      VpcId: !Ref vpc0id
+
+  protectedRouteTable0: 
+    Type: AWS::EC2::RouteTable
+    Properties: 
+      Tags: 
+        - Key: Name 
+          Value: !Join ['-', [!Ref 'AWS::StackName', protected, !Select [ 0, !GetAZs "" ], rt ]]
+        - Key: owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
+      VpcId: !Ref vpc0id
+
+  protectedRouteTable1: 
+    Type: AWS::EC2::RouteTable
+    Properties: 
+      Tags: 
+        - Key: Name 
+          Value: !Join ['-', [!Ref 'AWS::StackName', protected, !Select [ 1, !GetAZs "" ], rt ]]
+        - Key: owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
+      VpcId: !Ref vpc0id
+
+##Route Table Association 
+  publicSubnetRTAssociation0: 
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties: 
+      RouteTableId: !Ref publicRouteTable0
+      SubnetId: !Ref publicSubnet0id
+
+  publicSubnetRTAssociation1: 
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties: 
+      RouteTableId: !Ref publicRouteTable1
+      SubnetId: !Ref publicSubnet1id
+
+  privateSubnetRTAssociation0: 
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties: 
+      RouteTableId: !Ref privateRouteTable0
+      SubnetId: !Ref privateSubnet0id
+
+  privateSubnetRTAssociation1: 
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties: 
+      RouteTableId: !Ref privateRouteTable1
+      SubnetId: !Ref privateSubnet1id
+
+  protectedSubnetRTAssociation0: 
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties: 
+      RouteTableId: !Ref protectedRouteTable0
+      SubnetId: !Ref protectedSubnet0id
+
+  protectedSubnetRTAssociation1: 
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties: 
+      RouteTableId: !Ref protectedRouteTable1
+      SubnetId: !Ref protectedSubnet1id
+
+#Routes 
+##Public Routes 
+  publicRoute0: 
+    Type: AWS::EC2::Route
+    Properties: 
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref igw0id
+      RouteTableId: !Ref publicRouteTable0
+
+  publicRoute1: 
+    Type: AWS::EC2::Route
+    Properties: 
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref igw0id
+      RouteTableId: !Ref publicRouteTable1 
+
+##Private Routes 
+  privateRoute0: 
+    Type: AWS::EC2::Route
+    Properties: 
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref ngw0id
+      RouteTableId: !Ref privateRouteTable0
+
+  privateRoute1: 
+    Type: AWS::EC2::Route
+    Properties: 
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref ngw1id
+      RouteTableId: !Ref privateRouteTable1 
+
+Outputs:
