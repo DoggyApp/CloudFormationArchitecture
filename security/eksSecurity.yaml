@@ -1,0 +1,68 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Security stack which provides EKS cluster and worker groups with permissions and encryption 
+
+Parameters:
+#Stack Parameters 
+  vpc0id:
+    Type: String
+#Tag parameters 
+  name: 
+    Type: String 
+  owner: 
+    Type: String
+  ownerEmail: 
+    Type: String
+  environment: 
+    Type: String
+    AllowedValues: 
+      - production
+      - development
+  project: 
+    Type: String
+
+Resources:
+  clusterSecurityGroup: 
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: EKS cluster security group 
+      Tags: 
+        - Key: Name 
+          Value: !Join ['-', [!Ref 'AWS::StackName', EKS-cluster-sg ]]
+        - Key: owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
+      VpcId: !Ref vpc0id
+
+  outboundRuleTCP443: 
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties: 
+      Description: Allow outbound traffic to TCP 443 
+      DestinationPrefixListId: String
+      DestinationSecurityGroupId: String
+      FromPort: Integer
+      IpProtocol: String
+      ToPort: Integer
+
+
+  nodeSecurityGroup: 
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: EKS node security group 
+      Tags: 
+        - Key: Name 
+          Value: !Join ['-', [!Ref 'AWS::StackName', EKS-node-sg ]]
+        - Key: owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
+      VpcId: !Ref vpc0id
+

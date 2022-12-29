@@ -51,7 +51,7 @@ Resources:
   vpcStack:
     Type: "AWS::CloudFormation::Stack"
     Properties:
-      TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/vpc.yaml"
+      TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/vpc/vpc.yaml"
       Parameters:
         vpcCidrBlock: !Ref vpcCidrBlock
         publicSubnet0Cidr: !Ref publicSubnet0Cidr
@@ -73,7 +73,7 @@ Resources:
   routeTablesStack:
     Type: "AWS::CloudFormation::Stack"
     Properties:
-      TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/routeTables.yaml"
+      TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/vpc/routeTables.yaml"
       Parameters:
         vpc0id: 
           Fn::GetAtt: 
@@ -124,3 +124,45 @@ Resources:
       Tags:
         - Key: Name
           Value: RouteTablesStack
+
+  eksStack:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/eks/eks.yaml"
+      Parameters:
+        privateSubnet0id: 
+          Fn::GetAtt: 
+          - vpcStack
+          - Outputs.privateSubnet0id
+        privateSubnet1id: 
+          Fn::GetAtt: 
+          - vpcStack
+          - Outputs.privateSubnet1id
+        #Tag parameters 
+        name: !Ref name
+        owner: !Ref owner
+        ownerEmail: !Ref ownerEmail
+        environment: !Ref environment
+        project: !Ref project
+      Tags:
+        - Key: Name
+          Value: EksStack
+
+  eksSecurityStack:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/security/eksSecurity.yaml"
+      Parameters:
+        vpc0id: 
+          Fn::GetAtt: 
+          - vpcStack
+          - Outputs.vpc0id
+        #Tag parameters 
+        name: !Ref name
+        owner: !Ref owner
+        ownerEmail: !Ref ownerEmail
+        environment: !Ref environment
+        project: !Ref project
+      Tags:
+        - Key: Name
+          Value: EksSecurityStack

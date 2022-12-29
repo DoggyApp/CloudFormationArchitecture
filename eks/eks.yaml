@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: EKS stack which creates EKS cluster and worker groups 
+
+Parameters:
+#Stack Parameters 
+  privateSubnet0id: 
+    Type: String 
+  privateSubnet1id: 
+    Type: String
+#Tag parameters 
+  name: 
+    Type: String 
+  owner: 
+    Type: String
+  ownerEmail: 
+    Type: String
+  environment: 
+    Type: String
+    AllowedValues: 
+      - production
+      - development
+  project: 
+    Type: String
+
+Resources:
+  eksCluster: 
+    Type: AWS::EKS::Cluster
+    Properties: 
+      #EncryptionConfig: 
+      KubernetesNetworkConfig: 
+        ServiceIpv4Cidr: 10.100.0.0/16
+      Logging: 
+        Logging
+      ResourcesVpcConfig: 
+        SecurityGroupIds: 
+          - TODO
+        SubnetIds: 
+          - privateSubnet0id
+          - privateSubnet1id
+      RoleArn: String
+      Tags: 
+        - Key: Name 
+          Value: !Join ['-', [!Ref 'AWS::StackName', eks, cluster ]]
+        - Key: owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
+      Version: String
