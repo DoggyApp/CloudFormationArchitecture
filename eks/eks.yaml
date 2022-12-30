@@ -7,6 +7,17 @@ Parameters:
     Type: String 
   privateSubnet1id: 
     Type: String
+  clusterSGid: 
+    Type: String 
+  eksVersion: 
+    Type: String
+    Default: "1.24"
+    AllowedValues: 
+      - "1.24"
+      - "1.23"
+      - "1.22"
+      - "1.21"
+      - "1.20"
 #Tag parameters 
   name: 
     Type: String 
@@ -26,18 +37,18 @@ Resources:
   eksCluster: 
     Type: AWS::EKS::Cluster
     Properties: 
-      #EncryptionConfig: 
+      #EncryptionConfig: TODO
       KubernetesNetworkConfig: 
         ServiceIpv4Cidr: 10.100.0.0/16
-      Logging: 
-        Logging
+      #Logging: 
+        #TODO
       ResourcesVpcConfig: 
         SecurityGroupIds: 
-          - TODO
+          - clusterSGid
         SubnetIds: 
           - privateSubnet0id
           - privateSubnet1id
-      RoleArn: String
+      RoleArn: arn:aws:iam::109798190983:role/EKSclusterRole
       Tags: 
         - Key: Name 
           Value: !Join ['-', [!Ref 'AWS::StackName', eks, cluster ]]
@@ -49,4 +60,4 @@ Resources:
           Value: !Ref environment 
         - Key: project 
           Value: !Ref project 
-      Version: String
+      Version: eksVersion

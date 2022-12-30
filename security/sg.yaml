@@ -38,17 +38,6 @@ Resources:
           Value: !Ref project 
       VpcId: !Ref vpc0id
 
-  outboundRuleTCP443: 
-    Type: AWS::EC2::SecurityGroupEgress
-    Properties: 
-      Description: Allow outbound traffic to TCP 443 
-      DestinationPrefixListId: String
-      DestinationSecurityGroupId: String
-      FromPort: Integer
-      IpProtocol: String
-      ToPort: Integer
-
-
   nodeSecurityGroup: 
     Type: AWS::EC2::SecurityGroup
     Properties: 
@@ -66,3 +55,9 @@ Resources:
           Value: !Ref project 
       VpcId: !Ref vpc0id
 
+Outputs: 
+  clusterSGid: 
+    Value: !Ref clusterSecurityGroup
+
+  nodeSGid: 
+    Value: !Ref nodeSecurityGroup

@@ -138,6 +138,10 @@ Resources:
           Fn::GetAtt: 
           - vpcStack
           - Outputs.privateSubnet1id
+        clusterSGid: 
+          Fn::GetAtt: 
+          - sgStack
+          - Outputs.clusterSGid
         #Tag parameters 
         name: !Ref name
         owner: !Ref owner
@@ -148,10 +152,10 @@ Resources:
         - Key: Name
           Value: EksStack
 
-  eksSecurityStack:
+  sgStack:
     Type: "AWS::CloudFormation::Stack"
     Properties:
-      TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/security/eksSecurity.yaml"
+      TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/security/sg.yaml"
       Parameters:
         vpc0id: 
           Fn::GetAtt: 
@@ -165,4 +169,4 @@ Resources:
         project: !Ref project
       Tags:
         - Key: Name
-          Value: EksSecurityStack
+          Value: SecurityGroupStack
