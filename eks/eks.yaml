@@ -60,4 +60,3 @@ Resources:
           Value: !Ref environment 
         - Key: project 
           Value: !Ref project 
-      Version: eksVersion
