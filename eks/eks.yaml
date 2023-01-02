@@ -44,10 +44,10 @@ Resources:
         #TODO
       ResourcesVpcConfig: 
         SecurityGroupIds: 
-          - clusterSGid
+          - !Ref clusterSGid
         SubnetIds: 
-          - privateSubnet0id
-          - privateSubnet1id
+          - !Ref privateSubnet0id
+          - !Ref privateSubnet1id
       RoleArn: arn:aws:iam::109798190983:role/EKSclusterRole
       Tags: 
         - Key: Name 
