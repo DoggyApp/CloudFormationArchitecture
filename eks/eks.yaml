@@ -67,7 +67,7 @@ Resources:
       ClusterName: eksCluster
       PodExecutionRoleArn: arn:aws:iam::109798190983:role/Fargate-execution
       Selectors: 
-        - Namespace: Namespace0 
+        - Namespace: demo-space
       Subnets: 
         - !Ref privateSubnet0id
       Tags: 
@@ -88,7 +88,7 @@ Resources:
       ClusterName: eksCluster
       PodExecutionRoleArn: arn:aws:iam::109798190983:role/Fargate-execution
       Selectors: 
-        - Namespace: Namespace1
+        - Namespace: demo-space
       Subnets: 
         - !Ref privateSubnet1id
       Tags: 
