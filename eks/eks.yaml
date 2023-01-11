@@ -60,3 +60,45 @@ Resources:
           Value: !Ref environment 
         - Key: project 
           Value: !Ref project 
+
+  fargateProfile0: 
+    Type: AWS::EKS::FargateProfile
+    Properties: 
+      ClusterName: eksCluster
+      PodExecutionRoleArn: arn:aws:iam::109798190983:role/Fargate-execution
+      Selectors: 
+        - Namespace: Namespace0 
+      Subnets: 
+        - !Ref privateSubnet0id
+      Tags: 
+        - Key: Name 
+          Value: !Join ['-', [!Ref 'AWS::StackName', eks, profile0 ]]
+        - Key: owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
+
+  fargateProfile1: 
+    Type: AWS::EKS::FargateProfile
+    Properties: 
+      ClusterName: eksCluster
+      PodExecutionRoleArn: arn:aws:iam::109798190983:role/Fargate-execution
+      Selectors: 
+        - Namespace: Namespace1
+      Subnets: 
+        - !Ref privateSubnet1id
+      Tags: 
+        - Key: Name 
+          Value: !Join ['-', [!Ref 'AWS::StackName', eks, profile1 ]]
+        - Key: owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
