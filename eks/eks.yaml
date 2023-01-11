@@ -64,7 +64,7 @@ Resources:
   fargateProfile0: 
     Type: AWS::EKS::FargateProfile
     Properties: 
-      ClusterName: eksCluster
+      ClusterName: !Ref eksCluster
       PodExecutionRoleArn: arn:aws:iam::109798190983:role/Fargate-execution
       Selectors: 
         - Namespace: demo-space
