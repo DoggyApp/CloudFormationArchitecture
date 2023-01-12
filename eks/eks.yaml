@@ -49,6 +49,7 @@ Resources:
           - !Ref privateSubnet0id
           - !Ref privateSubnet1id
       RoleArn: arn:aws:iam::109798190983:role/EKSclusterRole
+      Name: doggy-app-eks-cluster-0
       Tags: 
         - Key: Name 
           Value: !Join ['-', [!Ref 'AWS::StackName', eks, cluster ]]
@@ -64,7 +65,7 @@ Resources:
   fargateProfile0: 
     Type: AWS::EKS::FargateProfile
     Properties: 
-      ClusterName: !Ref eksCluster
+      ClusterName: doggy-app-eks-cluster-0
       PodExecutionRoleArn: arn:aws:iam::109798190983:role/Fargate-execution
       Selectors: 
         - Namespace: demo-space
@@ -85,7 +86,7 @@ Resources:
   fargateProfile1: 
     Type: AWS::EKS::FargateProfile
     Properties: 
-      ClusterName: eksCluster
+      ClusterName: doggy-app-eks-cluster-0
       PodExecutionRoleArn: arn:aws:iam::109798190983:role/Fargate-execution
       Selectors: 
         - Namespace: demo-space
