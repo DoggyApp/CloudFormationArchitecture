@@ -64,6 +64,8 @@ Resources:
 
   fargateProfile0: 
     Type: AWS::EKS::FargateProfile
+    DependsOn: 
+      - eksCluster
     Properties: 
       ClusterName: doggy-app-eks-cluster-0
       PodExecutionRoleArn: arn:aws:iam::109798190983:role/Fargate-execution
@@ -85,6 +87,8 @@ Resources:
 
   fargateProfile1: 
     Type: AWS::EKS::FargateProfile
+    DependsOn: 
+      - eksCluster
     Properties: 
       ClusterName: doggy-app-eks-cluster-0
       PodExecutionRoleArn: arn:aws:iam::109798190983:role/Fargate-execution
