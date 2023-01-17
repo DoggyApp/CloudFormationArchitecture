@@ -1,8 +1,18 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: Creates encryption keys for use in EKS folder components 
 
-
-
+Parameters:
+ owner: 
+    Type: String
+  ownerEmail: 
+    Type: String
+  environment: 
+    Type: String
+    AllowedValues: 
+      - production
+      - development
+  project: 
+    Type: String
 
 Resources: 
   ec2mgmtkey: 
@@ -37,6 +47,17 @@ Resources:
               StringEquals: 
                 kms:ViaService: !Sub 'ec2.$(AWS::Region).amazonaws.com'
                 kms:CallerAccount: !Sub '$(AWS::AccountId)'
+      Tags: 
+        - Key: Name 
+          Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]
+        - Key: owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
 
   ec2mgmtkeyalias: 
     Type: AWS::KMS::Alias
