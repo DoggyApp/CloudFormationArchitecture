@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: Creates encryption keys for use in EKS folder components 
 
 Parameters:
- owner: 
+  owner: 
     Type: String
   ownerEmail: 
     Type: String
