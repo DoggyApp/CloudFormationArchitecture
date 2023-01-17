@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Creates encryption keys for use in EKS folder components 
+
+
+
+
+Resources: 
+  ec2mgmtkey: 
+    Type: AWS::KMS::Key
+    Properties: 
+      Description: Encrypts the volume attached to the ec2 booted with kubctl managing the doggy app EKS cluster 
+      Enabled: True
+      EnableKeyRotation: True
+      KeyPolicy: 
+        Version: 2012-10-17
+        Id: key-default-1
+        Statement:
+          - Sid: Enable IAM User Permissions
+            Effect: Allow
+            Principal:
+              AWS: 'arn:aws:$(AWS::AccountId):root'
+            Action: 'kms:*'
+            Resource: '*'
+          - Sid: Allows access through EBS for all principals in the account that are authorized 
+            Effect: Allow
+            Principal:
+              AWS: '*'
+            Action:
+              - 'kms:DescribeKey'
+              - 'kms:Encrypt'
+              - 'kms:Decrypt'
+              - 'kms:ReEncrypt*'
+              - 'kms:GenerateDataKey'
+              - 'kms:CreateGrant'
+            Resource: '*'
+            Condition: 
+              StringEquals: 
+                kms:ViaService: !Sub 'ec2.$(AWS::Region).amazonaws.com'
+                kms:CallerAccount: !Sub '$(AWS::AccountId)'
+
+  ec2mgmtkeyalias: 
+    Type: AWS::KMS::Alias
+    Properties: 
+      AliasName: 'alias/ec2mgmtkey-doggyapp'
+      TargetKeyId: !Ref ec2mgmtkey
+
+Outputs: 
+  ec2KeyId: 
+    Value: !Ref ec2mgmtkey
+
+

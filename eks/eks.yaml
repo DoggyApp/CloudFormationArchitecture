@@ -19,8 +19,6 @@ Parameters:
       - "1.21"
       - "1.20"
 #Tag parameters 
-  name: 
-    Type: String 
   owner: 
     Type: String
   ownerEmail: 

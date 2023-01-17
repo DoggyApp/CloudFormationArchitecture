@@ -6,8 +6,6 @@ Parameters:
   vpc0id:
     Type: String
 #Tag parameters 
-  name: 
-    Type: String 
   owner: 
     Type: String
   ownerEmail: 
@@ -55,9 +53,29 @@ Resources:
           Value: !Ref project 
       VpcId: !Ref vpc0id
 
+  managerSecurityGroup: 
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: EC2 manager security group 
+      Tags: 
+        - Key: Name 
+          Value: !Join ['-', [!Ref 'AWS::StackName', EC2-manager-sg ]]
+        - Key: owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
+      VpcId: !Ref vpc0id
+
 Outputs: 
   clusterSGid: 
     Value: !Ref clusterSecurityGroup
 
   nodeSGid: 
     Value: !Ref nodeSecurityGroup
+
+  managerSGid: 
+    Value: !Ref managerSecurityGroup

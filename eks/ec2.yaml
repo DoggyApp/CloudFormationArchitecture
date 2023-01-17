@@ -1,0 +1,122 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: EKS stack which creates EKS cluster and worker groups 
+
+Parameters:
+#Imported Parameters 
+  managerSGid: 
+    Type: String
+  ec2KeyId: 
+    Type: String 
+#Stack Parameters 
+  volumeType: 
+    Type: String
+    Default: gp3 
+    AllowedValues: 
+      - gp2
+      - gp3
+  disableApiTermination: 
+    Type: String 
+    Default: True
+    AllowedValues: 
+      - True
+      - False
+  ebsOptimized: 
+    Type: String 
+    Default: True
+    AllowedValues: 
+      - True
+      - False
+  keyName: 
+    Type: AWS::EC2::KeyPair::KeyName
+  imageId: 
+    Type: String 
+    Default: graviton
+    AllowedValues:
+      - graviton 
+      - x86
+  instanceSize: 
+    Type: String
+    Default: medium 
+    AllowedValues: 
+      - small 
+      - medium 
+#Tag parameters 
+  owner: 
+    Type: String
+  ownerEmail: 
+    Type: String
+  environment: 
+    Type: String
+    AllowedValues: 
+      - production
+      - development
+  project: 
+    Type: String
+
+Mappings: 
+  amiId: 
+    us-east-1: 
+      graviton: ami-03a45a5ac837f33b7 
+      x86: ami-0b5eea76982371e91
+
+  instanceMap: 
+    graviton: 
+      small: t4g.small
+      medium: t4g.medium 
+    x84: 
+      small: t4.small 
+      medium: t4.medium 
+
+Resources: 
+  lt: 
+    Type: AWS::EC2::LaunchTemplate
+    Properties: 
+      LaunchTemplateData: 
+        BlockDeviceMappings: 
+          - DeviceName: '/dev/xvda'
+            Ebs: 
+              DeleteOnTermination: True
+              Encrypted: True
+              KmsKeyId: ec2KeyId
+              VolumeSize: 8 
+              VolumeType: !Ref volumeType
+        DisableApiTermination: !Ref disableApiTermination
+        EbsOptimized: !Ref ebsOptimized
+        IamInstanceProfile: 
+          Arn: !GetAtt ec2InstanceProfile.Arn
+        ImageId: !FindInMap [ amiId, !Ref 'AWS::Region', !Ref imageId] 
+        InstanceType: !FindInMap [instanceMap, !Ref imageId, !Ref instanceSize]
+        KeyName: !Ref keyName
+        MetadataOptions: 
+          HttpTokens: Required 
+        SecurityGroupIds: 
+          - !Ref managerSGid
+        TagSpecifications: 
+            - ResourceType: instance 
+              Tags: 
+                - Key: Name 
+                  Value: !Join ['-', [!Ref 'AWS::StackName', managment, ec2 ]]
+                - Key: owner
+                  Value: !Ref owner
+                - Key: OwnerEmail 
+                  Value: !Ref ownerEmail
+                - Key: Environment 
+                  Value: !Ref environment 
+                - Key: project 
+                  Value: !Ref project 
+            - ResourceType: launch-template
+              Tags: 
+                - Key: owner
+                  Value: !Ref owner
+                - Key: OwnerEmail 
+                  Value: !Ref ownerEmail
+                - Key: Environment 
+                  Value: !Ref environment 
+                - Key: project 
+                  Value: !Ref project 
+
+  ec2InstanceProfile: 
+    Type: AWS::IAM::InstanceProfile 
+    Properties:
+      Roles:
+        - arn:aws:iam::109798190983:role/kubectl-control-base

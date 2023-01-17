@@ -24,8 +24,6 @@ Parameters:
   ngw1id: 
     Type: String 
 #Tag parameters 
-  name: 
-    Type: String 
   owner: 
     Type: String
   ownerEmail: 
