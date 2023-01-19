@@ -26,12 +26,11 @@ Resources:
       EnableKeyRotation: True
       KeyPolicy: 
         Version: 2012-10-17
-        Id: key-default-1
         Statement:  
           - Sid: Enable IAM User Permissions
             Effect: Allow
             Principal:
-              AWS: 'arn:aws:109798190983:root/idanzigm'
+              AWS: 'arn:aws:109798190983:root'
             Action: 
               - 'kms:*'
             Resource: '*'
