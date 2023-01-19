@@ -31,7 +31,7 @@ Resources:
           - Sid: Enable IAM User Permissions
             Effect: Allow
             Principal:
-              AWS: !Sub 'arn:aws:$(AWS::AccountId):root'
+              AWS: 'arn:aws:109798190983:root'
             Action: 'kms:*'
             Resource: '*'
           - Sid: Allows access through EBS for all principals in the account that are authorized 
@@ -48,8 +48,8 @@ Resources:
             Resource: '*'
             Condition: 
               StringEquals: 
-                kms:ViaService: !Sub 'ec2.$(AWS::Region).amazonaws.com'
-                kms:CallerAccount: !Sub '$(AWS::AccountId)'
+                kms:ViaService: 'ec2.us-east-1.amazonaws.com'
+                kms:CallerAccount: '109798190983'
       Tags: 
         - Key: Name 
           Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]
