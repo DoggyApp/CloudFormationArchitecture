@@ -21,7 +21,7 @@ Resources:
   ec2mgmtkey: 
     Type: AWS::KMS::Key
     Properties: 
-      Description: Encrypts the volume attached to the ec2 booted with kubctl managing the doggy app EKS cluster 
+      Description: Encrypts the volume attached to the ec2 booted with kubctl managing the doggy app EKS cluster. 
       Enabled: True
       EnableKeyRotation: True
       KeyPolicy: 
