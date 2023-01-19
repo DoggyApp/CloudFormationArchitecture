@@ -28,11 +28,20 @@ Resources:
         Version: 2012-10-17
         Id: key-default-1
         Statement:
+          - Sid: Add codepipeline to trust relationship 
+            Effect: Allow 
+            Principle: 
+              Service: 'codepipeline.aws.com'
+            Action: 
+              - 'sts.AssumeRole'
+              - 'kms:*'
           - Sid: Enable IAM User Permissions
             Effect: Allow
             Principal:
               AWS: 'arn:aws:109798190983:root'
-            Action: 'kms:*'
+            Action: 
+              - 'kms:*'
+              - 'sts.AssumeRole'
             Resource: '*'
           - Sid: Allows access through EBS for all principals in the account that are authorized 
             Effect: Allow
