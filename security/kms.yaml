@@ -34,10 +34,28 @@ Resources:
             Action: 
               - 'kms:*'
             Resource: '*'
-          - Sid: Allows access through EBS for all principals in the account that are authorized 
+            - Sid": Allow administration of the key
+              Effect: Allow
+              Principal: 
+                AWS: 'arn:aws:iam::109798190983:root'
+              Action: 
+                - 'kms:Create*'
+                - 'kms:Describe*'
+                - 'kms:Enable*'
+                - 'kms:List*'
+                - 'kms:Put*'
+                - 'kms:Update*'
+                - 'kms:Revoke*'
+                - 'kms:Disable*'
+                - 'kms:Get*'
+                - 'kms:Delete*'
+                - 'kms:ScheduleKeyDeletion'
+                - 'kms:CancelKeyDeletion'
+              Resource: '*'
+          - Sid: Allow use of the key
             Effect: Allow
             Principal:
-              AWS: '*'
+              AWS: 'arn:aws:iam::109798190983:root'
             Action:
               - 'kms:DescribeKey'
               - 'kms:Encrypt'
@@ -46,10 +64,6 @@ Resources:
               - 'kms:GenerateDataKey'
               - 'kms:CreateGrant'
             Resource: '*'
-            Condition: 
-              StringEquals: 
-                kms:ViaService: 'ec2.us-east-1.amazonaws.com'
-                kms:CallerAccount: '109798190983'
       Tags: 
         - Key: Name 
           Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]
