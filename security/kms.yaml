@@ -27,39 +27,30 @@ Resources:
       KeyPolicy: 
         Version: 2012-10-17
         Id: key-default-1
-        Statement:
-          - Sid: Add codepipeline to trust relationship 
-            Effect: Allow 
-            Principal: 
-              Service: 'codepipeline.aws.com'
-            Action: 
-              - 'sts.AssumeRole'
-              - 'kms:*'
-            Resource: '*'
+        Statement:  
           - Sid: Enable IAM User Permissions
             Effect: Allow
             Principal:
               AWS: 'arn:aws:109798190983:root'
             Action: 
               - 'kms:*'
-              - 'sts.AssumeRole'
             Resource: '*'
-          - Sid: Allows access through EBS for all principals in the account that are authorized 
-            Effect: Allow
-            Principal:
-              AWS: '*'
-            Action:
-              - 'kms:DescribeKey'
-              - 'kms:Encrypt'
-              - 'kms:Decrypt'
-              - 'kms:ReEncrypt*'
-              - 'kms:GenerateDataKey'
-              - 'kms:CreateGrant'
-            Resource: '*'
-            Condition: 
-              StringEquals: 
-                kms:ViaService: 'ec2.us-east-1.amazonaws.com'
-                kms:CallerAccount: '109798190983'
+          #- Sid: Allows access through EBS for all principals in the account that are authorized 
+          #  Effect: Allow
+          #  Principal:
+          #    AWS: '*'
+          #  Action:
+          #    - 'kms:DescribeKey'
+          #    - 'kms:Encrypt'
+          #    - 'kms:Decrypt'
+          #    - 'kms:ReEncrypt*'
+          #    - 'kms:GenerateDataKey'
+          #    - 'kms:CreateGrant'
+          #  Resource: '*'
+          #  Condition: 
+          #    StringEquals: 
+          #      kms:ViaService: 'ec2.us-east-1.amazonaws.com'
+          #      kms:CallerAccount: '109798190983'
       Tags: 
         - Key: Name 
           Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]
