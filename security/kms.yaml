@@ -34,22 +34,22 @@ Resources:
             Action: 
               - 'kms:*'
             Resource: '*'
-          #- Sid: Allows access through EBS for all principals in the account that are authorized 
-          #  Effect: Allow deletethis
-          #  Principal:
-          #    AWS: '*'
-          #  Action:
-          #    - 'kms:DescribeKey'
-          #    - 'kms:Encrypt'
-          #    - 'kms:Decrypt'
-          #    - 'kms:ReEncrypt*'
-          #    - 'kms:GenerateDataKey'
-          #    - 'kms:CreateGrant'
-          #  Resource: '*'
-          #  Condition: 
-          #    StringEquals: 
-          #      kms:ViaService: 'ec2.us-east-1.amazonaws.com'
-          #      kms:CallerAccount: '109798190983'
+          - Sid: Allows access through EBS for all principals in the account that are authorized 
+            Effect: Allow
+            Principal:
+              AWS: '*'
+            Action:
+              - 'kms:DescribeKey'
+              - 'kms:Encrypt'
+              - 'kms:Decrypt'
+              - 'kms:ReEncrypt*'
+              - 'kms:GenerateDataKey'
+              - 'kms:CreateGrant'
+            Resource: '*'
+            Condition: 
+              StringEquals: 
+                kms:ViaService: 'ec2.us-east-1.amazonaws.com'
+                kms:CallerAccount: '109798190983'
       Tags: 
         - Key: Name 
           Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]
