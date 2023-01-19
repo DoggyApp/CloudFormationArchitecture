@@ -24,8 +24,6 @@ Parameters:
       - 'true'
       - 'false'
 #Tag parameters 
-  name: 
-    Type: String 
   owner: 
     Type: String
   ownerEmail: 

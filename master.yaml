@@ -28,9 +28,6 @@ Parameters:
     Default: 10.98.72.0/21
 
 #Tag parameters 
-  name: 
-    Type: String 
-    Default: Ian Martin
   owner: 
     Type: String
     Default: idanzigm
@@ -61,7 +58,6 @@ Resources:
         protectedSubnet0Cidr: !Ref protectedSubnet0Cidr
         protectedSubnet1Cidr: !Ref protectedSubnet1Cidr
         #Tag parameters 
-        name: !Ref name
         owner: !Ref owner
         ownerEmail: !Ref ownerEmail
         environment: !Ref environment
@@ -116,7 +112,6 @@ Resources:
           - vpcStack
           - Outputs.ngw1id
         #Tag parameters 
-        name: !Ref name
         owner: !Ref owner
         ownerEmail: !Ref ownerEmail
         environment: !Ref environment
@@ -143,7 +138,6 @@ Resources:
           - sgStack
           - Outputs.clusterSGid
         #Tag parameters 
-        name: !Ref name
         owner: !Ref owner
         ownerEmail: !Ref ownerEmail
         environment: !Ref environment
@@ -162,7 +156,6 @@ Resources:
           - vpcStack
           - Outputs.vpc0id
         #Tag parameters 
-        name: !Ref name
         owner: !Ref owner
         ownerEmail: !Ref ownerEmail
         environment: !Ref environment
@@ -177,7 +170,6 @@ Resources:
       TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/security/kms.yaml"
       Parameters:
         #Tag parameters 
-        name: !Ref name
         owner: !Ref owner
         ownerEmail: !Ref ownerEmail
         environment: !Ref environment
@@ -201,7 +193,6 @@ Resources:
           - keyStack
           - Outputs.ec2KeyId
         #Tag parameters 
-        name: !Ref name
         owner: !Ref owner
         ownerEmail: !Ref ownerEmail
         environment: !Ref environment
