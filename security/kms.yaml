@@ -37,7 +37,7 @@ Resources:
           - Sid: Allow administration of the key
             Effect: Allow
             Principal: 
-              AWS: 'arn:aws:iam::109798190983:user/idanzigm'
+              AWS: 'arn:aws:iam::109798190983:role/kms-manager-role'
             Action: 
               - 'kms:Create*'
               - 'kms:Describe*'
@@ -55,7 +55,7 @@ Resources:
           - Sid: Allow use of the key
             Effect: Allow
             Principal:
-              AWS: 'arn:aws:iam::109798190983:user/idanzigm'
+              AWS: 'arn:aws:iam::109798190983:role/kms-manager-role'
             Action:
               - 'kms:DescribeKey'
               - 'kms:Encrypt'
