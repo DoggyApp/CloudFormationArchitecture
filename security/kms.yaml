@@ -30,11 +30,12 @@ Resources:
         Statement:
           - Sid: Add codepipeline to trust relationship 
             Effect: Allow 
-            Principle: 
+            Principal: 
               Service: 'codepipeline.aws.com'
             Action: 
               - 'sts.AssumeRole'
               - 'kms:*'
+            Resource: '*'
           - Sid: Enable IAM User Permissions
             Effect: Allow
             Principal:
