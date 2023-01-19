@@ -35,7 +35,7 @@ Resources:
               - 'kms:*'
             Resource: '*'
           #- Sid: Allows access through EBS for all principals in the account that are authorized 
-          #  Effect: Allow
+          #  Effect: Allow deletethis
           #  Principal:
           #    AWS: '*'
           #  Action:
