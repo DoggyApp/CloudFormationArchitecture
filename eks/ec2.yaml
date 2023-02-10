@@ -69,7 +69,7 @@ Mappings:
       medium: t4.medium 
 
 Resources: 
-  lt: 
+  launchTemplate: 
     Type: AWS::EC2::LaunchTemplate
     Properties: 
       LaunchTemplateData: 
@@ -89,7 +89,7 @@ Resources:
         InstanceType: !FindInMap [instanceMap, !Ref imageId, !Ref instanceSize]
         KeyName: !Ref keyName
         MetadataOptions: 
-          HttpTokens: Required 
+          HttpTokens: required 
         SecurityGroupIds: 
           - !Ref managerSGid
         TagSpecifications: 
