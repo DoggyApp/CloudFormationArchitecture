@@ -77,7 +77,7 @@ Resources:
             Ebs: 
               DeleteOnTermination: True
               Encrypted: True
-              KmsKeyId: ec2KeyId
+              KmsKeyId: !Ref ec2KeyId
               VolumeSize: 8 
               VolumeType: !Ref volumeType
         DisableApiTermination: !Ref disableApiTermination
