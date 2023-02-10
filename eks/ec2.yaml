@@ -28,6 +28,7 @@ Parameters:
       - False
   keyName: 
     Type: AWS::EC2::KeyPair::KeyName
+    Default: doggyApp-mgmt-keyPair
   imageId: 
     Type: String 
     Default: graviton
