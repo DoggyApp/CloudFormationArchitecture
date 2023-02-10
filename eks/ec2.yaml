@@ -120,4 +120,4 @@ Resources:
     Type: AWS::IAM::InstanceProfile 
     Properties:
       Roles:
-        - arn:aws:iam::109798190983:role/kubectl-control-base
+        - kubectl-control-base
