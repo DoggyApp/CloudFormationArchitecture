@@ -125,6 +125,7 @@ Resources:
         - kubectl-control-base
 
   mgmtInstance: 
+    Type: AWS::EC2::Instance
     DependsOn:
       - mgmtLaunchTemplate 
       - mgmtInstanceProfile 
