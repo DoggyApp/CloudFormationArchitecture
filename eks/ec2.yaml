@@ -7,6 +7,8 @@ Parameters:
     Type: String
   ec2KeyId: 
     Type: String 
+  privateSubnet0id: 
+    Type: String
 #Stack Parameters 
   volumeType: 
     Type: String
@@ -69,7 +71,7 @@ Mappings:
       medium: t4.medium 
 
 Resources: 
-  launchTemplate: 
+  mgmtLaunchTemplate: 
     Type: AWS::EC2::LaunchTemplate
     Properties: 
       LaunchTemplateData: 
@@ -116,8 +118,18 @@ Resources:
                 - Key: project 
                   Value: !Ref project 
 
-  ec2InstanceProfile: 
+  mgmtInstanceProfile: 
     Type: AWS::IAM::InstanceProfile 
     Properties:
       Roles:
         - kubectl-control-base
+
+  mgmtInstance: 
+    DependsOn:
+      - mgmtLaunchTemplate 
+      - mgmtInstanceProfile 
+    Properties: 
+      LaunchTemplate:
+        LaunchTemplateId: !Ref mgmtLaunchTemplate
+        Version: Fn::GetAtt mgmtLaunchTemplate.LatestVersionNumber
+      SubnetId: !Ref privateSubnet0id
