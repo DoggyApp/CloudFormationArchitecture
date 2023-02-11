@@ -131,5 +131,5 @@ Resources:
     Properties: 
       LaunchTemplate:
         LaunchTemplateId: !Ref mgmtLaunchTemplate
-        Version: Fn::GetAtt mgmtLaunchTemplate.LatestVersionNumber
+        Version: Latest
       SubnetId: !Ref privateSubnet0id
