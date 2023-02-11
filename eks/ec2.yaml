@@ -107,16 +107,6 @@ Resources:
                   Value: !Ref environment 
                 - Key: project 
                   Value: !Ref project 
-            - ResourceType: launch-template
-              Tags: 
-                - Key: owner
-                  Value: !Ref owner
-                - Key: OwnerEmail 
-                  Value: !Ref ownerEmail
-                - Key: Environment 
-                  Value: !Ref environment 
-                - Key: project 
-                  Value: !Ref project 
 
   mgmtInstanceProfile: 
     Type: AWS::IAM::InstanceProfile 
