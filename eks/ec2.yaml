@@ -86,7 +86,7 @@ Resources:
         DisableApiTermination: !Ref disableApiTermination
         EbsOptimized: !Ref ebsOptimized
         IamInstanceProfile: 
-          Arn: !GetAtt ec2InstanceProfile.Arn
+          Arn: !GetAtt mgmtInstanceProfile.Arn
         ImageId: !FindInMap [ amiId, !Ref 'AWS::Region', !Ref imageId] 
         InstanceType: !FindInMap [instanceMap, !Ref imageId, !Ref instanceSize]
         KeyName: !Ref keyName
@@ -126,8 +126,7 @@ Resources:
 
   mgmtInstance: 
     Type: AWS::EC2::Instance
-    DependsOn:
-      - mgmtLaunchTemplate 
+    DependsOn: 
       - mgmtInstanceProfile 
     Properties: 
       LaunchTemplate:
