@@ -27,14 +27,14 @@ Resources:
           - Sid: Enable IAM User Permissions
             Effect: Allow
             Principal:
-              AWS: 'arn:aws:iam::109798190983:root'
+              AWS: 'arn:aws:iam::109798190983:user/admin' 
             Action: 
               - 'kms:*'
             Resource: '*'
           - Sid: Allow administration of the key
             Effect: Allow
             Principal: 
-              AWS: 'arn:aws:iam::109798190983:assumed-role/kms-manager-role/idanzigm'
+              AWS: 'arn:aws:iam::109798190983:assumed-role/kms-manager-role/admin'
             Action: 
               - 'kms:Create*'
               - 'kms:Describe*'
@@ -52,7 +52,7 @@ Resources:
           - Sid: Allow use of the key
             Effect: Allow
             Principal:
-              AWS: 'arn:aws:iam::109798190983:assumed-role/kms-manager-role/idanzigm'
+              AWS: 'arn:aws:iam::109798190983:assumed-role/kms-manager-role/admin'
             Action:
               - 'kms:DescribeKey'
               - 'kms:Encrypt'
