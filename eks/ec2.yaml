@@ -107,6 +107,15 @@ Resources:
                   Value: !Ref environment 
                 - Key: project 
                   Value: !Ref project 
+        UserData: 
+          Fn::Base64:
+            Sub! |
+              #!/bin/bash 
+              curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.27.9/2024-01-04/bin/linux/arm64/kubectl
+              chmod +x ./kubectl
+              mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
+              echo 'export PATH=$HOME/bin:$PATH' >> ~/.bashrc
+              aws eks update-kubeconfig --region us-east-1 --name doggy-app-eks-cluster-0
 
   mgmtInstanceProfile: 
     Type: AWS::IAM::InstanceProfile 
