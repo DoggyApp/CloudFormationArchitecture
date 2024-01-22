@@ -19,7 +19,7 @@ Parameters:
     eksClusterRole: 
       Type: AWS::IAM::Role
       Properties: 
-        RoleName: eksClusterRole
+        RoleName: eksClusterRolebb
         Description: The role and it's permissions adopted by eks cluster in its own VPC 
         AssumeRolePolicyDocument: {
             "Version": "2012-10-17",
