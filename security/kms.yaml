@@ -2,6 +2,9 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: Creates encryption keys for use in EKS folder components 
 
 Parameters:
+  mgmtEc2Arn: 
+    Type: String
+  #tag parameters 
   owner: 
     Type: String
   ownerEmail: 
@@ -30,7 +33,7 @@ Resources:
               AWS: 'arn:aws:iam::109798190983:user/admin' 
             Action: 
               - 'kms:*'
-            Resource: '*'
+            Resource: !Ref mgmtEc2Arn
           - Sid: Allow administration of the key
             Effect: Allow
             Principal: 
@@ -48,7 +51,7 @@ Resources:
               - 'kms:Delete*'
               - 'kms:ScheduleKeyDeletion'
               - 'kms:CancelKeyDeletion'
-            Resource: '*'
+            Resource: !Ref mgmtEc2Arn
           - Sid: Allow use of the key
             Effect: Allow
             Principal:
@@ -60,7 +63,7 @@ Resources:
               - 'kms:ReEncrypt*'
               - 'kms:GenerateDataKey'
               - 'kms:CreateGrant'
-            Resource: '*'
+            Resource: !Ref mgmtEc2Arn
       Tags: 
         - Key: Name 
           Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]

@@ -2,6 +2,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: Creates IAM roles for EKS and mgmt services 
 
 Parameters:
+  #Tag parameters 
   owner: 
     Type: String
   ownerEmail: 
@@ -15,7 +16,7 @@ Parameters:
     Type: String
 
     Resources: 
-      eksclusterrole: 
+      eksClusterRole: 
         Type: AWS::KMS::Key
         Properties: 
           RoleName: eksClusterRole
@@ -91,5 +92,10 @@ Parameters:
               Value: !Ref environment 
             - Key: project 
               Value: !Ref project 
+
+Outputs:
+  clusterRoleArn: 
+    Value: !GetAtt eksClusterRole.Arn
+
 
         

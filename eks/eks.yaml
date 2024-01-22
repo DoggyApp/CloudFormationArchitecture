@@ -9,6 +9,8 @@ Parameters:
     Type: String
   clusterSGid: 
     Type: String 
+  clusterRoleArn: 
+    Type: String
 #Tag parameters 
   owner: 
     Type: String
@@ -38,7 +40,7 @@ Resources:
         SubnetIds: 
           - !Ref privateSubnet0id
           - !Ref privateSubnet1id
-      RoleArn: arn:aws:iam::109798190983:role/EKSclusterRole
+      RoleArn: !Ref clusterRoleArn
       Name: doggy-app-eks-cluster-0
       Tags: 
         - Key: Name 

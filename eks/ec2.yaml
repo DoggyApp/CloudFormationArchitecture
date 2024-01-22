@@ -136,3 +136,6 @@ Resources:
         LaunchTemplateId: !Ref mgmtLaunchTemplate
         Version: !GetAtt mgmtLaunchTemplate.LatestVersionNumber
       SubnetId: !Ref privateSubnet0id
+
+Output: 
+  mgmtEc2Arn: !GetAtt mgmtInstance.Arn

@@ -7,25 +7,25 @@ Parameters:
     Default: doggy-template-build-terminal
   vpcCidrBlock: 
     Type: String 
-    Default: 10.98.0.0/16
+    Default: 10.98.0.0/16 # 10.98.0.1 => 10.98.255.254
   publicSubnet0Cidr: 
     Type: String 
-    Default: 10.98.0.0/21
-  publicSubnet1Cidr: 
-    Type: String 
-    Default: 10.98.64.0/21
-  privateSubnet0Cidr: 
-    Type: String 
-    Default: 10.98.16.0/20
-  privateSubnet1Cidr: 
-    Type: String 
-    Default: 10.98.80.0/20
+    Default: 10.98.0.0/21 # 10.98.0.1 => 10.98.7.254
   protectedSubnet0Cidr: 
     Type: String 
-    Default: 10.98.8.0/21
+    Default: 10.98.8.0/21 # 10.98.8.1 => 10.98.15.254
+  privateSubnet0Cidr: 
+    Type: String 
+    Default: 10.98.16.0/20 # 10.98.16.1 => 10.98.31.254
+  publicSubnet1Cidr: 
+    Type: String 
+    Default: 10.98.64.0/21 # 10.98.64.1 => 10.98.71.254
+  privateSubnet1Cidr: 
+    Type: String 
+    Default: 10.98.80.0/20 # 10.98.80.1 => 10.98.95.254
   protectedSubnet1Cidr: 
     Type: String
-    Default: 10.98.72.0/21
+    Default: 10.98.72.0/21 # 10.98.72.1 => 10.98.79.254
 
 #Tag parameters 
   owner: 
@@ -120,6 +120,21 @@ Resources:
         - Key: Name
           Value: RouteTablesStack
 
+  rolesStack:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/security/roles.yaml"
+      Parameters:
+        #Tag parameters 
+        owner: !Ref owner
+        ownerEmail: !Ref ownerEmail
+        environment: !Ref environment
+        project: !Ref project
+      Tags:
+        - Key: Name
+          Value: RolesStack
+
+
   eksStack:
     Type: "AWS::CloudFormation::Stack"
     Properties:
@@ -137,6 +152,9 @@ Resources:
           Fn::GetAtt: 
           - sgStack
           - Outputs.clusterSGid
+        clusterRoleArn: 
+          Fn::GetAtt: 
+          - Outputs.clusterRoleArn
         #Tag parameters 
         owner: !Ref owner
         ownerEmail: !Ref ownerEmail
@@ -169,6 +187,7 @@ Resources:
     Properties:
       TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/security/kms.yaml"
       Parameters:
+        mgmtEc2Arn: Output.mgmtEc2Arn
         #Tag parameters 
         owner: !Ref owner
         ownerEmail: !Ref ownerEmail
