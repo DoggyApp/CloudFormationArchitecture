@@ -15,83 +15,83 @@ Parameters:
   project: 
     Type: String
 
-    Resources: 
-      eksClusterRole: 
-        Type: AWS::KMS::Key
-        Properties: 
-          RoleName: eksClusterRole
-          Description: The role and it's permissions adopted by eks cluster in its own VPC 
-          AssumeRolePolicyDocument: {
-              "Version": "2012-10-17",
-              "Statement": 
-                [
+  Resources: 
+    eksClusterRole: 
+      Type: AWS::KMS::Key
+      Properties: 
+        RoleName: eksClusterRole
+        Description: The role and it's permissions adopted by eks cluster in its own VPC 
+        AssumeRolePolicyDocument: {
+            "Version": "2012-10-17",
+            "Statement": 
+              [
+              {
+                "Effect": "Allow",
+                "Principal": 
                 {
-                  "Effect": "Allow",
-                  "Principal": 
-                  {
-                    "Service": [
-                      "eks.amazonaws.com"
-                    ]
-                  },
-                    "Action": [
-                      "sts:AssumeRole"
-                    ]
-                  }
+                  "Service": [
+                    "eks.amazonaws.com"
                   ]
-            }
-          ManagedPolicyArns: 
-            - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
-            - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
-            - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
-          Tags: 
-            - Key: Name 
-              Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]
-            - Key: owner
-              Value: !Ref owner
-            - Key: OwnerEmail 
-              Value: !Ref ownerEmail
-            - Key: Environment 
-              Value: !Ref environment 
-            - Key: project 
-              Value: !Ref project 
-      doggyeksnodegrouprole: 
-        Type: AWS::KMS::Key
-        Properties: 
-          RoleName: eksNodeRole
-          Description: The role and it's permissions adopted by eks worker nodes in each subnet 
-          AssumeRolePolicyDocument: {
-              "Version": "2012-10-17",
-              "Statement": 
-                [
+                },
+                  "Action": [
+                    "sts:AssumeRole"
+                  ]
+                }
+                ]
+          }
+        ManagedPolicyArns: 
+          - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+          - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+          - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+        Tags: 
+          - Key: Name 
+            Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]
+          - Key: owner
+            Value: !Ref owner
+          - Key: OwnerEmail 
+            Value: !Ref ownerEmail
+          - Key: Environment 
+            Value: !Ref environment 
+          - Key: project 
+            Value: !Ref project 
+    doggyeksnodegrouprole: 
+      Type: AWS::KMS::Key
+      Properties: 
+      RoleName: eksNodeRole
+        Description: The role and it's permissions adopted by eks worker nodes in each subnet 
+        AssumeRolePolicyDocument: {
+            "Version": "2012-10-17",
+            "Statement": 
+              [
+              {
+                "Effect": "Allow",
+                "Principal": 
                 {
-                  "Effect": "Allow",
-                  "Principal": 
-                  {
-                    "Service": [
-                      "ec2.amazonaws.com"
-                    ]
-                  },
-                    "Action": [
-                      "sts:AssumeRole"
-                    ]
-                  }
+                  "Service": [
+                    "ec2.amazonaws.com"
                   ]
-            }
-          ManagedPolicyArns: 
-            - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
-            - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
-            - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
-          Tags: 
-            - Key: Name 
-              Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]
-            - Key: owner
-              Value: !Ref owner
-            - Key: OwnerEmail 
-              Value: !Ref ownerEmail
-            - Key: Environment 
-              Value: !Ref environment 
-            - Key: project 
-              Value: !Ref project 
+                },
+                  "Action": [
+                    "sts:AssumeRole"
+                  ]
+                }
+                ]
+          }
+        ManagedPolicyArns: 
+          - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+          - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+          - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+        Tags: 
+          - Key: Name 
+            Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]
+          - Key: owner
+            Value: !Ref owner
+          - Key: OwnerEmail 
+            Value: !Ref ownerEmail
+          - Key: Environment 
+            Value: !Ref environment 
+          - Key: project 
+            Value: !Ref project 
 
 Outputs:
   clusterRoleArn: 
