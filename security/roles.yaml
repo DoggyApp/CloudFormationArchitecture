@@ -16,10 +16,10 @@ Parameters:
     Type: String
 
 Resources: 
-  eksClusterRoled: 
+  eksClusterRole: 
     Type: AWS::IAM::Role
     Properties: 
-      RoleName: eksClusterRolebb
+      RoleName: eksClusterRole
       Description: The role and it's permissions adopted by eks cluster in its own VPC 
       AssumeRolePolicyDocument: {
           "Version": "2012-10-17",
@@ -93,7 +93,7 @@ Resources:
           Value: !Ref environment 
         - Key: project 
           Value: !Ref project 
-          
+
 Outputs:
   clusterRoleArn: 
     Value: !GetAtt eksClusterRole.Arn
