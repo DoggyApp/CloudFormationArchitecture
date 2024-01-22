@@ -120,19 +120,19 @@ Resources:
         - Key: Name
           Value: RouteTablesStack
 
-  rolesStack:
-    Type: "AWS::CloudFormation::Stack"
-    Properties:
-      TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/security/roles.yaml"
-      Parameters:
-        #Tag parameters 
-        owner: !Ref owner
-        ownerEmail: !Ref ownerEmail
-        environment: !Ref environment
-        project: !Ref project
-      Tags:
-        - Key: Name
-          Value: RolesStack
+  # rolesStack:
+  #   Type: "AWS::CloudFormation::Stack"
+  #   Properties:
+  #     TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/security/roles.yaml"
+  #     Parameters:
+  #       #Tag parameters 
+  #       owner: !Ref owner
+  #       ownerEmail: !Ref ownerEmail
+  #       environment: !Ref environment
+  #       project: !Ref project
+  #     Tags:
+  #       - Key: Name
+  #         Value: RolesStack
 
 
   eksStack:
@@ -152,10 +152,10 @@ Resources:
           Fn::GetAtt: 
           - sgStack
           - Outputs.clusterSGid
-        clusterRoleArn: 
-          Fn::GetAtt: 
-          - rolesStack
-          - Outputs.clusterRoleArn
+        # clusterRoleArn: 
+        #   Fn::GetAtt: 
+        #   - rolesStack
+        #   - Outputs.clusterRoleArn
         #Tag parameters 
         owner: !Ref owner
         ownerEmail: !Ref ownerEmail
