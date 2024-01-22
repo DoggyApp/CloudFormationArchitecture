@@ -17,7 +17,7 @@ Parameters:
 
   Resources: 
     eksClusterRole: 
-      Type: AWS::KMS::Key
+      Type: AWS::IAM::Role
       Properties: 
         RoleName: eksClusterRole
         Description: The role and it's permissions adopted by eks cluster in its own VPC 
@@ -54,11 +54,12 @@ Parameters:
             Value: !Ref environment 
           - Key: project 
             Value: !Ref project 
+    
     doggyeksnodegrouprole: 
-      Type: AWS::KMS::Key
+      Type: AWS::IAM::Role
       Properties: 
       RoleName: eksNodeRole
-        Description: The role and it's permissions adopted by eks worker nodes in each subnet 
+        Description: The role and it s permissions adopted by eks worker nodes in each subnet 
         AssumeRolePolicyDocument: {
             "Version": "2012-10-17",
             "Statement": 
