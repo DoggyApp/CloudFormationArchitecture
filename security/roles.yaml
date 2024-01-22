@@ -16,7 +16,7 @@ Parameters:
     Type: String
 
   Resources: 
-    eksClusterRole: 
+    eksClusterRoled: 
       Type: AWS::IAM::Role
       Properties: 
         RoleName: eksClusterRolebb
