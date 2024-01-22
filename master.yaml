@@ -154,6 +154,7 @@ Resources:
           - Outputs.clusterSGid
         clusterRoleArn: 
           Fn::GetAtt: 
+          - rolesStack
           - Outputs.clusterRoleArn
         #Tag parameters 
         owner: !Ref owner
