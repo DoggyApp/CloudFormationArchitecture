@@ -27,7 +27,7 @@ Resources:
       KeyPolicy: 
         Version: 2012-10-17
         Statement:  
-          - Sid: Enable IAM User Permissions
+          - Sid: Enable IAM User Permissions for Admin
             Effect: Allow
             Principal:
               AWS: 'arn:aws:iam::109798190983:user/admin' 
@@ -41,7 +41,7 @@ Resources:
           - Sid: Allow administration of the key by Admin user 
             Effect: Allow
             Principal: 
-              AWS: 'arn:aws:iam::109798190983:assumed-role/kms-manager-role/admin'
+              AWS: 'arn:aws:iam::109798190983:user/admin'
             Action: 
               - 'kms:Create*'
               - 'kms:Describe*'
@@ -53,21 +53,23 @@ Resources:
               - 'kms:Disable*'
               - 'kms:Get*'
               - 'kms:Delete*'
+              - "kms:TagResource"
+              - "kms:UntagResource"
               - 'kms:ScheduleKeyDeletion'
               - 'kms:CancelKeyDeletion'
             Resource: '*'
-          - Sid: Add use of the key permissions to KMS-manager-role for Admin user 
+          - Sid: Allow attachment of persistent resources 
             Effect: Allow
             Principal:
-              AWS: 'arn:aws:iam::109798190983:assumed-role/kms-manager-role/admin'
+              AWS: 'arn:aws:iam::109798190983:user/admin'
             Action:
-              - 'kms:DescribeKey'
-              - 'kms:Encrypt'
-              - 'kms:Decrypt'
-              - 'kms:ReEncrypt*'
-              - 'kms:GenerateDataKey'
               - 'kms:CreateGrant'
+              - 'kms:ListGrants'
+              - 'kms:RevokeGrant'
             Resource: '*'
+            Condition: 
+              Bool: 
+                kms:GrantIsForAWSResource: 'true'
       Tags: 
         - Key: Name 
           Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]
