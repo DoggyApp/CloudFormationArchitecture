@@ -27,7 +27,13 @@ Resources:
       KeyPolicy: 
         Version: 2012-10-17
         Statement:  
-          - Sid: Enable IAM User Permissions for Admin
+          - Sid: Enable IAM User Permissions
+            Effect: Allow
+            Principal:
+              AWS: arn:aws:iam::109798190983:root
+            Action: kms:*
+            Resource: "*"
+          - Sid: Allow use of the key for Admin
             Effect: Allow
             Principal:
               AWS: 'arn:aws:iam::109798190983:user/admin' 
