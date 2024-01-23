@@ -37,7 +37,36 @@ Resources:
               - "kms:ReEncrypt*"
               - "kms:GenerateDataKey*"
               - "kms:DescribeKey"
-              - "kms:Update"
+            Resource: '*'
+          - Sid: Allow administration of the key by Admin user 
+            Effect: Allow
+            Principal: 
+              AWS: 'arn:aws:iam::109798190983:assumed-role/kms-manager-role/admin'
+            Action: 
+              - 'kms:Create*'
+              - 'kms:Describe*'
+              - 'kms:Enable*'
+              - 'kms:List*'
+              - 'kms:Put*'
+              - 'kms:Update*'
+              - 'kms:Revoke*'
+              - 'kms:Disable*'
+              - 'kms:Get*'
+              - 'kms:Delete*'
+              - 'kms:ScheduleKeyDeletion'
+              - 'kms:CancelKeyDeletion'
+            Resource: '*'
+          - Sid: Add use of the key permissions to KMS-manager-role for Admin user 
+            Effect: Allow
+            Principal:
+              AWS: 'arn:aws:iam::109798190983:assumed-role/kms-manager-role/admin'
+            Action:
+              - 'kms:DescribeKey'
+              - 'kms:Encrypt'
+              - 'kms:Decrypt'
+              - 'kms:ReEncrypt*'
+              - 'kms:GenerateDataKey'
+              - 'kms:CreateGrant'
             Resource: '*'
       Tags: 
         - Key: Name 
