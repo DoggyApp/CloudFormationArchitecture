@@ -37,6 +37,7 @@ Resources:
               - "kms:ReEncrypt*"
               - "kms:GenerateDataKey*"
               - "kms:DescribeKey"
+              - "kms:Update"
             Resource: '*'
       Tags: 
         - Key: Name 
