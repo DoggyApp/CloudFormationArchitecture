@@ -32,38 +32,12 @@ Resources:
             Principal:
               AWS: 'arn:aws:iam::109798190983:user/admin' 
             Action: 
-              - 'kms:*'
-            Resource: !Ref mgmtEc2Arn
-          - Sid: Allow administration of the key
-            Effect: Allow
-            Principal: 
-              AWS: 'arn:aws:iam::109798190983:assumed-role/kms-manager-role/admin'
-            Action: 
-              - 'kms:Create*'
-              - 'kms:Describe*'
-              - 'kms:Enable*'
-              - 'kms:List*'
-              - 'kms:Put*'
-              - 'kms:Update*'
-              - 'kms:Revoke*'
-              - 'kms:Disable*'
-              - 'kms:Get*'
-              - 'kms:Delete*'
-              - 'kms:ScheduleKeyDeletion'
-              - 'kms:CancelKeyDeletion'
-            Resource: !Ref mgmtEc2Arn
-          - Sid: Allow use of the key
-            Effect: Allow
-            Principal:
-              AWS: 'arn:aws:iam::109798190983:assumed-role/kms-manager-role/admin'
-            Action:
-              - 'kms:DescribeKey'
-              - 'kms:Encrypt'
-              - 'kms:Decrypt'
-              - 'kms:ReEncrypt*'
-              - 'kms:GenerateDataKey'
-              - 'kms:CreateGrant'
-            Resource: !Ref mgmtEc2Arn
+              - "kms:Encrypt"
+              - "kms:Decrypt"
+              - "kms:ReEncrypt*"
+              - "kms:GenerateDataKey*"
+              - "kms:DescribeKey"
+            Resource: '*'
       Tags: 
         - Key: Name 
           Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]
