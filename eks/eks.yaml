@@ -43,14 +43,14 @@ Resources:
       #EncryptionConfig: TODO
       KubernetesNetworkConfig: 
         ServiceIpv4Cidr: 10.100.0.0/16
-      Logging: 
-        ClusterLogging: 
-          EnabledTypes: 
-            - api
-            - audit
-            - authenticator
-            - controllerManager
-            - scheduler
+      # Logging: 
+      #   ClusterLogging: 
+      #     EnabledTypes: 
+      #       - Type: api
+      #       - Type: audit
+      #       - Type: authenticator
+      #       - Type: controllerManager
+      #       - Type: cheduler
       ResourcesVpcConfig: 
         EndpointPrivateAccess: false
         EndpointPublicAccess: true
