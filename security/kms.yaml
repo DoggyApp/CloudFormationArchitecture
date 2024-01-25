@@ -95,7 +95,7 @@ Resources:
       TargetKeyId: !Ref ec2mgmtkey
 
 Outputs: 
-  ec2KeyId: 
-    Value: !GetAtt ec2mgmtkey.Arn
+  ec2KeyAlias: 
+    Value: !Ref ec2mgmtkeyalias
 
 
