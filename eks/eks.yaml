@@ -13,8 +13,6 @@ Parameters:
     Type: String
   clusterSGid: 
     Type: String 
-  ec2KeyId:
-    Type: String
   publicNodeSGid:
     Type: String
   managerSGid: 
