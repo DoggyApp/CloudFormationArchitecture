@@ -56,8 +56,8 @@ Resources:
         EndpointPublicAccess: true
         PublicAccessCidrs:
           - 10.98.0.0/16
-        # SecurityGroupIds: 
-        #   - !Ref clusterSGid
+        SecurityGroupIds: 
+          - !Ref clusterSGid
         SubnetIds: 
           - !Ref publicSubnet0id
           - !Ref publicSubnet1id
