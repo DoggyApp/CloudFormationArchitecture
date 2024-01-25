@@ -160,10 +160,6 @@ Resources:
           Fn::GetAtt: 
           - sgStack
           - Outputs.clusterSGid
-        ec2KeyId:
-          Fn::GetAtt:
-          - keyStack
-          - Outputs.ec2KeyId
         publicNodeSGid:
           Fn::GetAtt:
           - sgStack

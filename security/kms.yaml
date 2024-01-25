@@ -95,7 +95,7 @@ Resources:
       TargetKeyId: !Ref ec2mgmtkey
 
 Outputs: 
-  ec2KeyAlias: 
-    Value: !Ref ec2mgmtkeyalias
+  ec2KeyId: 
+    Value: !Ref ec2mgmtkey
 
 

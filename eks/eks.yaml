@@ -93,9 +93,9 @@ Resources:
       NodeRole: arn:aws:iam::109798190983:role/eks-worker-node-service
       # ReleaseVersion: String
       RemoteAccess: 
-          Ec2SshKey: !Ref ec2KeyId
-          SourceSecurityGroups: 
-            - !Ref managerSGid
+        Ec2SshKey: doggyApp-mgmt-keyPair
+        SourceSecurityGroups: 
+          - !Ref managerSGid
       ScalingConfig: 
           DesiredSize: 1
           MaxSize: 2
@@ -130,9 +130,9 @@ Resources:
       NodeRole: arn:aws:iam::109798190983:role/eks-worker-node-service
       # ReleaseVersion: String
       RemoteAccess: 
-          Ec2SshKey: !Ref ec2KeyId
-          SourceSecurityGroups: 
-            - !Ref managerSGid
+        Ec2SshKey: !Ref ec2KeyId
+        SourceSecurityGroups: 
+          - !Ref managerSGid
       ScalingConfig: 
           DesiredSize: 1
           MaxSize: 2
