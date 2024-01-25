@@ -45,12 +45,11 @@ Resources:
         ServiceIpv4Cidr: 10.100.0.0/16
       Logging: 
         ClusterLogging: 
-          EnabledTypes: 
-            - api
-            - audit
-            - authenticator
-            - controllerManager
-            - scheduler
+          - api
+          - audit
+          - authenticator
+          - controllerManager
+          - scheduler
       ResourcesVpcConfig: 
         EndpointPrivateAccess: false
         EndpointPublicAccess: true
