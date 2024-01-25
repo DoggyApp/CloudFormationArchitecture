@@ -97,6 +97,5 @@ Resources:
 Outputs: 
   ec2KeyId: 
     Value: !GetAtt ec2mgmtkey.Arn
-    Type: String
 
 
