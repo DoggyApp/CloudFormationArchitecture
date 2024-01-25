@@ -3,12 +3,22 @@ Description: EKS stack which creates EKS cluster and worker groups
 
 Parameters:
 #Stack Parameters 
-  privateSubnet0id: 
+  publicSubnet0id: 
     Type: String 
-  privateSubnet1id: 
+  publicSubnet1id: 
+    Type: String
+  privateSubnet0id:
+    Type: String
+  privateSubnet1id:
     Type: String
   clusterSGid: 
     Type: String 
+  ec2KeyId:
+    Type: String
+  publicNodeSGid:
+    Type: String
+  managerSGid: 
+    Type: String
   # clusterRoleArn: 
   #   Type: String
 
@@ -33,14 +43,24 @@ Resources:
       #EncryptionConfig: TODO
       KubernetesNetworkConfig: 
         ServiceIpv4Cidr: 10.100.0.0/16
-      #Logging: 
-        #TODO
+      Logging: 
+        ClusterLogging: 
+          EnabledTypes: 
+            - api
+            - audit
+            - authenticator
+            - controllerManager
+            - scheduler
       ResourcesVpcConfig: 
-        SecurityGroupIds: 
-          - !Ref clusterSGid
+        EndpointPrivateAccess: false
+        EndpointPublicAccess: true
+        PublicAccessCidrs:
+          - 10.98.0.0/16
+        # SecurityGroupIds: 
+        #   - !Ref clusterSGid
         SubnetIds: 
-          - !Ref privateSubnet0id
-          - !Ref privateSubnet1id
+          - !Ref publicSubnet0id
+          - !Ref publicSubnet1id
       RoleArn: arn:aws:iam::109798190983:role/EKSclusterRole # !Ref clusterRoleArn
       Name: doggy-app-eks-cluster-0
       Tags: 
@@ -54,6 +74,81 @@ Resources:
           Value: !Ref environment 
         - Key: project 
           Value: !Ref project 
+
+  eksNodeGroupPublic: 
+    Type: AWS::EKS::Nodegroup
+    Properties:
+      AmiType: AL2_x86_64
+      CapacityType: ON_DEMAND
+      ClusterName: doggy-app-eks-cluster-0
+      DiskSize: 20
+      # ForceUpdateEnabled: Boolean
+      InstanceTypes: 
+        - t3.medium
+      # Labels: 
+      #   Key: Value
+      # LaunchTemplate: 
+      #   LaunchTemplateSpecification
+      NodegroupName: doggy-app-eks-ng-public
+      NodeRole: arn:aws:iam::109798190983:role/eks-worker-node-service
+      # ReleaseVersion: String
+      RemoteAccess: 
+          Ec2SshKey: !Ref ec2KeyId
+          SourceSecurityGroups: 
+            - !Ref managerSGid
+      ScalingConfig: 
+          DesiredSize: 1
+          MaxSize: 2
+          MinSize: 1
+      Subnets: 
+        - !Ref publicSubnet0id
+        - !Ref publicSubnet1id
+      # Tags: 
+      #   Key: Value
+      # Taints: 
+      #   - Taint
+      UpdateConfig: 
+        MaxUnavailable: 1
+        # MaxUnavailablePercentage: int 1 to 100
+      # Version: String
+
+  eksNodeGroupPrivate: 
+    Type: AWS::EKS::Nodegroup
+    Properties:
+      AmiType: AL2_x86_64
+      CapacityType: ON_DEMAND
+      ClusterName: doggy-app-eks-cluster-0
+      DiskSize: 20
+      # ForceUpdateEnabled: Boolean
+      InstanceTypes: 
+        - t3.medium
+      # Labels: 
+      #   Key: Value
+      # LaunchTemplate: 
+      #   LaunchTemplateSpecification
+      NodegroupName: doggy-app-eks-ng-private
+      NodeRole: arn:aws:iam::109798190983:role/eks-worker-node-service
+      # ReleaseVersion: String
+      RemoteAccess: 
+          Ec2SshKey: !Ref ec2KeyId
+          SourceSecurityGroups: 
+            - !Ref managerSGid
+      ScalingConfig: 
+          DesiredSize: 1
+          MaxSize: 2
+          MinSize: 1
+      Subnets: 
+        - !Ref privateSubnet0id
+        - !Ref privateSubnet1id
+      # Tags: 
+      #   Key: Value
+      # Taints: 
+      #   - Taint
+      UpdateConfig: 
+        MaxUnavailable: 1
+        # MaxUnavailablePercentage: int 1 to 100
+      # Version: String
+
 
   # fargateProfile0: 
   #   Type: AWS::EKS::FargateProfile

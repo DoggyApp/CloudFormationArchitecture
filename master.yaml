@@ -140,6 +140,14 @@ Resources:
     Properties:
       TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/eks/eks.yaml"
       Parameters:
+        publicSubnet0id: 
+          Fn::GetAtt: 
+          - vpcStack
+          - Outputs.publicSubnet0id
+        publicSubnet1id: 
+          Fn::GetAtt: 
+          - vpcStack
+          - Outputs.publicSubnet1id
         privateSubnet0id: 
           Fn::GetAtt: 
           - vpcStack
@@ -152,6 +160,18 @@ Resources:
           Fn::GetAtt: 
           - sgStack
           - Outputs.clusterSGid
+        ec2KeyId:
+          Fn::GetAtt:
+          - keyStack
+          - Outputs.ec2KeyId
+        publicNodeSGid:
+          Fn::GetAtt:
+          - sgStack
+          - Outputs.publicNodeSGid
+        managerSGid: 
+          Fn::GetAtt:
+          - sgStack
+          - Outputs.managerSGid
         # clusterRoleArn: 
         #   Fn::GetAtt: 
         #   - rolesStack

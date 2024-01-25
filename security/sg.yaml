@@ -36,7 +36,7 @@ Resources:
           Value: !Ref project 
       VpcId: !Ref vpc0id
 
-  nodeSecurityGroup: 
+  publicNodeSecurityGroup: 
     Type: AWS::EC2::SecurityGroup
     Properties: 
       GroupDescription: EKS node security group 
@@ -74,8 +74,8 @@ Outputs:
   clusterSGid: 
     Value: !Ref clusterSecurityGroup
 
-  nodeSGid: 
-    Value: !Ref nodeSecurityGroup
+  publicNodeSGid: 
+    Value: !Ref publicNodeSecurityGroup
 
   managerSGid: 
     Value: !Ref managerSecurityGroup
