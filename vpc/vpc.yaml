@@ -93,7 +93,7 @@ Resources:
     Properties: 
       AvailabilityZone: !Select [ 0, !GetAZs "" ]
       CidrBlock: !Ref publicSubnet0Cidr
-      MapPublicIpOnLaunch: false
+      MapPublicIpOnLaunch: true
       Tags: 
         - Key: Name 
           Value: !Join ['-', [!Ref 'AWS::StackName', public, !Select [ 0, !GetAZs "" ] ]]
@@ -115,7 +115,7 @@ Resources:
     Properties: 
       AvailabilityZone: !Select [ 1, !GetAZs "" ]
       CidrBlock: !Ref publicSubnet1Cidr
-      MapPublicIpOnLaunch: false
+      MapPublicIpOnLaunch: true
       Tags: 
         - Key: Name 
           Value: !Join ['-', [!Ref 'AWS::StackName', public, !Select [ 1, !GetAZs "" ] ]]
