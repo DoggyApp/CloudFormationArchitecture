@@ -50,10 +50,10 @@ Resources:
       #       - Type: controllerManager
       #       - Type: cheduler
       ResourcesVpcConfig: 
-        EndpointPrivateAccess: false
-        EndpointPublicAccess: true
-        PublicAccessCidrs:
-          - 10.98.0.0/16
+        EndpointPrivateAccess: true
+        EndpointPublicAccess: false
+        # PublicAccessCidrs:
+        #   - 10.98.0.0/16
         SecurityGroupIds: 
           - !Ref clusterSGid
         SubnetIds: 
