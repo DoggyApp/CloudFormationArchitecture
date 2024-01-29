@@ -141,13 +141,13 @@ Resources:
             cp ./kubectl $HOME/bin/kubectl 
             #   install latest version of AWS CLI 
             #remove old version of AWS CLI 
-            sudo yum remove awscli
+            sudo yum remove awscli -y 
             #download Zip of new v2 of aws cli 
             sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             #unzip v2 of aws cli 
             sudo unzip -u awscliv2.zip
             #install AWS CLI 
-            sudo ./aws/install
+            sudo ./aws/install --update 
             # add latest version of AWS CLI to class path 
             cp "/usr/local/bin/aws" "$HOME/bin/aws"
             # associate eksctl with the doggy app cluster
