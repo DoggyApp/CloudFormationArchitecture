@@ -129,7 +129,7 @@ Resources:
           !Sub |
             #!/bin/bash 
             # install eksctl
-            curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.27.9/2024-01-04/bin/linux/arm64/kubectl
+            curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.28.5/2024-01-04/bin/linux/arm64/kubectl
             # give eksctl executable privilage 
             chmod +x ./kubectl
             # add eksctl to the calss path 
