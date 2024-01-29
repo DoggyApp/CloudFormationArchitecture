@@ -109,6 +109,8 @@ Resources:
         MaxUnavailable: 1
         # MaxUnavailablePercentage: int 1 to 100
       # Version: String
+      DependsOn: 
+        - eksCluster
 
   eksNodeGroupPrivate: 
     Type: AWS::EKS::Nodegroup
@@ -146,6 +148,8 @@ Resources:
         MaxUnavailable: 1
         # MaxUnavailablePercentage: int 1 to 100
       # Version: String
+      DependsOn: 
+        - eksCluster
 
 
   # fargateProfile0: 
