@@ -226,10 +226,10 @@ Resources:
           Fn::GetAtt: 
           - sgStack
           - Outputs.managerSGid
-        privateSubnet0id:
+        publicSubnet0id:
           Fn::GetAtt: 
           - vpcStack
-          - Outputs.privateSubnet0id
+          - Outputs.publicSubnet0id
         ec2KeyId:
           Fn::GetAtt:
           - keyStack
