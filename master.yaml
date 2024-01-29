@@ -217,9 +217,9 @@ Resources:
 
   mgmtStack:
     Type: "AWS::CloudFormation::Stack"
-    Properties:
     DependsOn: 
       - eksStack
+    Properties:
       TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/eks/ec2.yaml"
       Parameters:
         managerSGid:
