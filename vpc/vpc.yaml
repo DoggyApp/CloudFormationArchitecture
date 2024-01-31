@@ -59,6 +59,31 @@ Resources:
         - Key: project 
           Value: !Ref project 
 
+  vpc0dhcpOpt:
+    Type: AWS::EC2::DHCPOptions
+    Properties:
+      DomainName: ec2.internal
+      DomainNameServers: 
+        - AmazonProvidedDNS
+      Tags: 
+        - Key: Name 
+          Value: !Sub '${AWS::StackName}-${environment}-dhcpOpt'
+        - Key: Owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
+
+  vpc0dhcpAss:
+    Type: AWS::EC2::VPCDHCPOptionsAssociation
+    Properties:
+      DhcpOptionsId: !Ref vpc0dhcpOpt
+      VpcId: !Ref vpc0
+
+
   igw0: 
     Type: AWS::EC2::InternetGateway
     Condition: isPublic 

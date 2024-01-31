@@ -137,18 +137,18 @@ Resources:
             echo 'export PATH=$HOME/bin:$PATH' >> ~/.bashrc
             
 
-            # #   install latest version of AWS CLI 
-            # #remove old version of AWS CLI 
-            # sudo yum remove awscli -y
-            # #download Zip of new v2 of aws cli 
-            # sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            # #unzip v2 of aws cli 
-            # sudo unzip -u awscliv2.zip
-            # #install
-            # sudo ./aws/install
+            #   install latest version of AWS CLI 
+            #remove old version of AWS CLI 
+            sudo yum remove awscli -y
+            #download Zip of new v2 of aws cli 
+            sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
+            #unzip v2 of aws cli 
+            sudo unzip awscliv2.zip
+            #install
+            sudo ./aws/install
 
-            # # add latest version of AWS CLI to class path 
-            # cp "./aws" "$HOME/bin/aws"
-            # # associate eksctl with the doggy app cluster
-            # aws eks update-kubeconfig --region us-east-1 --name doggy-app-eks-cluster-0
+            # add latest version of AWS CLI to class path 
+            cp "./aws" "$HOME/bin"
+            # associate eksctl with the doggy app cluster
+            aws eks update-kubeconfig --region us-east-1 --name doggy-app-eks-cluster-0
 
