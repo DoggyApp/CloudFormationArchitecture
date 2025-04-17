@@ -11,8 +11,8 @@ Parameters:
     Type: String
   privateSubnet1id:
     Type: String
-  clusterSGid: 
-    Type: String 
+  # clusterSGid: 
+  #   Type: String 
   publicNodeSGid:
     Type: String
   managerSGid: 
@@ -51,11 +51,11 @@ Resources:
       #       - Type: cheduler
       ResourcesVpcConfig: 
         EndpointPrivateAccess: true
-        EndpointPublicAccess: false
-        # PublicAccessCidrs:
-        #   - 10.98.0.0/16
-        SecurityGroupIds: 
-          - !Ref clusterSGid
+        EndpointPublicAccess: true
+        PublicAccessCidrs:
+          - 0.0.0.0/0 #10.98.0.0/16
+        # SecurityGroupIds: 
+        #   - !Ref clusterSGid
         SubnetIds: 
           - !Ref publicSubnet0id
           - !Ref publicSubnet1id

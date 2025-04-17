@@ -156,10 +156,10 @@ Resources:
           Fn::GetAtt: 
           - vpcStack
           - Outputs.privateSubnet1id
-        clusterSGid: 
-          Fn::GetAtt: 
-          - sgStack
-          - Outputs.clusterSGid
+        # clusterSGid: 
+        #   Fn::GetAtt: 
+        #   - sgStack
+        #   - Outputs.clusterSGid
         publicNodeSGid:
           Fn::GetAtt:
           - sgStack
