@@ -73,12 +73,12 @@ Resources:
         - IpProtocol: tcp
           FromPort: 443
           ToPort: 443
-          CidrIp: 0.0.0.0/0  # open outbound for access to AWS CLI and Kubeclt download (could probably be restricted) 
-      # SecurityGroupIngress:
-      #   - IpProtocol: tcp
-      #     FromPort: 22
-      #     ToPort: 22
-      #     CidrIp: 0.0.0.0/0  # For now, or restrict to your IP 
+          CidrIp: 0.0.0.0/0  # open outbound for access to AWS CLI and Kubeclt download (could probably be restricted) also allows connection to SSM
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0  # access for SSH management For now, or restrict to your IP 
       # don't need to open ports if using SSM
       Tags: 
         - Key: Name 
