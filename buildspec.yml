@@ -9,15 +9,3 @@ phases:
 artifacts:
   files:
     - 'packaged-root-template.yaml'
-
-{
-  "Version": "2012-10-17", 
-  "Statement": [
-    {
-      "Sid": "PermissionsForCloudFormation", 
-      "Effect": "Allow", 
-      "Action": "*", 
-      "Resource": "*"
-    }
-  ]
-}

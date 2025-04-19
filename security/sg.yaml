@@ -1,11 +1,11 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: Security stack which provides EKS cluster and worker groups with permissions and encryption 
 
+# Stack Parameters 
 Parameters:
-#Stack Parameters 
   vpc0id:
     Type: String
-#Tag parameters 
+# Tag parameters 
   owner: 
     Type: String
   ownerEmail: 
@@ -48,11 +48,6 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties: 
       GroupDescription: EKS node security group 
-      SecurityGroupEgress:
-        - IpProtocol: tcp
-          FromPort: 443
-          ToPort: 443
-          CidrIp: 10.0.0.0/8  # or specific CIDR for EKS ENIs
       Tags: 
         - Key: Name 
           Value: !Join ['-', [!Ref 'AWS::StackName', EKS-node-sg ]]
@@ -70,6 +65,16 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties: 
       GroupDescription: EC2 manager security group 
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 10.0.0.0/8  # or specific CIDR for EKS ENIs
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0  # For now, or restrict to your IP
       Tags: 
         - Key: Name 
           Value: !Join ['-', [!Ref 'AWS::StackName', EC2-manager-sg ]]
