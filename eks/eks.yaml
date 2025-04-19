@@ -40,7 +40,7 @@ Resources:
       Version: 1.28 
       #EncryptionConfig: TODO
       KubernetesNetworkConfig: 
-        ServiceIpv4Cidr: 10.100.0.0/16
+        ServiceIpv4Cidr: 10.100.0.0/16 
       # Logging: 
       #   ClusterLogging: 
       #     EnabledTypes: 
@@ -51,14 +51,14 @@ Resources:
       #       - Type: cheduler
       ResourcesVpcConfig: 
         EndpointPrivateAccess: true
-        EndpointPublicAccess: true
-        PublicAccessCidrs:
-          - 0.0.0.0/0 #10.98.0.0/16
+        EndpointPublicAccess: false
+        #PublicAccessCidrs:
+        #  - 0.0.0.0/0 #10.98.0.0/16
         # SecurityGroupIds: 
         #   - !Ref clusterSGid
         SubnetIds: 
-          - !Ref publicSubnet0id
-          - !Ref publicSubnet1id
+          - !Ref privateSubnet0id
+          - !Ref privateSubnet1id
       RoleArn: arn:aws:iam::109798190983:role/EKSclusterRole # !Ref clusterRoleArn
       Name: doggy-app-eks-cluster-0
       Tags: 

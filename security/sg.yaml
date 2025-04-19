@@ -23,6 +23,14 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties: 
       GroupDescription: EKS cluster security group 
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          SourceSecurityGroupId: !Ref managerSecurityGroup
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
       Tags: 
         - Key: Name 
           Value: !Join ['-', [!Ref 'AWS::StackName', EKS-cluster-sg ]]
@@ -40,6 +48,11 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties: 
       GroupDescription: EKS node security group 
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 10.0.0.0/8  # or specific CIDR for EKS ENIs
       Tags: 
         - Key: Name 
           Value: !Join ['-', [!Ref 'AWS::StackName', EKS-node-sg ]]

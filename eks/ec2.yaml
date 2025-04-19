@@ -152,3 +152,5 @@ Resources:
             # associate eksctl with the doggy app cluster
             # aws eks update-kubeconfig --region us-east-1 --name doggy-app-eks-cluster-0 --debug
 
+aws eks update-kubeconfig --name doggy-app-eks-cluster-0 --region us-east-1 --alias public
+
