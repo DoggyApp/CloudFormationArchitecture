@@ -11,8 +11,8 @@ Parameters:
     Type: String
   privateSubnet1id:
     Type: String
-  # clusterSGid: 
-  #   Type: String 
+  clusterSGid: 
+    Type: String 
   publicNodeSGid:
     Type: String
   managerSGid: 
@@ -54,8 +54,8 @@ Resources:
         EndpointPublicAccess: false
         #PublicAccessCidrs:
         #  - 0.0.0.0/0 #10.98.0.0/16
-        # SecurityGroupIds: 
-        #   - !Ref clusterSGid
+        SecurityGroupIds: 
+          - !Ref clusterSGid
         SubnetIds: 
           - !Ref privateSubnet0id
           - !Ref privateSubnet1id
