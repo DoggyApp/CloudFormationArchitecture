@@ -2,6 +2,11 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: EKS stack which creates EKS cluster and worker groups 
 
 Parameters:
+#Secret Parameters 
+  AdminAccessKey:
+    Type: String
+  AdminSecretKey:
+    Type: String
 #Imported Parameters 
   managerSGid: 
     Type: String
@@ -129,12 +134,12 @@ Resources:
           !Sub |
             #!/bin/bash 
             # install eksctl
+            cd ~
             curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.28.5/2024-01-04/bin/linux/arm64/kubectl
             # give eksctl executable privilage 
-            chmod +x ./kubectl
-            # add eksctl to the calss path 
-            mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
-            echo 'export PATH=$HOME/bin:$PATH' >> ~/.bashrc
+            sudo mv kubectl /usr/local/bin/
+            sudo chmod +x /usr/local/bin/kubectl
+            
             
 
             #   install latest version of AWS CLI 
@@ -150,5 +155,32 @@ Resources:
             # add latest version of AWS CLI to class path 
             cp "./aws" "$HOME/bin"
             # associate eksctl with the doggy app cluster
-            # aws eks update-kubeconfig --region us-east-1 --name doggy-app-eks-cluster-0 --debug
+
+            # install EKSCTL 
+            curl -LO "https://github.com/eksctl-io/eksctl/releases/download/v0.207.0/eksctl_Linux_arm64.tar.gz"
+            tar -xzf eksctl_Linux_arm64.tar.gz
+            sudo mv eksctl /usr/local/bin/
+            sudo chmod +x /usr/local/bin/eksctl
+
+            # create the ~/.aws/config file 
+            cat <<EOF > ~/.aws/config
+            [default]
+            role_arn = arn:aws:iam::109798190983:role/deploy-cfn-template-role
+            region = us-east-1
+            source_profile = eks-cluster-admin
+            output = json
+
+            [profile eks-cluster-admin]
+            region = us-east-1
+            role_arn = arn:aws:iam::109798190983:user/admin
+            EOF
+
+            cat <<EOF > ~/.aws/credentials
+            [eks-cluster-admin]
+            aws_access_key_id = ${AdminAccessKey}
+            aws_secret_access_key = ${AdminSecretKey}
+            EOF
+
+            # connect Kubectl with the context 
+            aws eks update-kubeconfig --region us-east-1 --name doggy-app-eks-cluster-0 
 

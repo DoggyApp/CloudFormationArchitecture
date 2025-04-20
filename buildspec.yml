@@ -1,11 +1,29 @@
 version: 0.2
 env:
+  secrets-manager:
+    AWS_ACCESS_KEY_ID: admin-user-key-id:key-id 
+    AWS_SECRET_ACCESS_KEY: admin-user-key-id:secret-key 
   variables:
     TEMPLATE_BUCKET: "doggy-template-build-terminal"
 phases:
   build:
     commands:
-      - aws cloudformation package --template master.yaml --s3-bucket $TEMPLATE_BUCKET --output-template-file packaged-root-template.yaml
+      - echo "Packaging CloudFormation template..."
+      - aws cloudformation package \
+          --template master.yaml \
+          --s3-bucket $TEMPLATE_BUCKET \
+          --output-template-file packaged-root-template.yaml
+          
+      - echo "Deploying with secrets injected..."
+      - aws cloudformation deploy \
+          --template-file packaged-root-template.yaml \
+          --stack-name my-stack-name \
+          --capabilities CAPABILITY_NAMED_IAM \
+          --region $REGION \
+          --parameter-overrides \
+              AdminAccessKey=$AWS_ACCESS_KEY_ID \
+              AdminSecretKey=$AWS_SECRET_ACCESS_KEY
+
 artifacts:
   files:
     - 'packaged-root-template.yaml'
