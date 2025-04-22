@@ -30,15 +30,14 @@ phases:
       - echo "Using AccessKey= $ACCESS_KEY"
       - echo "Using SecretKey= $SECRET_KEY"
       - |
-        aws cloudformation deploy \
+        eval "aws cloudformation deploy \
           --template-file packaged-root-template.yaml \
           --stack-name my-stack-name \
           --capabilities CAPABILITY_NAMED_IAM \
           --region $REGION \
           --parameter-overrides \
-            ParameterKey=AdminAccessKey,ParameterValue=$ACCESS_KEY \
-            ParameterKey=AdminSecretKey,ParameterValue=$SECRET_KEY
-
+            ParameterKey=AdminAccessKey,ParameterValue=$AWS_ACCESS_KEY_ID \
+            ParameterKey=AdminSecretKey,ParameterValue=$AWS_SECRET_ACCESS_KEY"
 
 artifacts:
   files:
