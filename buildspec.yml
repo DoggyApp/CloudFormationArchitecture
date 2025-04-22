@@ -4,10 +4,21 @@ env:
     AWS_ACCESS_KEY_ID: admine-user-key-id:key-id 
     AWS_SECRET_ACCESS_KEY: admine-user-key-id:secret-key 
   variables:
+    REGION: "us-east-1"
     TEMPLATE_BUCKET: "doggy-template-build-terminal"
 phases:
+  install:
+    runtime-versions:
+      python: 3.9  
+    commands:
+      - echo "Installing AWS CLI v2..."
+      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      - unzip awscliv2.zip
+      - sudo ./aws/install
+      - aws --version
   build:
     commands:
+      - set -e 
       - echo "Packaging CloudFormation template..."
       - aws cloudformation package \
           --template master.yaml \
