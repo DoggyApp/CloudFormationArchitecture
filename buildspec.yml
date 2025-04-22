@@ -32,8 +32,8 @@ phases:
           --capabilities CAPABILITY_NAMED_IAM \
           --region $REGION \
           --parameter-overrides \
-            AdminAccessKey=$AWS_ACCESS_KEY_ID \
-            AdminSecretKey=$AWS_SECRET_ACCESS_KEY
+            ParameterKey=AdminAccessKey,ParameterValue=$AWS_ACCESS_KEY_ID \
+            ParameterKey=AdminSecretKey,ParameterValue=$AWS_SECRET_ACCESS_KEY
 
 
 artifacts:
