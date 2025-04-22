@@ -1,8 +1,8 @@
 version: 0.2
 env:
   secrets-manager:
-    AWS_ACCESS_KEY_ID: admine-user-key-id:key-id 
-    AWS_SECRET_ACCESS_KEY: admine-user-key-id:secret-key 
+    AWS_ACCESS_KEY_ID: admine-user-key-id:key-id
+    AWS_SECRET_ACCESS_KEY: admine-user-key-id:secret-key
   variables:
     REGION: "us-east-1"
     TEMPLATE_BUCKET: "doggy-template-build-terminal"
@@ -22,6 +22,9 @@ phases:
       - echo "Packaging CloudFormation template..."
       - aws cloudformation package --template-file master.yaml --s3-bucket $TEMPLATE_BUCKET --output-template-file packaged-root-template.yaml
       - echo "Deploying with secrets injected..."
+      - echo "AccessKey: $AWS_ACCESS_KEY_ID"
+      - echo "SecretKey: $AWS_SECRET_ACCESS_KEY"
+      - if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ]; then echo "Secrets not loaded!"; exit 1; fi
       - |
         aws cloudformation deploy \
           --template-file packaged-root-template.yaml \
