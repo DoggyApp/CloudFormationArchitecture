@@ -32,7 +32,7 @@ phases:
           --stack-name my-stack-name \
           --capabilities CAPABILITY_NAMED_IAM \
           --region $REGION \
-          --parameter-overrides $PARAMS
+          --parameter-overrides $PARAMS"
 
 artifacts:
   files:
