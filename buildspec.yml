@@ -20,20 +20,18 @@ phases:
     commands:
       - set -e 
       - echo "Packaging CloudFormation template..."
-      - aws cloudformation package \
-          --template master.yaml \
-          --s3-bucket $TEMPLATE_BUCKET \
-          --output-template-file packaged-root-template.yaml
-          
+      - aws cloudformation package --template-file master.yaml --s3-bucket $TEMPLATE_BUCKET --output-template-file packaged-root-template.yaml
       - echo "Deploying with secrets injected..."
-      - aws cloudformation deploy \
+      - |
+        aws cloudformation deploy \
           --template-file packaged-root-template.yaml \
           --stack-name my-stack-name \
           --capabilities CAPABILITY_NAMED_IAM \
           --region $REGION \
           --parameter-overrides \
-              AdminAccessKey=$AWS_ACCESS_KEY_ID \
-              AdminSecretKey=$AWS_SECRET_ACCESS_KEY
+            AdminAccessKey=$AWS_ACCESS_KEY_ID \
+            AdminSecretKey=$AWS_SECRET_ACCESS_KEY
+
 
 artifacts:
   files:
