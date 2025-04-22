@@ -22,22 +22,17 @@ phases:
       - echo "Packaging CloudFormation template..."
       - aws cloudformation package --template-file master.yaml --s3-bucket $TEMPLATE_BUCKET --output-template-file packaged-root-template.yaml
       - echo "Deploying with secrets injected..."
-      - echo "AccessKey= $AWS_ACCESS_KEY_ID"
-      - echo "SecretKey= $AWS_SECRET_ACCESS_KEY"
+      - echo "AccessKey (base64)= $(echo -n $AWS_ACCESS_KEY_ID | base64)"
+      - echo "SecretKey (base64)= $(echo -n $AWS_SECRET_ACCESS_KEY | base64)"
       - if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ]; then echo "Secrets not loaded!"; exit 1; fi
-      - ACCESS_KEY=$AWS_ACCESS_KEY_ID
-      - SECRET_KEY=$AWS_SECRET_ACCESS_KEY
-      - echo "Using AccessKey= $ACCESS_KEY"
-      - echo "Using SecretKey= $SECRET_KEY"
+      - PARAMS="ParameterKey=AdminAccessKey,ParameterValue=$AWS_ACCESS_KEY_ID ParameterKey=AdminSecretKey,ParameterValue=$AWS_SECRET_ACCESS_KEY"
       - |
         eval "aws cloudformation deploy \
           --template-file packaged-root-template.yaml \
           --stack-name my-stack-name \
           --capabilities CAPABILITY_NAMED_IAM \
           --region $REGION \
-          --parameter-overrides \
-            ParameterKey=AdminAccessKey,ParameterValue=$ACCESS_KEY \
-            ParameterKey=AdminSecretKey,ParameterValue=$SECRET_KEY"
+          --parameter-overrides $PARAMS
 
 artifacts:
   files:

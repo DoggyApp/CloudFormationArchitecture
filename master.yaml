@@ -5,9 +5,11 @@ Parameters:
 #secrets
   AdminAccessKey:
     Type: String
+    NoEcho: true
     Description: "Admin AWS Access Key for programmatic access"
   AdminSecretKey:
     Type: String
+    NoEcho: true
     Description: "Admin AWS Secret Key for programmatic access"
 
   templatePath: 
@@ -230,8 +232,8 @@ Resources:
     Properties:
       TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/eks/ec2.yaml"
       Parameters:
-        AdminAccessKey:
-        AdminSecretKey:
+        AdminAccessKey: !Ref AdminAccessKey
+        AdminSecretKey: !Ref AdminSecretKey
         managerSGid:
           Fn::GetAtt: 
           - sgStack

@@ -103,7 +103,7 @@ Resources:
             - ResourceType: instance 
               Tags: 
                 - Key: Name 
-                  Value: !Join ['-', [!Ref 'AWS::StackName', managment, ec2 ]]
+                  Value: !Sub "${AWS::StackName}-management-ec2"
                 - Key: owner
                   Value: !Ref owner
                 - Key: OwnerEmail 
@@ -163,6 +163,8 @@ Resources:
             sudo chmod +x /usr/local/bin/eksctl
 
             # create the ~/.aws/config file 
+            mkdir -p ~/.aws
+            
             cat <<EOF > ~/.aws/config
             [default]
             role_arn = arn:aws:iam::109798190983:role/deploy-cfn-template-role
