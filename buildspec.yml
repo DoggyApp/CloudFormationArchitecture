@@ -1,8 +1,8 @@
 version: 0.2
 env:
   secrets-manager:
-    AWS_ACCESS_KEY_ID: admin-user-key-id:key-id 
-    AWS_SECRET_ACCESS_KEY: admin-user-key-id:secret-key 
+    AWS_ACCESS_KEY_ID: admine-user-key-id:key-id 
+    AWS_SECRET_ACCESS_KEY: admine-user-key-id:secret-key 
   variables:
     TEMPLATE_BUCKET: "doggy-template-build-terminal"
 phases:
