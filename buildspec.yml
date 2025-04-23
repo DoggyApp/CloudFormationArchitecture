@@ -26,7 +26,7 @@ phases:
       - echo "ACCESS_KEY length= ${#AWS_ACCESS_KEY_ID}"
       - echo "SECRET_KEY length= ${#AWS_SECRET_ACCESS_KEY}"
       - if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ]; then echo "Secrets not loaded!"; exit 1; fi
-      - PARAMS="ParameterKey=AdminAccessKey,ParameterValue=\"$AWS_ACCESS_KEY_ID\" ParameterKey=AdminSecretKey,ParameterValue=\"$AWS_SECRET_ACCESS_KEY\""
+      - PARAMS="AdminAccessKey="$AWS_ACCESS_KEY_ID" AdminSecretKey="$AWS_SECRET_ACCESS_KEY""
       - echo "$PARAMS"
       - |
         aws cloudformation deploy \
