@@ -123,9 +123,9 @@ Resources:
             chmod +x /usr/local/bin/eksctl
 
             echo "[INFO] Configuring AWS CLI credentials..."
-            mkdir -p /root/.aws
+            mkdir -p /ec2-user/.aws
 
-            cat <<EOF > /root/.aws/config
+            cat <<EOF > /ec2-user/.aws/config
             [default]
             role_arn = arn:aws:iam::109798190983:role/deploy-cfn-template-role
             region = us-east-1
@@ -136,7 +136,7 @@ Resources:
             region = us-east-1
             EOF
 
-            cat <<EOF > /root/.aws/credentials
+            cat <<EOF > /ec2-user/.aws/credentials
             [eks-cluster-admin]
             aws_access_key_id = ${AdminAccessKey}
             aws_secret_access_key = ${AdminSecretKey}
@@ -189,59 +189,6 @@ Resources:
         LaunchTemplateId: !Ref mgmtLaunchTemplate
         Version: !GetAtt mgmtLaunchTemplate.LatestVersionNumber
       SubnetId: !Ref publicSubnet0id
-      # UserData: 
-      #   Fn::Base64:
-      #     !Sub |
-      #       #!/bin/bash 
-      #       # install eksctl
-      #       cd ~/local/usr/bin
-      #       curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.28.5/2024-01-04/bin/linux/arm64/kubectl
-      #       # give eksctl executable privilage 
-      #       sudo mv kubectl /usr/local/bin/
-      #       sudo chmod +x /usr/local/bin/kubectl
-            
-            
 
-      #       #   install latest version of AWS CLI 
-      #       #remove old version of AWS CLI 
-      #       sudo yum remove awscli -y
-      #       #download Zip of new v2 of aws cli 
-      #       sudo curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
-      #       #unzip v2 of aws cli 
-      #       sudo unzip awscliv2.zip
-      #       #install
-      #       sudo ./aws/install
 
-      #       # add latest version of AWS CLI to class path 
-      #       cp "./aws" "$HOME/bin"
-            
-      #       # install EKSCTL 
-      #       curl -LO "https://github.com/eksctl-io/eksctl/releases/download/v0.207.0/eksctl_Linux_arm64.tar.gz"
-      #       tar -xzf eksctl_Linux_arm64.tar.gz
-      #       sudo mv eksctl /usr/local/bin/
-      #       sudo chmod +x /usr/local/bin/eksctl
-
-      #       # create the ~/.aws/config file 
-      #       mkdir -p ~/.aws
-            
-      #       cat <<EOF > ~/.aws/config
-      #       [default]
-      #       role_arn = arn:aws:iam::109798190983:role/deploy-cfn-template-role
-      #       region = us-east-1
-      #       source_profile = eks-cluster-admin
-      #       output = json
-
-      #       [profile eks-cluster-admin]
-      #       region = us-east-1
-      #       role_arn = arn:aws:iam::109798190983:user/admin
-      #       EOF
-
-      #       cat <<EOF > ~/.aws/credentials
-      #       [eks-cluster-admin]
-      #       aws_access_key_id = ${AdminAccessKey}
-      #       aws_secret_access_key = ${AdminSecretKey}
-      #       EOF
-
-      #       # connect Kubectl with the context 
-      #       aws eks update-kubeconfig --region us-east-1 --name doggy-app-eks-cluster-0 
-
+# sudo su - ec2-user   # to switch to ec2-user
