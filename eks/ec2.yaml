@@ -155,8 +155,6 @@ Resources:
         ImageId: !FindInMap [ amiId, !Ref 'AWS::Region', !Ref imageId] 
         InstanceType: !FindInMap [instanceMap, !Ref imageId, !Ref instanceSize]
         KeyName: !Ref keyName
-        Metadata:
-          LaunchTemplateVersion: "v1-20250428"  # <- increment manually on changes
         MetadataOptions: 
           HttpTokens: required 
         SecurityGroupIds: 
