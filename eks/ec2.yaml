@@ -145,7 +145,7 @@ Resources:
 
             echo "[INFO] Updating kubeconfig..."
             export PATH=$PATH:/usr/local/bin
-            aws eks update-kubeconfig --region us-east-1 --name doggy-app-eks-cluster-0 --profile eks-cluster-admin
+            sudo -u ec2-user aws eks update-kubeconfig --region us-east-1 --name doggy-app-eks-cluster-0 --profile eks-cluster-admin
 
             echo "[INFO] User data script completed successfully."
             echo "===== USER DATA SCRIPT END ====="
