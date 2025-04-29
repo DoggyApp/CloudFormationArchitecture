@@ -123,9 +123,10 @@ Resources:
             chmod +x /usr/local/bin/eksctl
 
             echo "[INFO] Configuring AWS CLI credentials..."
-            mkdir -p /ec2-user/.aws
+            mkdir -p /home/ec2-user/.aws
+            chown ec2-user:ec2-user /home/ec2-user/.aws
 
-            cat <<EOF > /ec2-user/.aws/config
+            cat <<EOF > /home/ec2-user/.aws/config
             [default]
             role_arn = arn:aws:iam::109798190983:role/deploy-cfn-template-role
             region = us-east-1
@@ -136,7 +137,7 @@ Resources:
             region = us-east-1
             EOF
 
-            cat <<EOF > /ec2-user/.aws/credentials
+            cat <<EOF > /home/ec2-user/.aws/credentials
             [eks-cluster-admin]
             aws_access_key_id = ${AdminAccessKey}
             aws_secret_access_key = ${AdminSecretKey}
