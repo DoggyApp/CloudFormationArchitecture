@@ -123,8 +123,7 @@ Resources:
             chmod +x /usr/local/bin/eksctl
 
             echo "[INFO] Configuring AWS CLI credentials..."
-            mkdir -p /root/bin
-            cp -r ./aws /root/bin/
+            mkdir -p /root/.aws
 
             cat <<EOF > /root/.aws/config
             [default]
