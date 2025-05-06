@@ -73,44 +73,44 @@ Resources:
         - Key: project 
           Value: !Ref project 
 
-  eksNodeGroupPublic: 
-    Type: AWS::EKS::Nodegroup
-    Properties:
-      AmiType: AL2_x86_64
-      CapacityType: ON_DEMAND
-      ClusterName: doggy-app-eks-cluster-0
-      DiskSize: 20
-      # ForceUpdateEnabled: Boolean
-      InstanceTypes: 
-        - t3.medium
-      # Labels: 
-      #   Key: Value
-      # LaunchTemplate: 
-      #   LaunchTemplateSpecification
-      NodegroupName: doggy-app-eks-ng-public
-      NodeRole: arn:aws:iam::109798190983:role/eks-worker-node-service
-      # ReleaseVersion: String
-      RemoteAccess: 
-        Ec2SshKey: doggyApp-mgmt-keyPair
-        SourceSecurityGroups: 
-          - !Ref managerSGid
-      ScalingConfig: 
-          DesiredSize: 1
-          MaxSize: 2
-          MinSize: 1
-      Subnets: 
-        - !Ref publicSubnet0id
-        - !Ref publicSubnet1id
-      # Tags: 
-      #   Key: Value
-      # Taints: 
-      #   - Taint
-      UpdateConfig: 
-        MaxUnavailable: 1
-        # MaxUnavailablePercentage: int 1 to 100
-      # Version: String
-    DependsOn: 
-      - eksCluster
+  # eksNodeGroupPublic: 
+  #   Type: AWS::EKS::Nodegroup
+  #   Properties:
+  #     AmiType: AL2_x86_64
+  #     CapacityType: ON_DEMAND
+  #     ClusterName: doggy-app-eks-cluster-0
+  #     DiskSize: 20
+  #     # ForceUpdateEnabled: Boolean
+  #     InstanceTypes: 
+  #       - t3.medium
+  #     # Labels: 
+  #     #   Key: Value
+  #     # LaunchTemplate: 
+  #     #   LaunchTemplateSpecification
+  #     NodegroupName: doggy-app-eks-ng-public
+  #     NodeRole: arn:aws:iam::109798190983:role/eks-worker-node-service
+  #     # ReleaseVersion: String
+  #     RemoteAccess: 
+  #       Ec2SshKey: doggyApp-mgmt-keyPair
+  #       SourceSecurityGroups: 
+  #         - !Ref managerSGid
+  #     ScalingConfig: 
+  #         DesiredSize: 1
+  #         MaxSize: 2
+  #         MinSize: 1
+  #     Subnets: 
+  #       - !Ref publicSubnet0id
+  #       - !Ref publicSubnet1id
+  #     # Tags: 
+  #     #   Key: Value
+  #     # Taints: 
+  #     #   - Taint
+  #     UpdateConfig: 
+  #       MaxUnavailable: 1
+  #       # MaxUnavailablePercentage: int 1 to 100
+  #     # Version: String
+  #   DependsOn: 
+  #     - eksCluster
 
   eksNodeGroupPrivate: 
     Type: AWS::EKS::Nodegroup

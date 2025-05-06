@@ -152,7 +152,7 @@ Resources:
 
             sudo yum install git -y
 
-            git clone https://github.com/DoggyApp/kubernetesArchitecture.git /home/ec2-user
+            git clone https://github.com/DoggyApp/kubernetesArchitecture.git /home/ec2-user/kubernetesArchitecture
 
             echo "[INFO] User data script completed successfully."
             echo "===== USER DATA SCRIPT END ====="
