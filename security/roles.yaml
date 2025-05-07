@@ -1,102 +1,124 @@
-# AWSTemplateFormatVersion: "2010-09-09"
-# Description: Creates IAM roles for EKS and mgmt services #for use with mitigated risk of escalation attacks 
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Creates IAM roles for EKS and mgmt services #for use with mitigated risk of escalation attacks 
 
-# Parameters:
-#   #Tag parameters 
-#   owner: 
-#     Type: String
-#   ownerEmail: 
-#     Type: String
-#   environment: 
-#     Type: String
-#     AllowedValues: 
-#       - production
-#       - development
-#   project: 
-#     Type: String
+Parameters:
+  #Tag parameters 
+  owner: 
+    Type: String
+  ownerEmail: 
+    Type: String
+  environment: 
+    Type: String
+    AllowedValues: 
+      - production
+      - development
+  project: 
+    Type: String
 
-# Resources: 
-#   eksClusterRole: 
-#     Type: AWS::IAM::Role
-#     Properties: 
-#       RoleName: eksClusterRole
-#       Description: The role and it's permissions adopted by eks cluster in its own VPC 
-#       AssumeRolePolicyDocument: {
-#           "Version": "2012-10-17",
-#           "Statement": 
-#             [
-#             {
-#               "Effect": "Allow",
-#               "Principal": 
-#               {
-#                 "Service": [
-#                   "eks.amazonaws.com"
-#                 ]
-#               },
-#                 "Action": [
-#                   "sts:AssumeRole"
-#                 ]
-#               }
-#               ]
-#         }
-#       ManagedPolicyArns: 
-#         - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
-#         - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
-#         - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
-#       Tags: 
-#         - Key: Name 
-#           Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]
-#         - Key: owner
-#           Value: !Ref owner
-#         - Key: OwnerEmail 
-#           Value: !Ref ownerEmail
-#         - Key: Environment 
-#           Value: !Ref environment 
-#         - Key: project 
-#           Value: !Ref project 
+Resources: 
+  eksClusterRole: 
+    Type: AWS::IAM::Role
+    Properties: 
+      RoleName: eks-cluster-role-dpl
+      Description: The role and it's permissions adopted by eks cluster to perform control place funstions neccessary to connect to and manage eks nodes
+      AssumeRolePolicyDocument:
+         Version: "2012-10-17"
+         Statement:
+            - Effect: Allow
+              Principal:
+                Service: eks.amazonaws.com
+              Action: sts:AssumeRole
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
+        - arn:aws:iam::aws:policy/AmazonEKSVPCResourceController
+      Tags: 
+        - Key: Name 
+          Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]
+        - Key: owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
   
-#   doggyeksnodegrouprole: 
-#     Type: AWS::IAM::Role
-#     Properties: 
-#       RoleName: eksNodeRole
-#       Description: The role and it s permissions adopted by eks worker nodes in each subnet 
-#       AssumeRolePolicyDocument: {
-#           "Version": "2012-10-17",
-#           "Statement": 
-#             [
-#             {
-#               "Effect": "Allow",
-#               "Principal": 
-#               {
-#                 "Service": [
-#                   "ec2.amazonaws.com"
-#                 ]
-#               },
-#                 "Action": [
-#                   "sts:AssumeRole"
-#                 ]
-#               }
-#               ]
-#         }
-#       ManagedPolicyArns: 
-#         - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
-#         - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
-#         - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
-#       Tags: 
-#         - Key: Name 
-#           Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]
-#         - Key: owner
-#           Value: !Ref owner
-#         - Key: OwnerEmail 
-#           Value: !Ref ownerEmail
-#         - Key: Environment 
-#           Value: !Ref environment 
-#         - Key: project 
-#           Value: !Ref project 
+  eksNodeGroupRole: 
+    Type: AWS::IAM::Role
+    Properties: 
+      RoleName: eks-worker-node-service-dpl
+      Description: The role and it s permissions adopted by eks worker nodes to perform auto scaling and other core functions
+      AssumeRolePolicyDocument: 
+         Version: "2012-10-17"
+         Statement:
+            - Effect: Allow
+              Principal:
+                Service: ec2.amazonaws.com
+              Action: sts:AssumeRole
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+      Tags: 
+        - Key: Name 
+          Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]
+        - Key: owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
 
-# Outputs:
-#   clusterRoleArn: 
-#     Value: !GetAtt eksClusterRole.Arn
+  mgmtInstanceRole: 
+    Type: AWS::IAM::Role
+    Properties: 
+      RoleName: kubectl-control-base-dpl
+      Description: The role and it's permissions adopted by the bastion to issue commands to the kube cluster 
+      AssumeRolePolicyDocument: 
+         Version: "2012-10-17"
+         Statement:
+            - Effect: Allow
+              Principal:
+                Service: ec2.amazonaws.com
+              Action: sts:AssumeRole
+      Policies:
+          - PolicyName: BastionEKSCustomPolicy
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Sid: Statement1
+                  Effect: Allow
+                  Action:
+                    - eks:DescribeCluster
+                    - sts:GetCallerIdentity
+                    - sts:AssumeRole
+                  Resource: arn:aws:eks:us-east-1:109798190983:cluster/doggy-app-eks-cluster-0
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
+        - arn:aws:iam::aws:policy/AmazonEKSServicePolicy
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore # allows the instance to be accessed from SSM so that all ports can remain closed 
+      Tags: 
+        - Key: Name 
+          Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]
+        - Key: owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
 
+Outputs:
+  clusterRoleArn: 
+    Value: !GetAtt eksClusterRole.Arn
+
+  nodeRoleArn: 
+    Value: !GetAtt eksNodeGroupRole.Arn
+
+  mgmtInstanceRoleArn: 
+    Value: !GetAtt mgmtInstanceRole.Arn
 
         

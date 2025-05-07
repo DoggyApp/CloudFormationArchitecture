@@ -14,6 +14,8 @@ Parameters:
     Type: String 
   publicSubnet0id: 
     Type: String
+  mgmtInstanceRoleArn: 
+    Type: String
 #Stack Parameters 
   volumeType: 
     Type: String
@@ -186,7 +188,7 @@ Resources:
     Type: AWS::IAM::InstanceProfile 
     Properties:
       Roles:
-        - kubectl-control-base
+        - !Ref mgmtInstanceRoleArn
 
   mgmtInstance: 
     Type: AWS::EC2::Instance

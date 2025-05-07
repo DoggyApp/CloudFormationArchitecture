@@ -178,6 +178,10 @@ Resources:
         #   Fn::GetAtt: 
         #   - rolesStack
         #   - Outputs.clusterRoleArn
+        # nodeRoleArn: 
+        #   Fn::GetAtt: 
+        #   - rolesStack
+        #   - Outputs.nodeRoleArn
         #Tag parameters 
         owner: !Ref owner
         ownerEmail: !Ref ownerEmail
@@ -242,6 +246,10 @@ Resources:
           Fn::GetAtt:
           - keyStack
           - Outputs.ec2KeyId
+        # mgmtInstanceRoleArn: 
+        #   Fn::GetAtt: 
+        #   - rolesStack
+        #   - Outputs.mgmtInstanceRoleArn
         #Tag parameters
         owner: !Ref owner
         ownerEmail: !Ref ownerEmail

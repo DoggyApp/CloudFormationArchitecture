@@ -15,8 +15,10 @@ Parameters:
     Type: String 
   managerSGid: 
     Type: String
-  # clusterRoleArn: 
-  #   Type: String
+  clusterRoleArn: 
+    Type: String
+  nodeRoleArn: 
+    Type: String
 
 #Tag parameters. 
   owner: 
@@ -57,7 +59,7 @@ Resources:
         SubnetIds: 
           - !Ref privateSubnet0id
           - !Ref privateSubnet1id
-      RoleArn: arn:aws:iam::109798190983:role/EKSclusterRole # !Ref clusterRoleArn
+      RoleArn: !Ref clusterRoleArn
       Name: doggy-app-eks-cluster-0
       Tags: 
         - Key: Name 
@@ -86,7 +88,7 @@ Resources:
       # LaunchTemplate: 
       #   LaunchTemplateSpecification
       NodegroupName: doggy-app-eks-ng-private
-      NodeRole: arn:aws:iam::109798190983:role/eks-worker-node-service
+      NodeRole: !Ref nodeRoleArn
       # ReleaseVersion: String
       RemoteAccess: 
         Ec2SshKey: doggyApp-mgmt-keyPair
