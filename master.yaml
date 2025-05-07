@@ -272,6 +272,10 @@ Resources:
           Fn::GetAtt: 
           - mgmtRoleStack
           - Outputs.mgmtInstanceRoleArn
+        mgmtInstanceRole: 
+          Fn::GetAtt: 
+          - mgmtRoleStack
+          - Outputs.mgmtInstanceRole
         #Tag parameters
         owner: !Ref owner
         ownerEmail: !Ref ownerEmail
