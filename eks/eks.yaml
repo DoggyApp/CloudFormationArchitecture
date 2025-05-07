@@ -13,8 +13,6 @@ Parameters:
     Type: String
   clusterSGid: 
     Type: String 
-  publicNodeSGid:
-    Type: String
   managerSGid: 
     Type: String
   # clusterRoleArn: 

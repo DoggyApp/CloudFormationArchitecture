@@ -170,10 +170,6 @@ Resources:
           Fn::GetAtt: 
           - sgStack
           - Outputs.clusterSGid
-        publicNodeSGid:
-          Fn::GetAtt:
-          - sgStack
-          - Outputs.publicNodeSGid
         managerSGid: 
           Fn::GetAtt:
           - sgStack
