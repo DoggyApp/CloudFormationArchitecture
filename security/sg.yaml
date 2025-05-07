@@ -44,22 +44,22 @@ Resources:
           Value: !Ref project 
       VpcId: !Ref vpc0id
 
-  publicNodeSecurityGroup: 
-    Type: AWS::EC2::SecurityGroup
-    Properties: 
-      GroupDescription: EKS node security group 
-      Tags: 
-        - Key: Name 
-          Value: !Join ['-', [!Ref 'AWS::StackName', EKS-node-sg ]]
-        - Key: owner
-          Value: !Ref owner
-        - Key: OwnerEmail 
-          Value: !Ref ownerEmail
-        - Key: Environment 
-          Value: !Ref environment 
-        - Key: project 
-          Value: !Ref project 
-      VpcId: !Ref vpc0id
+  # publicNodeSecurityGroup: 
+  #   Type: AWS::EC2::SecurityGroup
+  #   Properties: 
+  #     GroupDescription: EKS node security group 
+  #     Tags: 
+  #       - Key: Name 
+  #         Value: !Join ['-', [!Ref 'AWS::StackName', EKS-node-sg ]]
+  #       - Key: owner
+  #         Value: !Ref owner
+  #       - Key: OwnerEmail 
+  #         Value: !Ref ownerEmail
+  #       - Key: Environment 
+  #         Value: !Ref environment 
+  #       - Key: project 
+  #         Value: !Ref project 
+  #     VpcId: !Ref vpc0id
 
   managerSecurityGroup: 
     Type: AWS::EC2::SecurityGroup
@@ -96,9 +96,6 @@ Resources:
 Outputs: 
   clusterSGid: 
     Value: !Ref clusterSecurityGroup
-
-  publicNodeSGid: 
-    Value: !Ref publicNodeSecurityGroup
 
   managerSGid: 
     Value: !Ref managerSecurityGroup
