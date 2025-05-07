@@ -130,25 +130,27 @@ Resources:
         - Key: Name
           Value: RouteTablesStack
 
-  # rolesStack:
-  #   Type: "AWS::CloudFormation::Stack"
-  #   Properties:
-  #     TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/security/roles.yaml"
-  #     Parameters:
-  #       #Tag parameters 
-  #       owner: !Ref owner
-  #       ownerEmail: !Ref ownerEmail
-  #       environment: !Ref environment
-  #       project: !Ref project
-  #     Tags:
-  #       - Key: Name
-  #         Value: RolesStack
+  rolesStack:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/security/roles.yaml"
+      Parameters:
+        #Tag parameters 
+        owner: !Ref owner
+        ownerEmail: !Ref ownerEmail
+        environment: !Ref environment
+        project: !Ref project
+      Tags:
+        - Key: Name
+          Value: RolesStack
 
 
   eksStack:
     Type: "AWS::CloudFormation::Stack"
     Properties:
       TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/eks/eks.yaml"
+      DependsOn: 
+      - rolesStack
       Parameters:
         publicSubnet0id: 
           Fn::GetAtt: 
@@ -229,6 +231,7 @@ Resources:
     Type: "AWS::CloudFormation::Stack"
     DependsOn: 
       - eksStack
+      - rolesStack
     Properties:
       TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/eks/ec2.yaml"
       Parameters:
