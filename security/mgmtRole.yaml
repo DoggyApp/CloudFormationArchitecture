@@ -22,7 +22,7 @@ Resources:
   mgmtInstanceRole: 
     Type: AWS::IAM::Role
     Properties: 
-      RoleName: kubectl-control-base-dpl
+      RoleName: kube-control-base-dpl
       Description: The role and it's permissions adopted by the bastion to issue commands to the kube cluster 
       AssumeRolePolicyDocument: 
          Version: "2012-10-17"
