@@ -42,14 +42,14 @@ Resources:
                     - eks:DescribeCluster
                     - sts:GetCallerIdentity
                     - sts:AssumeRole
-                  Resource: !Ref eksClusterArn 
+                  Resource: !Ref eksClusterArn
       ManagedPolicyArns: 
         - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
         - arn:aws:iam::aws:policy/AmazonEKSServicePolicy
         - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore # allows the instance to be accessed from SSM so that all ports can remain closed 
       Tags: 
         - Key: Name 
-          Value: !Join ['-', [!Ref 'AWS::StackName', role ]]
+          Value: !Join ['-', [!Ref 'AWS::StackName', 'role' ]]
         - Key: owner
           Value: !Ref owner
         - Key: OwnerEmail 

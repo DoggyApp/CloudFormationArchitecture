@@ -102,6 +102,8 @@ managing the cluster and related resources.
 
     🔐 AWS profile uses admin user, not root, all users are locked behind MFA. 
 
+    🔐 Only admin user has permission to assume role of the pipeline and access Kube Cluster. 
+
 
 
 
