@@ -174,14 +174,14 @@ Resources:
           Fn::GetAtt:
           - sgStack
           - Outputs.managerSGid
-        # clusterRoleArn: 
-        #   Fn::GetAtt: 
-        #   - rolesStack
-        #   - Outputs.clusterRoleArn
-        # nodeRoleArn: 
-        #   Fn::GetAtt: 
-        #   - rolesStack
-        #   - Outputs.nodeRoleArn
+        clusterRoleArn: 
+          Fn::GetStack
+          - Outputs.clusterRoleArn
+        nodeRoleArn: 
+          Fn::GetAtt: 
+          - rolesStaAtt: 
+          - rolesck
+          - Outputs.nodeRoleArn
         #Tag parameters 
         owner: !Ref owner
         ownerEmail: !Ref ownerEmail
@@ -246,10 +246,10 @@ Resources:
           Fn::GetAtt:
           - keyStack
           - Outputs.ec2KeyId
-        # mgmtInstanceRoleArn: 
-        #   Fn::GetAtt: 
-        #   - rolesStack
-        #   - Outputs.mgmtInstanceRoleArn
+        mgmtInstanceRoleArn: 
+          Fn::GetAtt: 
+          - rolesStack
+          - Outputs.mgmtInstanceRoleArn
         #Tag parameters
         owner: !Ref owner
         ownerEmail: !Ref ownerEmail
