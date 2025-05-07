@@ -65,6 +65,6 @@ Outputs:
     Value: !GetAtt mgmtInstanceRole.Arn
 
   mgmtInstanceRole: 
-    Value: !GetAtt mgmtInstanceRole
+    Value: !Ref mgmtInstanceRole
 
         
