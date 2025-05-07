@@ -78,7 +78,4 @@ Outputs:
   nodeRoleArn: 
     Value: !GetAtt eksNodeGroupRole.Arn
 
-  mgmtInstanceRoleArn: 
-    Value: !GetAtt mgmtInstanceRole.Arn
-
         
