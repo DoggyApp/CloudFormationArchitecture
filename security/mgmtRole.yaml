@@ -1,7 +1,9 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: Creates IAM roles for EKS and mgmt services #for use with mitigated risk of escalation attacks 
+Description: Creates IAM roles for EKS and mgmt services 
 
 Parameters:
+  eksClusterArn: 
+    Type: String
   #Tag parameters 
   owner: 
     Type: String
@@ -24,7 +26,7 @@ Resources:
       Description: The role and it's permissions adopted by the bastion to issue commands to the kube cluster 
       AssumeRolePolicyDocument: 
          Version: "2012-10-17"
-         Statement:
+         Statement: 
             - Effect: Allow
               Principal:
                 Service: ec2.amazonaws.com
@@ -34,20 +36,20 @@ Resources:
             PolicyDocument:
               Version: "2012-10-17"
               Statement:
-                - Sid: Statement1
+                - Sid: AllowClusterAccess
                   Effect: Allow
                   Action:
                     - eks:DescribeCluster
                     - sts:GetCallerIdentity
                     - sts:AssumeRole
-                  Resource: arn:aws:eks:us-east-1:109798190983:cluster/doggy-app-eks-cluster-0
+                  Resource: !Ref eksClusterArn 
       ManagedPolicyArns: 
         - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
         - arn:aws:iam::aws:policy/AmazonEKSServicePolicy
         - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore # allows the instance to be accessed from SSM so that all ports can remain closed 
       Tags: 
         - Key: Name 
-          Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]
+          Value: !Join ['-', [!Ref 'AWS::StackName', role ]]
         - Key: owner
           Value: !Ref owner
         - Key: OwnerEmail 

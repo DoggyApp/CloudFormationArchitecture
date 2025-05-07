@@ -33,7 +33,7 @@ Resources:
         - arn:aws:iam::aws:policy/AmazonEKSVPCResourceController
       Tags: 
         - Key: Name 
-          Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]
+          Value: !Join ['-', [!Ref 'AWS::StackName', role ]]
         - Key: owner
           Value: !Ref owner
         - Key: OwnerEmail 
@@ -61,7 +61,7 @@ Resources:
         - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
       Tags: 
         - Key: Name 
-          Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]
+          Value: !Join ['-', [!Ref 'AWS::StackName', role ]]
         - Key: owner
           Value: !Ref owner
         - Key: OwnerEmail 

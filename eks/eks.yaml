@@ -112,3 +112,7 @@ Resources:
     DependsOn: 
       - eksCluster
 
+Outputs:
+
+  eksClusterArn: 
+    Value: !GetAtt eksCluster.Arn
