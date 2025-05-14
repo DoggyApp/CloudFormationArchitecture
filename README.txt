@@ -93,6 +93,9 @@ managing the cluster and related resources.
 
     🔐 Security group on mgmt instance blocks all traffic, only allowing SSM. 
 
+    🔐 Security group on Kubernetes cluster blocks all traffic, except TCP originating from mgmt 
+    instance security group. 
+
     🔐 Mgmt instance role only given access to doggy-app-cluster resource. 
 
     🔐 Access Key and Secret Access Key (needed to access kubernetes cluster) stored as secrets 
