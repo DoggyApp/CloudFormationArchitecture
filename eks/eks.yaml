@@ -82,7 +82,7 @@ Resources:
       DiskSize: 20
       # ForceUpdateEnabled: Boolean
       InstanceTypes: 
-        - t3.medium
+        - t3.large
       # Labels: 
       #   Key: Value
       # LaunchTemplate: 
