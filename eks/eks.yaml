@@ -73,7 +73,7 @@ Resources:
         - Key: project 
           Value: !Ref project 
 
-  eksNodeGroupPrivate: 
+  eksNodeGroup0: 
     Type: AWS::EKS::Nodegroup
     Properties:
       AmiType: AL2_x86_64
@@ -82,13 +82,12 @@ Resources:
       DiskSize: 20
       # ForceUpdateEnabled: Boolean
       InstanceTypes: 
-        - t3.large
+        - t3.medium
       # Labels: 
       #   Key: Value
       # LaunchTemplate: 
       #   LaunchTemplateSpecification
-      NodegroupName: doggy-app-eks-ng-private
-      NodeRole: !Ref nodeRoleArn
+      NodegroupName: doggy-app-eks-ng-0
       # ReleaseVersion: String
       RemoteAccess: 
         Ec2SshKey: doggyApp-mgmt-keyPair
@@ -96,8 +95,8 @@ Resources:
           - !Ref managerSGid
       ScalingConfig: 
           DesiredSize: 1
-          MaxSize: 2
-          MinSize: 1
+          MaxSize: 3
+          MinSize: 0
       Subnets: 
         - !Ref privateSubnet0id
         - !Ref privateSubnet1id
@@ -109,8 +108,60 @@ Resources:
         MaxUnavailable: 1
         # MaxUnavailablePercentage: int 1 to 100
       # Version: String
+    Tags:
+      - Key: "k8s.io/cluster-autoscaler/enabled"
+        Value: "true"
+      - Key: "k8s.io/cluster-autoscaler/doggy-app-eks-cluster-0"
+        Value: "owned"
     DependsOn: 
       - eksCluster
+
+  eksNodeGroup1: 
+    Type: AWS::EKS::Nodegroup
+    Properties:
+      AmiType: AL2_x86_64
+      CapacityType: ON_DEMAND
+      ClusterName: doggy-app-eks-cluster-0
+      DiskSize: 20
+      # ForceUpdateEnabled: Boolean
+      InstanceTypes: 
+        - t3.medium
+      # Labels: 
+      #   Key: Value
+      # LaunchTemplate: 
+      #   LaunchTemplateSpecification
+      NodegroupName: doggy-app-eks-ng-monitoring
+      # ReleaseVersion: String
+      RemoteAccess: 
+        Ec2SshKey: doggyApp-mgmt-keyPair
+        SourceSecurityGroups: 
+          - !Ref managerSGid
+      ScalingConfig: # referes to how many nodes can scale NOT how many pods
+          DesiredSize: 1
+          MaxSize: 3
+          MinSize: 0
+      Subnets: 
+        - !Ref privateSubnet0id
+        - !Ref privateSubnet1id
+      # Tags: 
+      #   Key: Value
+      # Taints: 
+      #   - Taint
+      UpdateConfig: 
+        MaxUnavailable: 1
+        # MaxUnavailablePercentage: int 1 to 100
+      # Version: String
+    Taints:
+      - Key: workload
+        Value: monitoring
+        Effect: NO_SCHEDULE
+    DependsOn: 
+      - eksCluster
+    Tags:
+      - Key: "k8s.io/cluster-autoscaler/enabled"
+        Value: "true"
+      - Key: "k8s.io/cluster-autoscaler/doggy-app-eks-cluster-0"
+        Value: "owned"
 
 Outputs:
 

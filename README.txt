@@ -25,6 +25,9 @@ managing the cluster and related resources.
 
         Worker nodes in private subnets across 2 AZs
 
+        2 Node groups, one for monitoring and the other for the application and core Kube 
+            functions 
+
     VPC
 
         Custom VPC with public, private and protected subnets
