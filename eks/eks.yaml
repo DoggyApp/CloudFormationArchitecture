@@ -79,12 +79,11 @@ Resources:
       AmiType: AL2_x86_64
       CapacityType: ON_DEMAND
       ClusterName: doggy-app-eks-cluster-0
+      NodeRole: !Ref nodeRoleArn
       DiskSize: 20
       # ForceUpdateEnabled: Boolean
       InstanceTypes: 
         - t3.medium
-      # Labels: 
-      #   Key: Value
       # LaunchTemplate: 
       #   LaunchTemplateSpecification
       NodegroupName: doggy-app-eks-ng-0
@@ -125,6 +124,7 @@ Resources:
       AmiType: AL2_x86_64
       CapacityType: ON_DEMAND
       ClusterName: doggy-app-eks-cluster-0
+      NodeRole: !Ref nodeRoleArn
       DiskSize: 20
       # ForceUpdateEnabled: Boolean
       InstanceTypes: 
