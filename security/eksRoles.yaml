@@ -75,6 +75,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName: cluster-autoscaler-role-doggyapp
+      Description: The role policy used to allow the autoscaling pod to execute scaling on the eks node groups themselves 
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -86,7 +87,6 @@ Resources:
         - arn:aws:iam::aws:policy/AutoScalingFullAccess
       Policies:
         - PolicyName: ClusterAutoscalerPolicy
-          Description: The role policy used to allow the autoscaling pod to execute scaling on the eks node groups themselves 
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
