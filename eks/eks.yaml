@@ -108,11 +108,21 @@ Resources:
         MaxUnavailable: 1
         # MaxUnavailablePercentage: int 1 to 100
       # Version: String
-    Tags:
-      - Key: "k8s.io/cluster-autoscaler/enabled"
-        Value: "true"
-      - Key: "k8s.io/cluster-autoscaler/doggy-app-eks-cluster-0"
-        Value: "owned"
+      Tags:
+        - Key: "k8s.io/cluster-autoscaler/enabled"
+          Value: "true"
+        - Key: "k8s.io/cluster-autoscaler/doggy-app-eks-cluster-0"
+          Value: "owned"
+        - Key: Name 
+          Value: !Join ['-', [!Ref 'AWS::StackName', eks, node ]]
+        - Key: owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
     DependsOn: 
       - eksCluster
 
@@ -151,17 +161,28 @@ Resources:
         MaxUnavailable: 1
         # MaxUnavailablePercentage: int 1 to 100
       # Version: String
-    Taints:
-      - Key: workload
-        Value: monitoring
-        Effect: NO_SCHEDULE
+      Taints:
+        - Key: workload
+          Value: monitoring
+          Effect: NO_SCHEDULE
+      Tags:
+        - Key: "k8s.io/cluster-autoscaler/enabled"
+          Value: "true"
+        - Key: "k8s.io/cluster-autoscaler/doggy-app-eks-cluster-0"
+          Value: "owned"
+        - Key: Name 
+          Value: !Join ['-', [!Ref 'AWS::StackName', eks, node ]]
+        - Key: owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
     DependsOn: 
       - eksCluster
-    Tags:
-      - Key: "k8s.io/cluster-autoscaler/enabled"
-        Value: "true"
-      - Key: "k8s.io/cluster-autoscaler/doggy-app-eks-cluster-0"
-        Value: "owned"
+    
 
 Outputs:
 
