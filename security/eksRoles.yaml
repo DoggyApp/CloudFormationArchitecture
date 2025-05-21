@@ -82,7 +82,6 @@ Resources:
             Principal:
               Service: eks.amazonaws.com
             Action: sts:AssumeRole
-      Path: "/"
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AutoScalingFullAccess
       Policies:
@@ -101,6 +100,18 @@ Resources:
                   - autoscaling:TerminateInstanceInAutoScalingGroup
                   - ec2:DescribeLaunchTemplateVersions
                 Resource: "*"
+      Tags: 
+        - Key: Name 
+          Value: !Join ['-', [!Ref 'AWS::StackName', role ]]
+        - Key: owner
+          Value: !Ref owner
+        - Key: OwnerEmail 
+          Value: !Ref ownerEmail
+        - Key: Environment 
+          Value: !Ref environment 
+        - Key: project 
+          Value: !Ref project 
+
 
 
 Outputs:
