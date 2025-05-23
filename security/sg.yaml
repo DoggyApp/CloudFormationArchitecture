@@ -23,11 +23,11 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties: 
       GroupDescription: EKS cluster security group 
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 443
-          ToPort: 443
-          SourceSecurityGroupId: !Ref managerSecurityGroup
+      # SecurityGroupIngress:
+      #   - IpProtocol: tcp
+      #     FromPort: 443
+      #     ToPort: 443
+      #     SourceSecurityGroupId: !Ref managerSecurityGroup # you don't need ingress rules to access the cluster and issue kube commands 
       SecurityGroupEgress:
         - IpProtocol: -1
           CidrIp: 0.0.0.0/0
