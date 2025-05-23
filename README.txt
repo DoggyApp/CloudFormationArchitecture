@@ -36,7 +36,7 @@ managing the cluster and related resources.
 
     Bastion Host
 
-        EC2 instance in a public subnet
+        EC2 instance in a private subnet
 
         Used for secure management access via SSM 
 
@@ -94,7 +94,8 @@ managing the cluster and related resources.
     🔐 Private subnets are used to restrict access to the Kubernetes cluster and worker nodes 
     are placed in the private subet. 
 
-    🔐 Security group on mgmt instance blocks all traffic, only allowing SSM. 
+    🔐 Security group on mgmt instance blocks all traffic, only allowing SSM, and is placed in
+    a private subnet to ensure no public access. 
 
     🔐 Security group on Kubernetes cluster blocks all traffic, except TCP originating from mgmt 
     instance security group. 

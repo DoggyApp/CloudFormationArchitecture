@@ -12,7 +12,7 @@ Parameters:
     Type: String
   ec2KeyId: 
     Type: String 
-  publicSubnet0id: 
+  privateSubnet0id: 
     Type: String
   mgmtInstanceRoleArn: 
     Type: String
@@ -200,5 +200,5 @@ Resources:
       LaunchTemplate:
         LaunchTemplateId: !Ref mgmtLaunchTemplate
         Version: !GetAtt mgmtLaunchTemplate.LatestVersionNumber
-      SubnetId: !Ref publicSubnet0id
+      SubnetId: !Ref privateSubnet0id
 
