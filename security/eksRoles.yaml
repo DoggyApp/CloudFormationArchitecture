@@ -56,7 +56,7 @@ Resources:
                 Service: ec2.amazonaws.com
               Action: sts:AssumeRole
       Policies:
-          - PolicyName: grants ssm access to nodes  
+          - PolicyName: ssm-access-to-doggy-nodes  
             PolicyDocument:
               Version: "2012-10-17"
               Statement:
