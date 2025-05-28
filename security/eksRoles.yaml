@@ -55,13 +55,22 @@ Resources:
               Principal:
                 Service: ec2.amazonaws.com
               Action: sts:AssumeRole
+      Policies:
+          - PolicyName: grants ssm access to nodes  
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Sid: AllowNodeAccess
+                  Effect: Allow
+                  Action:
+                    - ssm:StartSession,
+                    - ssm:SendCommand,
+                    - ssm:DescribeInstanceInformation"
+                  Resource: "*"
       ManagedPolicyArns: 
         - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
         - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
         - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly,
-        - ssm:StartSession,
-        - ssm:SendCommand,
-        - ssm:DescribeInstanceInformation
       Tags: 
         - Key: Name 
           Value: !Join ['-', [!Ref 'AWS::StackName', role ]]
