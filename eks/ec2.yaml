@@ -158,6 +158,13 @@ Resources:
 
             git clone https://github.com/DoggyApp/kubernetesArchitecture.git /home/ec2-user/kubernetesArchitecture
 
+            sudo amazon-linux-extras enable ansible2
+            sudo yum install -y ansible
+            ansible-galaxy collection install community.kubernetes
+            pip3 install kubernetes openshift
+
+
+
             echo "[INFO] User data script completed successfully!"
             echo "===== USER DATA SCRIPT END ====="
         DisableApiTermination: !Ref disableApiTermination

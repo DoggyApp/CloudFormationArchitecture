@@ -83,47 +83,6 @@ Resources:
         - Key: project 
           Value: !Ref project 
 
-  # ClusterAutoscalerRole:
-  #   Type: AWS::IAM::Role
-  #   Properties:
-  #     RoleName: cluster-autoscaler-role-doggyapp
-  #     Description: The role policy used to allow the autoscaling pod to execute scaling on the eks node groups themselves 
-  #     AssumeRolePolicyDocument:
-  #       Version: "2012-10-17"
-  #       Statement:
-  #         - Effect: Allow
-  #           Principal:
-  #             Service: eks.amazonaws.com
-  #           Action: sts:AssumeRole
-  #     ManagedPolicyArns:
-  #       - arn:aws:iam::aws:policy/AutoScalingFullAccess
-  #     Policies:
-  #       - PolicyName: ClusterAutoscalerPolicy
-  #         PolicyDocument:
-  #           Version: "2012-10-17"
-  #           Statement:
-  #             - Effect: Allow
-  #               Action:
-  #                 - autoscaling:DescribeAutoScalingGroups
-  #                 - autoscaling:DescribeAutoScalingInstances
-  #                 - autoscaling:DescribeLaunchConfigurations
-  #                 - autoscaling:DescribeTags
-  #                 - autoscaling:SetDesiredCapacity
-  #                 - autoscaling:TerminateInstanceInAutoScalingGroup
-  #                 - ec2:DescribeLaunchTemplateVersions
-  #               Resource: "*"
-  #     Tags: 
-  #       - Key: Name 
-  #         Value: !Join ['-', [!Ref 'AWS::StackName', role ]]
-  #       - Key: owner
-  #         Value: !Ref owner
-  #       - Key: OwnerEmail 
-  #         Value: !Ref ownerEmail
-  #       - Key: Environment 
-  #         Value: !Ref environment 
-  #       - Key: project 
-  #         Value: !Ref project 
-
 
 
 Outputs:
