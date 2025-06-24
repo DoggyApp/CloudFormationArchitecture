@@ -12,6 +12,16 @@ Parameters:
     NoEcho: true
     Description: "Admin AWS Secret Key for programmatic access"
 
+  Email: 
+    Type: String
+    Description: to email being passed into the ansible configuration for the SNS set up
+  AWSID: 
+    Type: String 
+    Description: the AWS ID being passed into the ansible configuration for kube set up 
+  OpenAISecret: 
+    Type: String 
+    Description: the ARN of the AWS secret that contains the Open AI secret key, it will be passed to Ansible for set up of Alerting pod 
+
   templatePath: 
     Type: String 
     Default: doggy-template-build-terminal
@@ -256,6 +266,9 @@ Resources:
       Parameters:
         AdminAccessKey: !Ref AdminAccessKey
         AdminSecretKey: !Ref AdminSecretKey
+        Email: !Ref Email 
+        AWSID: !Ref AWSID 
+        OpenAISecret: !Ref OpenAISecret
         managerSGid:
           Fn::GetAtt: 
           - sgStack

@@ -6,6 +6,9 @@ env:
   variables:
     REGION: "us-east-1"
     TEMPLATE_BUCKET: "doggy-template-build-terminal"
+    EMAIL: "idanzigm@gmail.com"
+    AWS_ID: "109798190983"
+    OPEN_AI_SECRET_KEY: "arn:aws:secretsmanager:us-east-1:109798190983:secret:openai-key-NSazkz"
 phases:
   install:
     runtime-versions:
@@ -26,7 +29,7 @@ phases:
       # - echo "ACCESS_KEY length= ${#AWS_ACCESS_KEY_ID}"
       # - echo "SECRET_KEY length= ${#AWS_SECRET_ACCESS_KEY}"
       - if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ]; then echo "Secrets not loaded!"; exit 1; fi
-      - PARAMS="AdminAccessKey="$AWS_ACCESS_KEY_ID" AdminSecretKey="$AWS_SECRET_ACCESS_KEY""
+      - PARAMS="AdminAccessKey="$AWS_ACCESS_KEY_ID" AdminSecretKey="$AWS_SECRET_ACCESS_KEY" Email="$EMAIL" AWSID="$AWS_ID" OpenAISecret="$OPEN_AI_SECRET_KEY""
       - echo "$PARAMS"
       - |
         aws cloudformation deploy \

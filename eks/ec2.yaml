@@ -7,6 +7,15 @@ Parameters:
     Type: String
   AdminSecretKey:
     Type: String
+
+#Env Parameters 
+  Email: 
+    Type: String
+  AWSID:
+    Type: String
+  OpenAISecret:
+    Type: String
+
 #Imported Parameters 
   managerSGid: 
     Type: String
@@ -158,10 +167,22 @@ Resources:
 
             git clone https://github.com/DoggyApp/kubernetesArchitecture.git /home/ec2-user/kubernetesArchitecture
 
-            sudo amazon-linux-extras enable ansible2
-            sudo yum install -y ansible
-            ansible-galaxy collection install community.kubernetes
-            pip3 install kubernetes openshift
+
+            sudo yum groupinstall "Development Tools" -y
+            
+            sudo yum install -y \
+              gcc \
+              openssl-devel \
+              bzip2-devel \
+              libffi-devel \
+              zlib-devel \
+              wget make \
+              libuuid-devel \
+              sqlite-devel \
+              readline-devel \
+              xz-devel \
+              gdbm-devel \
+              tk-devel
 
 
 

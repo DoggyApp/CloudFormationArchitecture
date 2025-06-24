@@ -57,6 +57,9 @@ managing the cluster and related resources.
           --parameter-overrides \ # go to IAM> users> <YourUser> >Security Credentials> Access Keys you can create a new one or maybe use an existing one 
             AdminAccessKey=<access_key> \ # this key will be placed in the startup script in the ec2.yaml file and automatically configure your credentials to access the kubernetes cluster.
             AdminSecretKey=<secret_access_key> #  As long as you issue these commands with the same user as the access key and that user has permissions use EKS, you should be able to access the cluster with the below command 
+            email=<email> # use the email you would like to recieve alerts to 
+            AwsId=<AwsId> 
+            OpenAiARN=<SecretARN> 
 
         # a kubernetes cluster is only accessible by the user OR RESOURCE that deployed it 
         # once the cluster is deployed go to EC2 > Instances > mgmtInstance > connect > SSM > Connect 
