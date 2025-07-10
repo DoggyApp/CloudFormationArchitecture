@@ -37,7 +37,7 @@ Resources:
   eksCluster: 
     Type: AWS::EKS::Cluster
     Properties: 
-      #Version: 1.28 
+      Version: 1.32
       #EncryptionConfig: TODO
       KubernetesNetworkConfig: 
         ServiceIpv4Cidr: 10.100.0.0/16 
