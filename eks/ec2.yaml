@@ -208,6 +208,7 @@ Resources:
 
             
             sudo make -j$(nproc)
+            sudo make install
 
             
             echo 'export PATH="/usr/local/bin:$PATH"' >> /home/ec2-user/.bashrc
