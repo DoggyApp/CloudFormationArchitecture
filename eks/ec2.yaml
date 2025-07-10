@@ -227,7 +227,7 @@ Resources:
             echo "alias setup='ansible-playbook \
               -i /home/ec2-user/kubernetesArchitecture/ansible/inventory/hosts.yaml \
               /home/ec2-user/kubernetesArchitecture/ansible/playbooks/setup.yaml \
-              -e email=${Email} aws_id=${AWSID} openai_secret_arn=${OpenAISecret:}'" \
+              -e email=${Email} aws_id=${AWSID} openai_secret_arn=${OpenAISecret}'" \
               >> ~/.bashrc
 
             echo "alias teardown='ansible-playbook -i \
