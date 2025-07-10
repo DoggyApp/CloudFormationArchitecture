@@ -111,6 +111,9 @@ Resources:
             # Redirect all output to a log file
             exec > /var/log/user-data.log 2>&1
 
+            export CLUSTER_NAME="doggy-app-eks-cluster-0"
+            export NODEGROUP_NAME="doggy-app-eks-ng-monitoring"
+
             aws sts get-caller-identity
 
             echo "===== USER DATA SCRIPT START ====="
@@ -207,9 +210,9 @@ Resources:
             sudo make -j$(nproc)
 
             
-            echo 'export PATH="/usr/local/bin:$PATH"' >> ~/.bashrc
+            echo 'export PATH="/usr/local/bin:$PATH"' >> /home/ec2-user/.bashrc
             
-            source ~/.bashrc
+            source /home/ec2-user/.bashrc
 
             
             python3.10 -m venv /home/ec2-user/py10-ansible-env
@@ -228,14 +231,20 @@ Resources:
               -i /home/ec2-user/kubernetesArchitecture/ansible/inventory/hosts.yaml \
               /home/ec2-user/kubernetesArchitecture/ansible/playbooks/setup.yaml \
               -e email=${Email} aws_id=${AWSID} openai_secret_arn=${OpenAISecret}'" \
-              >> ~/.bashrc
+              >> /home/ec2-user/.bashrc
 
             echo "alias teardown='ansible-playbook -i \
               /home/ec2-user/kubernetesArchitecture/ansible/inventory/hosts.yaml \
               /home/ec2-user/kubernetesArchitecture/ansible/playbooks/teardown.yaml'"\
-               >> ~/.bashrc
+               >> /home/ec2-user/.bashrc
 
             echo "source /home/ec2-user/py10-ansible-env/bin/activate" >> /home/ec2-user/.bashrc
+
+            echo "aws eks update-kubeconfig --region us-east-1 --name $CLUSTER_NAME --profile eks-cluster-admin" >> /home/ec2-user/.bashrc
+
+            aws eks update-kubeconfig --region us-east-1 --name $CLUSTER_NAME --profile eks-cluster-admin
+
+
 
 
             ansible-playbook -i /home/ec2-user/kubernetesArchitecture/ansible/inventory/hosts.yaml \
