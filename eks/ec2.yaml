@@ -172,11 +172,13 @@ Resources:
             
             sudo yum install -y \
               gcc \
-              openssl-devel \
+              openssl11  \
+              openssl11-devel \
               bzip2-devel \
               libffi-devel \
               zlib-devel \
-              wget make \
+              wget \
+              make \
               libuuid-devel \
               sqlite-devel \
               readline-devel \
@@ -184,6 +186,61 @@ Resources:
               gdbm-devel \
               tk-devel
 
+            
+            sudo wget https://www.python.org/ftp/python/3.10.14/Python-3.10.14.tgz -P /usr/src
+
+            
+            sudo tar xzf /usr/src/Python-3.10.14.tgz -C /usr/src
+
+            
+            cd /usr/src/Python-3.10.14 
+            
+
+            
+            sudo ./configure --enable-optimizations \
+              --with-openssl=/usr \
+              CPPFLAGS="-I/usr/include" \
+              LDFLAGS="-L/usr/lib64"
+
+
+            
+            sudo make -j$(nproc)
+
+            
+            echo 'export PATH="/usr/local/bin:$PATH"' >> ~/.bashrc
+            
+            source ~/.bashrc
+
+            
+            python3.10 -m venv /home/ec2-user/py10-ansible-env
+            
+            source /home/ec2-user/py10-ansible-env/bin/activate
+
+            
+            pip install --upgrade pip setuptools wheel
+
+            
+            pip install ansible boto3 botocore
+
+
+
+            echo "alias setup='ansible-playbook \
+              -i /home/ec2-user/kubernetesArchitecture/ansible/inventory/hosts.yaml \
+              /home/ec2-user/kubernetesArchitecture/ansible/playbooks/setup.yaml \
+              -e email=${Email} aws_id=${AWSID} openai_secret_arn=${OpenAISecret:}'" \
+              >> ~/.bashrc
+
+            echo "alias teardown='ansible-playbook -i \
+              /home/ec2-user/kubernetesArchitecture/ansible/inventory/hosts.yaml \
+              /home/ec2-user/kubernetesArchitecture/ansible/playbooks/teardown.yaml'"\
+               >> ~/.bashrc
+
+            echo "source /home/ec2-user/py10-ansible-env/bin/activate" >> /home/ec2-user/.bashrc
+
+
+            ansible-playbook -i /home/ec2-user/kubernetesArchitecture/ansible/inventory/hosts.yaml \
+              /home/ec2-user/kubernetesArchitecture/ansible/playbooks/setup.yaml \
+              -e "email=${Email} aws_id=${AWSID} openai_secret_arn=${OpenAISecret}"
 
 
             echo "[INFO] User data script completed successfully!"
