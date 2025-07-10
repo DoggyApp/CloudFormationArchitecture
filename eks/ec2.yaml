@@ -199,15 +199,16 @@ Resources:
             cd /usr/src/Python-3.10.14 
             
 
-            
+            echo "sudo ./configure --enable-optimizations"
             sudo ./configure --enable-optimizations \
               --with-openssl=/usr \
               CPPFLAGS="-I/usr/include" \
               LDFLAGS="-L/usr/lib64"
 
 
-            
+            echo "sudo make -j$(nproc)"
             sudo make -j$(nproc)
+            echo "sudo make install"
             sudo make install
 
             
@@ -215,7 +216,7 @@ Resources:
             
             source /home/ec2-user/.bashrc
 
-            
+            echo "python3.10 -m venv /home/ec2-user/py10-ansible-env"
             python3.10 -m venv /home/ec2-user/py10-ansible-env
             
             source /home/ec2-user/py10-ansible-env/bin/activate
