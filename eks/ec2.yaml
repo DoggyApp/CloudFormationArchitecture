@@ -226,6 +226,8 @@ Resources:
             pip install ansible boto3 botocore
 
 
+            ansible-galaxy collection install kubernetes.core
+
 
             echo "setup() {
                 (
