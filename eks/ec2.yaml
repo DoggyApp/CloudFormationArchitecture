@@ -159,6 +159,25 @@ Resources:
             aws_secret_access_key = ${AdminSecretKey}
             EOF
 
+            mkdir -p /root/.aws
+
+            cat <<EOF > /root/.aws/config
+            [default]
+            role_arn = arn:aws:iam::109798190983:role/deploy-cfn-template-role
+            region = us-east-1
+            source_profile = eks-cluster-admin
+            output = json
+
+            [profile eks-cluster-admin]
+            region = us-east-1
+            EOF
+
+            cat <<EOF > /root/.aws/credentials
+            [eks-cluster-admin]
+            aws_access_key_id = ${AdminAccessKey}
+            aws_secret_access_key = ${AdminSecretKey}
+            EOF
+
             echo "[INFO] Updating kubeconfig..."
             export PATH=$PATH:/usr/local/bin
             
@@ -256,10 +275,6 @@ Resources:
 
             echo "aws eks update-kubeconfig --region us-east-1 --name $CLUSTER_NAME --profile eks-cluster-admin" >> /home/ec2-user/.bashrc
 
-            # sudo -u ec2-user aws eks update-kubeconfig --region us-east-1 --name $CLUSTER_NAME --profile eks-cluster-admin
-
-            export AWS_CONFIG_FILE=/home/ec2-user/.aws/config 
-            export AWS_SHARED_CREDENTIALS_FILE=/home/ec2-user/.aws/credentials 
             aws eks update-kubeconfig --region us-east-1 --name "$CLUSTER_NAME" --profile eks-cluster-admin
 
 
