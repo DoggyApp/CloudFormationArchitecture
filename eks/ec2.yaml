@@ -213,8 +213,6 @@ Resources:
 
             
             echo 'export PATH="/usr/local/bin:$PATH"' >> /home/ec2-user/.bashrc
-            
-            source /home/ec2-user/.bashrc
 
             echo "python3.10 -m venv /home/ec2-user/py10-ansible-env"
             python3.10 -m venv /home/ec2-user/py10-ansible-env
@@ -229,18 +227,28 @@ Resources:
 
 
 
-            echo "alias setup='ansible-playbook \
-              --chdir=/home/ec2-user/kubernetesArchitecture/ansible \
-              -i inventory/hosts.yaml \
-              playbooks/setup.yaml \
-              -e "email=${Email} aws_id=${AWSID} openai_secret_arn=${OpenAISecret}"'" \
+            echo "setup() {
+                (
+                  cd /home/ec2-user/kubernetesArchitecture/ansible || return 1
+                  source /home/ec2-user/py10-ansible-env/bin/activate
+                  ansible-playbook \\
+                    -i inventory/hosts.yaml \\
+                    playbooks/setup.yaml \\
+                    -e 'email=idanzigm@gmail.com aws_id=109798190983 openai_secret_arn=arn:aws:secretsmanager:us-east-1:109798190983:secret:openai-key-NSazkz'
+                )
+              }" \
               >> /home/ec2-user/.bashrc
 
-            echo "alias teardown='ansible-playbook \
-              --chdir=/home/ec2-user/kubernetesArchitecture/ansible \
-              -i inventory/hosts.yaml \
-              playbooks/teardown.yaml'"\
-               >> /home/ec2-user/.bashrc
+            echo "teardown() {
+                (
+                  cd /home/ec2-user/kubernetesArchitecture/ansible || return 1
+                  source /home/ec2-user/py10-ansible-env/bin/activate
+                  ansible-playbook \\
+                    -i inventory/hosts.yaml \\
+                    playbooks/teardown.yaml
+                )
+              }" \
+              >> /home/ec2-user/.bashrc
 
             echo "source /home/ec2-user/py10-ansible-env/bin/activate" >> /home/ec2-user/.bashrc
 
@@ -249,10 +257,9 @@ Resources:
             aws eks update-kubeconfig --region us-east-1 --name $CLUSTER_NAME --profile eks-cluster-admin
 
 
-
+            cd /home/ec2-user/kubernetesArchitecture/ansible 
 
             ansible-playbook \
-              --chdir=/home/ec2-user/kubernetesArchitecture/ansible \
               -i inventory/hosts.yaml \
               playbooks/setup.yaml \
               -e "email=${Email} aws_id=${AWSID} openai_secret_arn=${OpenAISecret}"
