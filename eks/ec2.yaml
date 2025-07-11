@@ -256,7 +256,11 @@ Resources:
 
             echo "aws eks update-kubeconfig --region us-east-1 --name $CLUSTER_NAME --profile eks-cluster-admin" >> /home/ec2-user/.bashrc
 
-            aws eks update-kubeconfig --region us-east-1 --name $CLUSTER_NAME --profile eks-cluster-admin
+            # sudo -u ec2-user aws eks update-kubeconfig --region us-east-1 --name $CLUSTER_NAME --profile eks-cluster-admin
+
+            AWS_CONFIG_FILE=/home/ec2-user/.aws/config \
+            AWS_SHARED_CREDENTIALS_FILE=/home/ec2-user/.aws/credentials \
+            aws eks update-kubeconfig --region us-east-1 --name "$CLUSTER_NAME" --profile eks-cluster-admin
 
 
             cd /home/ec2-user/kubernetesArchitecture/ansible 
