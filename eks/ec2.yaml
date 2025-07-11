@@ -180,6 +180,7 @@ Resources:
 
             echo "[INFO] Updating kubeconfig..."
             export PATH=$PATH:/usr/local/bin
+
             
             echo 'export AWS_PROFILE=eks-cluster-admin' >> /home/ec2-user/.bashrc
 
@@ -279,6 +280,12 @@ Resources:
 
 
             cd /home/ec2-user/kubernetesArchitecture/ansible 
+
+
+            export AWS_PROFILE=eks-cluster-admin
+            export KUBECONFIG=/root/.kube/config
+
+
 
             ansible-playbook \
               -i inventory/hosts.yaml \
