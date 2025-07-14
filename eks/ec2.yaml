@@ -232,7 +232,7 @@ Resources:
             sudo make install
 
             
-            echo 'export PATH="/usr/local/bin:$PATH"' >> /home/ec2-user/.bashrc'
+            echo 'export PATH="/usr/local/bin:$PATH"' >> /home/ec2-user/.bashrc
 
             echo '[INFO] ++++++ python3.10 -m venv /home/ec2-user/py10-ansible-env'
             python3.10 -m venv /home/ec2-user/py10-ansible-env
