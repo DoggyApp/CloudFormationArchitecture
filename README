@@ -116,6 +116,10 @@ managing the cluster and related resources.
 
     Remeber to deavtivate the access key when you are done! AWS will not automatically deactivate them if they go unused, but they will ping a security recommnedation on your IAM page when you next look at it. 
 
+🛠️ Troubleshooting 
+
+    If you go to the CloudFormation console in AWS you will be able to see all of the stacks and where they fail. If you click on the failed stack, then on "events" you will be able to see which resource failed to deploy, at the top of the stack will be an error message with more information on why, often they are permission errors. You can use these errors to direct you in fixing the issue. 
+
 🛡️ Security 
 
     🔐 Private subnets are used to restrict access to the Kubernetes cluster and worker nodes 

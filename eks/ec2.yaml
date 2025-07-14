@@ -121,12 +121,12 @@ Resources:
             # Wait for networking
             sleep 15
 
-            echo "[INFO] Installing kubectl..."
+            echo "[INFO] +++++ Installing kubectl..."
             curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.28.5/2024-01-04/bin/linux/arm64/kubectl
             mv kubectl /usr/local/bin/
             chmod +x /usr/local/bin/kubectl
 
-            echo "[INFO] Installing AWS CLI v2..."
+            echo "[INFO] +++++ Installing AWS CLI v2..."
             yum remove -y awscli
             curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
@@ -178,7 +178,6 @@ Resources:
             aws_secret_access_key = ${AdminSecretKey}
             EOF
 
-            echo "[INFO] Updating kubeconfig..."
             export PATH=$PATH:/usr/local/bin
 
             
@@ -186,11 +185,12 @@ Resources:
 
             # collect kubernetes architecture
 
+            echo '[INFO] +++++ Installing git" 
             sudo yum install git -y
 
             git clone https://github.com/DoggyApp/kubernetesArchitecture.git /home/ec2-user/kubernetesArchitecture
 
-
+            echo '[INFO] +++++ Installing development tools for py-10" 
             sudo yum groupinstall "Development Tools" -y
             
             sudo yum install -y \
@@ -219,22 +219,22 @@ Resources:
             cd /usr/src/Python-3.10.14 
             
 
-            echo "sudo ./configure --enable-optimizations"
+            echo "[INFO] ++++++ sudo ./configure --enable-optimizations"
             sudo ./configure --enable-optimizations \
               --with-openssl=/usr \
               CPPFLAGS="-I/usr/include" \
               LDFLAGS="-L/usr/lib64"
 
 
-            echo "sudo make -j$(nproc)"
+            echo "[INFO] ++++++ sudo make -j$(nproc)"
             sudo make -j$(nproc)
-            echo "sudo make install"
+            echo "[INFO] ++++++ sudo make install"
             sudo make install
 
             
             echo 'export PATH="/usr/local/bin:$PATH"' >> /home/ec2-user/.bashrc
 
-            echo "python3.10 -m venv /home/ec2-user/py10-ansible-env"
+            echo "[INFO] ++++++ python3.10 -m venv /home/ec2-user/py10-ansible-env"
             python3.10 -m venv /home/ec2-user/py10-ansible-env
             
             source /home/ec2-user/py10-ansible-env/bin/activate
@@ -256,7 +256,8 @@ Resources:
                   ansible-playbook \\
                     -i inventory/hosts.yaml \\
                     playbooks/setup.yaml \\
-                    -e 'email=idanzigm@gmail.com aws_id=109798190983 openai_secret_arn=arn:aws:secretsmanager:us-east-1:109798190983:secret:openai-key-NSazkz'
+                    -e 'email=idanzigm@gmail.com aws_id=109798190983 openai_secret_arn=arn:aws:secretsmanager:us-east-1:109798190983:secret:openai-key-NSazkz' \\
+                    -vvv
                 )
               }" \
               >> /home/ec2-user/.bashrc
@@ -267,7 +268,7 @@ Resources:
                   source /home/ec2-user/py10-ansible-env/bin/activate
                   ansible-playbook \\
                     -i inventory/hosts.yaml \\
-                    playbooks/teardown.yaml
+                    playbooks/teardown.yaml -vvv
                 )
               }" \
               >> /home/ec2-user/.bashrc
@@ -285,15 +286,15 @@ Resources:
             export AWS_PROFILE=eks-cluster-admin
             export KUBECONFIG=/root/.kube/config
 
-
+            echo "[INFO] +++++ running ansible playbook!"
 
             ansible-playbook \
               -i inventory/hosts.yaml \
               playbooks/setup.yaml \
-              -e "email=${Email} aws_id=${AWSID} openai_secret_arn=${OpenAISecret}"
+              -e "email=${Email} aws_id=${AWSID} openai_secret_arn=${OpenAISecret}" -vvv
 
 
-            echo "[INFO] User data script completed successfully!"
+            echo "[INFO] +++++ User data script completed successfully!"
             echo "===== USER DATA SCRIPT END ====="
         DisableApiTermination: !Ref disableApiTermination
         EbsOptimized: !Ref ebsOptimized
