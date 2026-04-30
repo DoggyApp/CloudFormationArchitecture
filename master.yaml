@@ -303,26 +303,26 @@ Resources:
           Value: MgmtStack
 
 
-ecrStack:
-  Type: AWS::CloudFormation::Stack
-  Properties:
-    TemplateURL: !Sub https://s3.amazonaws.com/${templatePath}/ecr/ecr.yaml
-    Tags:
-      - Key: owner
-        Value: !Ref owner
-      - Key: project
-        Value: !Ref project
+  ecrStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://s3.amazonaws.com/${templatePath}/ecr/ecr.yaml
+      Tags:
+        - Key: owner
+          Value: !Ref owner
+        - Key: project
+          Value: !Ref project
 
-gitlabAlbStack:
-  Type: AWS::CloudFormation::Stack
-  DependsOn: mgmtStack
-  Properties:
-    TemplateURL: !Sub https://s3.amazonaws.com/${templatePath}/gitlab-alb.yaml
-    Parameters:
-      vpc0id: !GetAtt vpcStack.Outputs.vpc0id
-      publicSubnet0id: !GetAtt vpcStack.Outputs.publicSubnet0id
-      publicSubnet1id: !GetAtt vpcStack.Outputs.publicSubnet1id
-      mgmtInstanceId: !GetAtt mgmtStack.Outputs.mgmtInstanceId
-      owner: !Ref owner
-      environment: !Ref environment
-      project: !Ref project
+  gitlabAlbStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: mgmtStack
+    Properties:
+      TemplateURL: !Sub https://s3.amazonaws.com/${templatePath}/eks/gitlab-alb.yaml
+      Parameters:
+        vpc0id: !GetAtt vpcStack.Outputs.vpc0id
+        publicSubnet0id: !GetAtt vpcStack.Outputs.publicSubnet0id
+        publicSubnet1id: !GetAtt vpcStack.Outputs.publicSubnet1id
+        mgmtInstanceId: !GetAtt mgmtStack.Outputs.mgmtInstanceId
+        owner: !Ref owner
+        environment: !Ref environment
+        project: !Ref project
