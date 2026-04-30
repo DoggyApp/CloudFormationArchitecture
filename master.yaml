@@ -178,14 +178,10 @@ Resources:
           Fn::GetAtt: 
           - vpcStack
           - Outputs.privateSubnet1id
-        clusterSGid: 
-          Fn::GetAtt: 
-          - sgStack
-          - Outputs.clusterSGid
-        managerSGid: 
+        clusterSGid:
           Fn::GetAtt:
           - sgStack
-          - Outputs.managerSGid
+          - Outputs.clusterSGid
         clusterRoleArn: 
           Fn::GetAtt:
           - eksRolesStack

@@ -86,10 +86,11 @@ Resources:
                     - ecr:CompleteLayerUpload
                   Resource:
                     - !Sub arn:aws:ecr:us-east-1:109798190983:repository/doggyapp/*
-      ManagedPolicyArns: 
+      ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
         - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
         - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
       Tags: 
         - Key: Name 
           Value: !Join ['-', [!Ref 'AWS::StackName', role ]]

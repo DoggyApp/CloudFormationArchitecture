@@ -13,8 +13,6 @@ Parameters:
     Type: String
   clusterSGid: 
     Type: String 
-  managerSGid: 
-    Type: String
   clusterRoleArn: 
     Type: String
   nodeRoleArn: 
@@ -37,7 +35,7 @@ Resources:
   eksCluster: 
     Type: AWS::EKS::Cluster
     Properties: 
-      Version: 1.32
+      Version: "1.32"
       #EncryptionConfig: TODO
       KubernetesNetworkConfig: 
         ServiceIpv4Cidr: 10.100.0.0/16 
@@ -73,12 +71,12 @@ Resources:
         - Key: project 
           Value: !Ref project 
 
-  eksNodeGroup0: 
+  eksNodeGroup0:
     Type: AWS::EKS::Nodegroup
     Properties:
       AmiType: AL2023_x86_64_STANDARD
       CapacityType: ON_DEMAND
-      ClusterName: doggy-app-eks-cluster-0
+      ClusterName: !Ref eksCluster
       NodeRole: !Ref nodeRoleArn
       DiskSize: 20
       # ForceUpdateEnabled: Boolean
@@ -88,10 +86,6 @@ Resources:
       #   LaunchTemplateSpecification
       NodegroupName: doggy-app-eks-ng-0
       # ReleaseVersion: String
-      RemoteAccess: 
-        Ec2SshKey: doggyApp-mgmt-keyPair
-        SourceSecurityGroups: 
-          - !Ref managerSGid
       ScalingConfig: 
           DesiredSize: 1
           MaxSize: 3
@@ -118,12 +112,12 @@ Resources:
     DependsOn: 
       - eksCluster
 
-  eksNodeGroup1: 
+  eksNodeGroup1:
     Type: AWS::EKS::Nodegroup
     Properties:
       AmiType: AL2023_x86_64_STANDARD
       CapacityType: ON_DEMAND
-      ClusterName: doggy-app-eks-cluster-0
+      ClusterName: !Ref eksCluster
       NodeRole: !Ref nodeRoleArn
       DiskSize: 20
       # ForceUpdateEnabled: Boolean
@@ -135,10 +129,6 @@ Resources:
       #   LaunchTemplateSpecification
       NodegroupName: doggy-app-eks-ng-monitoring
       # ReleaseVersion: String
-      RemoteAccess: 
-        Ec2SshKey: doggyApp-mgmt-keyPair
-        SourceSecurityGroups: 
-          - !Ref managerSGid
       ScalingConfig: # referes to how many nodes can scale NOT how many pods
           DesiredSize: 1
           MaxSize: 3
