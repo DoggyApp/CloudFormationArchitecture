@@ -6,8 +6,8 @@ env:
     EMAIL: "idanzigm@gmail.com"
     AWS_ID: "109798190983"
   secrets-manager:
-    AWS_ACCESS_KEY_ID: doggy-key:key-id
-    AWS_SECRET_ACCESS_KEY: doggy-key:key-secret
+    AWS_ACCESS_KEY_ID: admin-key:key-id
+    AWS_SECRET_ACCESS_KEY: admin-key:key-secret
     OPEN_AI_SECRET_KEY: openai-key:openai-key
 phases:
   install:
