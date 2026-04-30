@@ -212,10 +212,6 @@ Resources:
           Fn::GetAtt: 
           - vpcStack
           - Outputs.vpc0id
-        GitLabALBSecurityGroup:
-          Fn::GetAtt: 
-          - gitlabAlbStack
-          - Outputs.GitLabALBSecurityGroup
         #Tag parameters 
         owner: !Ref owner
         ownerEmail: !Ref ownerEmail
@@ -315,7 +311,6 @@ Resources:
 
   gitlabAlbStack:
     Type: AWS::CloudFormation::Stack
-    DependsOn: mgmtStack
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${templatePath}/eks/gitlab-alb.yaml
       Parameters:
@@ -323,6 +318,7 @@ Resources:
         publicSubnet0id: !GetAtt vpcStack.Outputs.publicSubnet0id
         publicSubnet1id: !GetAtt vpcStack.Outputs.publicSubnet1id
         mgmtInstanceId: !GetAtt mgmtStack.Outputs.mgmtInstanceId
+        GitLabALBSecurityGroupId: !GetAtt sgStack.Outputs.gitLabALBSecurityGroupId
         owner: !Ref owner
         environment: !Ref environment
         project: !Ref project

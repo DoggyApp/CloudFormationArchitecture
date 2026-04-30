@@ -10,7 +10,9 @@ Parameters:
   publicSubnet1id:
     Type: String
   mgmtInstanceId:
-    Type: String  # EC2 instance ID of the bastion
+    Type: String
+  GitLabALBSecurityGroupId:
+    Type: String
   owner:
     Type: String
   environment:
@@ -19,27 +21,6 @@ Parameters:
     Type: String
 
 Resources:
-
-  # Security group for the ALB — allows internet traffic on port 80 and 443
-  GitLabALBSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Allow HTTP/HTTPS to the GitLab ALB
-      VpcId: !Ref vpc0id
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 443
-          ToPort: 443
-          CidrIp: 0.0.0.0/0
-      SecurityGroupEgress:
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 10.98.0.0/16  # Only route to the VPC
 
   GitLabTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -67,7 +48,7 @@ Resources:
         - !Ref publicSubnet0id
         - !Ref publicSubnet1id
       SecurityGroups:
-        - !Ref GitLabALBSecurityGroup
+        - !Ref GitLabALBSecurityGroupId
 
   GitLabListener:
     Type: AWS::ElasticLoadBalancingV2::Listener

@@ -5,9 +5,7 @@ Description: Security stack which provides EKS cluster and worker groups with pe
 Parameters:
   vpc0id:
     Type: String
-  GitLabALBSecurityGroup:
-    Type: String
-# Tag parameters 
+# Tag parameters
   owner: 
     Type: String
   ownerEmail: 
@@ -21,6 +19,35 @@ Parameters:
     Type: String
 
 Resources:
+  gitLabALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow HTTP/HTTPS to the GitLab ALB
+      VpcId: !Ref vpc0id
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 10.98.0.0/16
+      Tags:
+        - Key: Name
+          Value: !Join ['-', [!Ref 'AWS::StackName', gitlab-alb-sg]]
+        - Key: owner
+          Value: !Ref owner
+        - Key: Environment
+          Value: !Ref environment
+        - Key: project
+          Value: !Ref project
+
   clusterSecurityGroup: 
     Type: AWS::EC2::SecurityGroup
     Properties: 
@@ -77,9 +104,12 @@ Resources:
           Value: !Ref project 
       VpcId: !Ref vpc0id
 
-Outputs: 
-  clusterSGid: 
+Outputs:
+  gitLabALBSecurityGroupId:
+    Value: !Ref gitLabALBSecurityGroup
+
+  clusterSGid:
     Value: !Ref clusterSecurityGroup
 
-  managerSGid: 
+  managerSGid:
     Value: !Ref managerSecurityGroup
