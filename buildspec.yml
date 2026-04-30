@@ -1,14 +1,14 @@
 version: 0.2
 env:
   secrets-manager:
-    AWS_ACCESS_KEY_ID: admin-key:key-id
-    AWS_SECRET_ACCESS_KEY: admin-key:secret-key
+    AWS_ACCESS_KEY_ID: doggy-key:key-id
+    AWS_SECRET_ACCESS_KEY: doggy-key:secret-key
   variables:
     REGION: "us-east-1"
     TEMPLATE_BUCKET: "doggy-template-build-terminal"
     EMAIL: "idanzigm@gmail.com"
     AWS_ID: "109798190983"
-    OPEN_AI_SECRET_KEY: "arn:aws:secretsmanager:us-east-1:109798190983:secret:openai-key-NSazkz"
+    OPEN_AI_SECRET_KEY: "arn:aws:secretsmanager:us-east-1:109798190983:secret:openai-key-oFvgSl"
 phases:
   install:
     runtime-versions:

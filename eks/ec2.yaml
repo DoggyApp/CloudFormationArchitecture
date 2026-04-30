@@ -57,10 +57,11 @@ Parameters:
       - x86
   instanceSize: 
     Type: String
-    Default: medium 
+    Default: large
     AllowedValues: 
       - small 
       - medium 
+      - large
 #Tag parameters 
   owner: 
     Type: String
@@ -84,9 +85,11 @@ Mappings:
     graviton: 
       small: t4g.small
       medium: t4g.medium 
+      large: t4g.large
     x84: 
       small: t4.small 
       medium: t4.medium 
+      large: t3.large
 
 Resources: 
   mgmtLaunchTemplate: 
@@ -246,7 +249,7 @@ Resources:
             pip install ansible boto3 botocore openshift kubernetes pyyaml
 
 
-            ansible-galaxy collection install kubernetes.core
+            ansible-galaxy collection install kubernetes.core community.general
 
 
             echo "setup() {

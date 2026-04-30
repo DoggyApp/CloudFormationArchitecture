@@ -63,10 +63,29 @@ Resources:
                 - Sid: AllowNodeAccess
                   Effect: Allow
                   Action:
-                    - ssm:StartSession,
-                    - ssm:SendCommand,
+                    - ssm:StartSession
+                    - ssm:SendCommand
                     - ssm:DescribeInstanceInformation
                   Resource: "*"
+          - PolicyName: ecr-push-doggyapp
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - ecr:GetAuthorizationToken
+                  Resource: '*'
+                - Effect: Allow
+                  Action:
+                    - ecr:BatchCheckLayerAvailability
+                    - ecr:GetDownloadUrlForLayer
+                    - ecr:BatchGetImage
+                    - ecr:PutImage
+                    - ecr:InitiateLayerUpload
+                    - ecr:UploadLayerPart
+                    - ecr:CompleteLayerUpload
+                  Resource:
+                    - !Sub arn:aws:ecr:us-east-1:109798190983:repository/doggyapp/*
       ManagedPolicyArns: 
         - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
         - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy

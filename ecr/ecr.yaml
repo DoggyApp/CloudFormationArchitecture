@@ -1,0 +1,56 @@
+# CloudFormationArchitecture/ecr.yaml
+AWSTemplateFormatVersion: '2010-09-09'
+Description: ECR repositories for DoggyApp services
+
+Resources:
+  FrontendRepo:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: doggyapp/frontend
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      LifecyclePolicy:
+        LifecyclePolicyText: |
+          {
+            "rules": [{
+              "rulePriority": 1,
+              "description": "Keep only the last 10 images",
+              "selection": {
+                "tagStatus": "any",
+                "countType": "imageCountMoreThan",
+                "countNumber": 10
+              },
+              "action": { "type": "expire" }
+            }]
+          }
+
+  OwnerServiceRepo:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: doggyapp/owner-service
+      ImageScanningConfiguration:
+        ScanOnPush: true
+
+  UserServiceRepo:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: doggyapp/user-service
+      ImageScanningConfiguration:
+        ScanOnPush: true
+
+  OrgServiceRepo:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: doggyapp/org-service
+      ImageScanningConfiguration:
+        ScanOnPush: true
+
+Outputs:
+  FrontendRepoUri:
+    Value: !GetAtt FrontendRepo.RepositoryUri
+  OwnerServiceRepoUri:
+    Value: !GetAtt OwnerServiceRepo.RepositoryUri
+  UserServiceRepoUri:
+    Value: !GetAtt UserServiceRepo.RepositoryUri
+  OrgServiceRepoUri:
+    Value: !GetAtt OrgServiceRepo.RepositoryUri

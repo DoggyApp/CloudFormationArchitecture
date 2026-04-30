@@ -1,0 +1,90 @@
+# CloudFormationArchitecture/gitlab-alb.yaml
+AWSTemplateFormatVersion: '2010-09-09'
+Description: ALB that exposes the self-hosted GitLab instance on the bastion
+
+Parameters:
+  vpc0id:
+    Type: String
+  publicSubnet0id:
+    Type: String
+  publicSubnet1id:
+    Type: String
+  mgmtInstanceId:
+    Type: String  # EC2 instance ID of the bastion
+  owner:
+    Type: String
+  environment:
+    Type: String
+  project:
+    Type: String
+
+Resources:
+
+  # Security group for the ALB — allows internet traffic on port 80 and 443
+  GitLabALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow HTTP/HTTPS to the GitLab ALB
+      VpcId: !Ref vpc0id
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 10.98.0.0/16  # Only route to the VPC
+
+  GitLabTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: doggy-gitlab-tg
+      Protocol: HTTP
+      Port: 80
+      VpcId: !Ref vpc0id
+      TargetType: instance
+      Targets:
+        - Id: !Ref mgmtInstanceId
+          Port: 80
+      HealthCheckPath: /-/health
+      HealthCheckIntervalSeconds: 30
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 5
+
+  GitLabALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: doggy-gitlab-alb
+      Scheme: internet-facing
+      Type: application
+      Subnets:
+        - !Ref publicSubnet0id
+        - !Ref publicSubnet1id
+      SecurityGroups:
+        - !Ref GitLabALBSecurityGroup
+
+  GitLabListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref GitLabALB
+      Protocol: HTTP
+      Port: 80
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref GitLabTargetGroup
+
+Outputs:
+  GitLabALBDns:
+    Value: !GetAtt GitLabALB.DNSName
+    Description: >
+      Use this hostname as your GitLab external URL and as the git remote
+      when pushing from your IDE.
+
+  GitLabALBSecurityGroup: 
+    Value: !Ref GitLabALBSecurityGroup
