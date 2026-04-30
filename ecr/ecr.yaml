@@ -1,6 +1,6 @@
 # CloudFormationArchitecture/ecr.yaml
 AWSTemplateFormatVersion: '2010-09-09'
-Description: ECR repositories for DoggyApp services
+Description: ECR repositories for DoggyApp services.
 
 Resources:
   FrontendRepo:
