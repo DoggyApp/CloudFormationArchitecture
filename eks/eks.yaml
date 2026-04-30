@@ -76,7 +76,7 @@ Resources:
   eksNodeGroup0: 
     Type: AWS::EKS::Nodegroup
     Properties:
-      AmiType: AL2_x86_64
+      AmiType: AL2023_x86_64_STANDARD
       CapacityType: ON_DEMAND
       ClusterName: doggy-app-eks-cluster-0
       NodeRole: !Ref nodeRoleArn
@@ -121,7 +121,7 @@ Resources:
   eksNodeGroup1: 
     Type: AWS::EKS::Nodegroup
     Properties:
-      AmiType: AL2_x86_64
+      AmiType: AL2023_x86_64_STANDARD
       CapacityType: ON_DEMAND
       ClusterName: doggy-app-eks-cluster-0
       NodeRole: !Ref nodeRoleArn
