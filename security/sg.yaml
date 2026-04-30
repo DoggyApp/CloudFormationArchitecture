@@ -90,7 +90,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
-          SourceSecurityGroupId: !Ref GitLabALBSecurityGroup
+          SourceSecurityGroupId: !Ref gitLabALBSecurityGroup
       Tags: 
         - Key: Name 
           Value: !Join ['-', [!Ref 'AWS::StackName', EC2-manager-sg ]]
