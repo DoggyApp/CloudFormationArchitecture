@@ -258,7 +258,7 @@ Resources:
             pip install --upgrade pip setuptools wheel
 
             
-            pip install ansible boto3 botocore openshift kubernetes pyyaml
+            pip install ansible boto3 botocore openshift kubernetes pyyaml python-gitlab
 
 
             ansible-galaxy collection install kubernetes.core community.general
