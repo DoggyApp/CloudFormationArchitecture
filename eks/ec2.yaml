@@ -46,10 +46,7 @@ Parameters:
     AllowedValues: 
       - True
       - False
-  keyName: 
-    Type: AWS::EC2::KeyPair::KeyName
-    Default: doggyApp-mgmt-keyPair
-  imageId: 
+  imageId:
     Type: String 
     Default: graviton
     AllowedValues:
@@ -91,7 +88,22 @@ Mappings:
       medium: t4.medium 
       large: t3.large
 
-Resources: 
+Resources:
+  mgmtKeyPair:
+    Type: AWS::EC2::KeyPair
+    Properties:
+      KeyName: doggyApp-mgmt-keyPair
+      KeyType: rsa
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-mgmt-keypair"
+        - Key: owner
+          Value: !Ref owner
+        - Key: Environment
+          Value: !Ref environment
+        - Key: project
+          Value: !Ref project
+
   mgmtLaunchTemplate: 
     Type: AWS::EC2::LaunchTemplate
     Properties: 
@@ -304,7 +316,7 @@ Resources:
           Arn: !GetAtt mgmtInstanceProfile.Arn
         ImageId: !FindInMap [ amiId, !Ref 'AWS::Region', !Ref imageId] 
         InstanceType: !FindInMap [instanceMap, !Ref imageId, !Ref instanceSize]
-        KeyName: !Ref keyName
+        KeyName: !Ref mgmtKeyPair
         MetadataOptions: 
           HttpTokens: required 
         SecurityGroupIds: 
@@ -330,13 +342,21 @@ Resources:
       Roles:
         - !Ref mgmtInstanceRole
 
-  mgmtInstance: 
+  mgmtInstance:
     Type: AWS::EC2::Instance
-    DependsOn: 
-      - mgmtInstanceProfile 
-    Properties: 
+    DependsOn:
+      - mgmtInstanceProfile
+    Properties:
       LaunchTemplate:
         LaunchTemplateId: !Ref mgmtLaunchTemplate
         Version: !GetAtt mgmtLaunchTemplate.LatestVersionNumber
       SubnetId: !Ref privateSubnet0id
+
+Outputs:
+  mgmtInstanceId:
+    Value: !Ref mgmtInstance
+
+  mgmtKeyPairSsmPath:
+    Description: SSM path to retrieve the private key - aws ssm get-parameter --name <value> --with-decryption --query Parameter.Value --output text
+    Value: !Sub "/ec2/keypair/${mgmtKeyPair.KeyPairId}"
 
