@@ -114,7 +114,7 @@ Resources:
               DeleteOnTermination: True
               Encrypted: True
               KmsKeyId: !Ref ec2KeyId
-              VolumeSize: 8 
+              VolumeSize: 20
               VolumeType: !Ref volumeType
         UserData:
           Fn::Base64: !Sub |
