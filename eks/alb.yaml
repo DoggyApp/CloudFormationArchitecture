@@ -66,6 +66,3 @@ Outputs:
     Description: >
       Use this hostname as your GitLab external URL and as the git remote
       when pushing from your IDE.
-
-  GitLabALBSecurityGroup: 
-    Value: !Ref GitLabALBSecurityGroup
