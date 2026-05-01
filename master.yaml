@@ -308,7 +308,7 @@ Resources:
   gitlabAlbStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub https://s3.amazonaws.com/${templatePath}/eks/gitlab-alb.yaml
+      TemplateURL: !Sub https://s3.amazonaws.com/${templatePath}/eks/alb.yaml
       Parameters:
         vpc0id: !GetAtt vpcStack.Outputs.vpc0id
         publicSubnet0id: !GetAtt vpcStack.Outputs.publicSubnet0id
