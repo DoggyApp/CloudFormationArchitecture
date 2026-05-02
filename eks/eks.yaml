@@ -62,7 +62,7 @@ Resources:
       #       - Type: audit
       #       - Type: authenticator
       #       - Type: controllerManager
-      #       - Type: cheduler
+      #       - Type: scheduler
       ResourcesVpcConfig: 
         EndpointPrivateAccess: true
         EndpointPublicAccess: false
