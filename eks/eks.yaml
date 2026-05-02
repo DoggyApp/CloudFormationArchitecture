@@ -32,6 +32,22 @@ Parameters:
     Type: String
 
 Resources:
+  nodeLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: doggy-app-eks-node-lt
+      LaunchTemplateData:
+        BlockDeviceMappings:
+          - DeviceName: /dev/xvda
+            Ebs:
+              VolumeSize: 20
+              VolumeType: gp3
+              DeleteOnTermination: true
+        MetadataOptions:
+          HttpEndpoint: enabled
+          HttpTokens: required
+          HttpPutResponseHopLimit: 2
+
   eksCluster: 
     Type: AWS::EKS::Cluster
     Properties: 
@@ -75,15 +91,15 @@ Resources:
     Type: AWS::EKS::Nodegroup
     Properties:
       AmiType: AL2023_x86_64_STANDARD
-      CapacityType: ON_DEMAND
+      CapacityType: SPOT
       ClusterName: !Ref eksCluster
       NodeRole: !Ref nodeRoleArn
-      DiskSize: 20
       # ForceUpdateEnabled: Boolean
-      InstanceTypes: 
+      InstanceTypes:
         - t3.medium
-      # LaunchTemplate: 
-      #   LaunchTemplateSpecification
+      LaunchTemplate:
+        Id: !Ref nodeLaunchTemplate
+        Version: !GetAtt nodeLaunchTemplate.LatestVersionNumber
       NodegroupName: doggy-app-eks-ng-0
       # ReleaseVersion: String
       ScalingConfig: 
@@ -116,17 +132,15 @@ Resources:
     Type: AWS::EKS::Nodegroup
     Properties:
       AmiType: AL2023_x86_64_STANDARD
-      CapacityType: ON_DEMAND
+      CapacityType: SPOT
       ClusterName: !Ref eksCluster
       NodeRole: !Ref nodeRoleArn
-      DiskSize: 20
       # ForceUpdateEnabled: Boolean
-      InstanceTypes: 
+      InstanceTypes:
         - t3.medium
-      # Labels: 
-      #   Key: Value
-      # LaunchTemplate: 
-      #   LaunchTemplateSpecification
+      LaunchTemplate:
+        Id: !Ref nodeLaunchTemplate
+        Version: !GetAtt nodeLaunchTemplate.LatestVersionNumber
       NodegroupName: doggy-app-eks-ng-monitoring
       # ReleaseVersion: String
       ScalingConfig: # referes to how many nodes can scale NOT how many pods
