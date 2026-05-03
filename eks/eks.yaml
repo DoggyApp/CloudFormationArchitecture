@@ -97,14 +97,18 @@ Resources:
       # ForceUpdateEnabled: Boolean
       InstanceTypes:
         - t3.medium
+        - t3.large
+        - t3a.medium
+        - t3a.large
+        - t3.xlarge
       LaunchTemplate:
         Id: !Ref nodeLaunchTemplate
         Version: !GetAtt nodeLaunchTemplate.LatestVersionNumber
       NodegroupName: doggy-app-eks-ng-0
       # ReleaseVersion: String
-      ScalingConfig: 
-          DesiredSize: 1
-          MaxSize: 3
+      ScalingConfig:
+          DesiredSize: 2
+          MaxSize: 4
           MinSize: 0
       Subnets: 
         - !Ref privateSubnet0id

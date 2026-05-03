@@ -261,7 +261,7 @@ Resources:
             pip install ansible boto3 botocore openshift kubernetes pyyaml python-gitlab
 
 
-            ansible-galaxy collection install kubernetes.core community.general
+            ansible-galaxy collection install kubernetes.core community.general "amazon.aws:>=7.0.0"
 
 
             echo "setup() {
