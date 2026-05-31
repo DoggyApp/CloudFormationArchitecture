@@ -1,0 +1,82 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: EFS filesystem for Postgres storage — mount targets in both private subnets so the pod can schedule in either AZ
+
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+  PrivateSubnet0Id:
+    Type: AWS::EC2::Subnet::Id
+    Description: Private subnet in us-east-1a
+  PrivateSubnet1Id:
+    Type: AWS::EC2::Subnet::Id
+    Description: Private subnet in us-east-1b
+  ClusterSecurityGroupId:
+    Type: AWS::EC2::SecurityGroup::Id
+    Description: EKS cluster security group attached to all nodes
+  owner:
+    Type: String
+  ownerEmail:
+    Type: String
+  environment:
+    Type: String
+  project:
+    Type: String
+
+Resources:
+  EfsMountSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow NFS from EKS nodes to EFS mount targets
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 2049
+          ToPort: 2049
+          SourceSecurityGroupId: !Ref ClusterSecurityGroupId
+      Tags:
+        - Key: owner
+          Value: !Ref owner
+        - Key: ownerEmail
+          Value: !Ref ownerEmail
+        - Key: environment
+          Value: !Ref environment
+        - Key: project
+          Value: !Ref project
+
+  EfsFileSystem:
+    Type: AWS::EFS::FileSystem
+    Properties:
+      Encrypted: true
+      PerformanceMode: generalPurpose
+      ThroughputMode: bursting
+      FileSystemTags:
+        - Key: owner
+          Value: !Ref owner
+        - Key: ownerEmail
+          Value: !Ref ownerEmail
+        - Key: environment
+          Value: !Ref environment
+        - Key: project
+          Value: !Ref project
+
+  MountTarget0:
+    Type: AWS::EFS::MountTarget
+    Properties:
+      FileSystemId: !Ref EfsFileSystem
+      SubnetId: !Ref PrivateSubnet0Id
+      SecurityGroups:
+        - !Ref EfsMountSecurityGroup
+
+  MountTarget1:
+    Type: AWS::EFS::MountTarget
+    Properties:
+      FileSystemId: !Ref EfsFileSystem
+      SubnetId: !Ref PrivateSubnet1Id
+      SecurityGroups:
+        - !Ref EfsMountSecurityGroup
+
+Outputs:
+  EfsFileSystemId:
+    Value: !Ref EfsFileSystem
+    Export:
+      Name: EfsFileSystemId

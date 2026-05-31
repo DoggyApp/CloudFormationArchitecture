@@ -2,13 +2,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: EKS stack which creates EKS cluster and worker groups 
 
 Parameters:
-#Secret Parameters 
-  AdminAccessKey:
-    Type: String
-  AdminSecretKey:
-    Type: String
-
-#Env Parameters 
+#Env Parameters
   Email: 
     Type: String
   AWSID:
@@ -153,50 +147,35 @@ Resources:
             mv eksctl /usr/local/bin/
             chmod +x /usr/local/bin/eksctl
 
-            echo "[INFO] Configuring AWS CLI credentials..."
-            mkdir -p /home/ec2-user/.aws
+            echo "[INFO] Creating AWS CLI config directory..."
+            mkdir -p /home/ec2-user/.aws /root/.aws
             chown ec2-user:ec2-user /home/ec2-user/.aws
 
             cat <<EOF > /home/ec2-user/.aws/config
             [default]
-            role_arn = arn:aws:iam::109798190983:role/deploy-cfn-template-role
             region = us-east-1
-            source_profile = eks-cluster-admin
             output = json
 
-            [profile eks-cluster-admin]
+            [sso-session doggy-session]
+            sso_start_url = https://d-90660d7b78.awsapps.com/start
+            sso_region = us-east-1
+            sso_registration_scopes = sso:account:access
+
+            [profile doggy-admin]
+            sso_session = doggy-session
+            sso_account_id = 109798190983
+            sso_role_name = AdministratorAccess
             region = us-east-1
+            output = json
             EOF
-
-            cat <<EOF > /home/ec2-user/.aws/credentials
-            [eks-cluster-admin]
-            aws_access_key_id = ${AdminAccessKey}
-            aws_secret_access_key = ${AdminSecretKey}
-            EOF
-
-            mkdir -p /root/.aws
 
             cat <<EOF > /root/.aws/config
             [default]
-            role_arn = arn:aws:iam::109798190983:role/deploy-cfn-template-role
             region = us-east-1
-            source_profile = eks-cluster-admin
             output = json
-
-            [profile eks-cluster-admin]
-            region = us-east-1
-            EOF
-
-            cat <<EOF > /root/.aws/credentials
-            [eks-cluster-admin]
-            aws_access_key_id = ${AdminAccessKey}
-            aws_secret_access_key = ${AdminSecretKey}
             EOF
 
             export PATH=$PATH:/usr/local/bin
-
-            
-            echo 'export AWS_PROFILE=eks-cluster-admin' >> /home/ec2-user/.bashrc
 
             # collect kubernetes architecture
 
@@ -247,6 +226,7 @@ Resources:
             sudo make install
 
             
+            echo 'export AWS_PROFILE=doggy-admin' >> /home/ec2-user/.bashrc
             echo 'export PATH="/usr/local/bin:$PATH"' >> /home/ec2-user/.bashrc
 
             echo '[INFO] ++++++ python3.10 -m venv /home/ec2-user/py10-ansible-env'
@@ -264,13 +244,36 @@ Resources:
             ansible-galaxy collection install kubernetes.core community.general "amazon.aws:>=7.0.0"
 
 
-            echo "setup() {
+            echo "setadmin() {
                 (
                   cd /home/ec2-user/kubernetesArchitecture/ansible || return 1
                   source /home/ec2-user/py10-ansible-env/bin/activate
                   ansible-playbook \\
                     -i inventory/hosts.yaml \\
-                    playbooks/setup.yaml \\
+                    playbooks/setadmin.yaml -vvv
+                )
+              }" \
+              >> /home/ec2-user/.bashrc
+
+            echo "setupgit() {
+                (
+                  cd /home/ec2-user/kubernetesArchitecture/ansible || return 1
+                  source /home/ec2-user/py10-ansible-env/bin/activate
+                  ansible-playbook \\
+                    -i inventory/hosts.yaml \\
+                    playbooks/setupgit.yaml \\
+                    -e 'aws_id=109798190983' -vvv
+                )
+              }" \
+              >> /home/ec2-user/.bashrc
+
+            echo "setupkube() {
+                (
+                  cd /home/ec2-user/kubernetesArchitecture/ansible || return 1
+                  source /home/ec2-user/py10-ansible-env/bin/activate
+                  ansible-playbook \\
+                    -i inventory/hosts.yaml \\
+                    playbooks/setupkube.yaml \\
                     -e 'email=idanzigm@gmail.com aws_id=109798190983 openai_secret_arn=arn:aws:secretsmanager:us-east-1:109798190983:secret:openai-key-NSazkz' -vvv
                 )
               }" \
@@ -289,26 +292,11 @@ Resources:
 
             echo "source /home/ec2-user/py10-ansible-env/bin/activate" >> /home/ec2-user/.bashrc
 
-            echo "aws eks update-kubeconfig --region us-east-1 --name $CLUSTER_NAME --profile eks-cluster-admin" >> /home/ec2-user/.bashrc
+            echo "aws sso login --profile doggy-admin" >> /home/ec2-user/.bashrc
+            echo "alias setkube='aws eks update-kubeconfig --region us-east-1 --name doggy-app-eks-cluster-0 --profile doggy-admin'" >> /home/ec2-user/.bashrc
 
-            aws eks update-kubeconfig --region us-east-1 --name "$CLUSTER_NAME" --profile eks-cluster-admin
-
-
-            cd /home/ec2-user/kubernetesArchitecture/ansible 
-
-
-            export AWS_PROFILE=eks-cluster-admin
-            export KUBECONFIG=/root/.kube/config
-
-            echo '[INFO] +++++ running ansible playbook!'
-
-            ansible-playbook \
-              -i inventory/hosts.yaml \
-              playbooks/setup.yaml \
-              -e "email=${Email} aws_id=${AWSID} openai_secret_arn=${OpenAISecret}" -vvv
-
-
-            echo "[INFO] +++++ User data script completed successfully!"
+            echo "[INFO] +++++ Bastion provisioning complete."
+            echo "[INFO] SSO login required before running setup. After 'aws sso login', run: setup()"
             echo "===== USER DATA SCRIPT END ====="
         DisableApiTermination: !Ref disableApiTermination
         EbsOptimized: !Ref ebsOptimized

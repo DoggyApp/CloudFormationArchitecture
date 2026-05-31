@@ -36,17 +36,15 @@ Resources:
             PolicyDocument:
               Version: "2012-10-17"
               Statement:
-                - Sid: AllowClusterAccess
+                - Sid: EKSDescribeAndAuth
                   Effect: Allow
                   Action:
                     - eks:DescribeCluster
+                    - eks:AccessKubernetesApi
                     - sts:GetCallerIdentity
-                    - sts:AssumeRole
                   Resource: !Ref eksClusterArn
-      ManagedPolicyArns: 
-        - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
-        - arn:aws:iam::aws:policy/AmazonEKSServicePolicy
-        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore # allows the instance to be accessed from SSM so that all ports can remain closed 
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
       Tags: 
         - Key: Name 
           Value: !Join ['-', [!Ref 'AWS::StackName', 'role' ]]
