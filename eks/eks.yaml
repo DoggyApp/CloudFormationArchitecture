@@ -182,5 +182,8 @@ Resources:
 
 Outputs:
 
-  eksClusterArn: 
+  eksClusterArn:
     Value: !GetAtt eksCluster.Arn
+
+  eksClusterSecurityGroupId:
+    Value: !GetAtt eksCluster.ClusterSecurityGroupId

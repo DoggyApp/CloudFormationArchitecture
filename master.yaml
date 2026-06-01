@@ -311,14 +311,14 @@ Resources:
     Type: AWS::CloudFormation::Stack
     DependsOn:
       - vpcStack
-      - sgStack
+      - eksStack
     Properties:
       TemplateURL: !Sub "https://s3.amazonaws.com/${templatePath}/storage/efs.yaml"
       Parameters:
         VpcId: !GetAtt vpcStack.Outputs.vpc0id
         PrivateSubnet0Id: !GetAtt vpcStack.Outputs.privateSubnet0id
         PrivateSubnet1Id: !GetAtt vpcStack.Outputs.privateSubnet1id
-        ClusterSecurityGroupId: !GetAtt sgStack.Outputs.clusterSGid
+        ClusterSecurityGroupId: !GetAtt eksStack.Outputs.eksClusterSecurityGroupId
         owner: !Ref owner
         ownerEmail: !Ref ownerEmail
         environment: !Ref environment
