@@ -78,5 +78,3 @@ Resources:
 Outputs:
   EfsFileSystemId:
     Value: !Ref EfsFileSystem
-    Export:
-      Name: EfsFileSystemId
