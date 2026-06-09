@@ -3,7 +3,9 @@
 This project provides an infrastructure-as-code solution for deploying a highly available 
 Amazon EKS (Elastic Kubernetes Service) cluster across two Availability Zones using AWS 
 CloudFormation. The setup includes an EC2 Bastion Host to provide secure SSM access for 
-managing the cluster and related resources.
+managing the cluster and related resources. A private EC2 bastion host provides secure SSM 
+and AWS SSO access for managing the cluster and related resources. Deployment is handled by 
+an AWS CodeBuild pipeline — no access keys are ever stored or passed as parameters.
 
 🛠️ Features
 
@@ -11,7 +13,7 @@ managing the cluster and related resources.
 
     🌐 Spans across two Availability Zones for high availability
 
-    🔐 EC2 Bastion Host for secure management access
+    🔐 EC2 Bastion Host for secure management access with ALB for GitLab access 
 
     🔄 Supports cluster upgrades and scalability
 
@@ -19,6 +21,10 @@ managing the cluster and related resources.
 
     🏃 Automated deployment of Kubernets cluster, monitoring namespace, alerting, ingress 
     and application for complete end to end automation. 
+
+    🧳 EFS-backed persistent storage for the database
+
+    🖼️ ECR for container image storage
 
 🧱 Architecture
 
@@ -35,114 +41,190 @@ managing the cluster and related resources.
 
         Custom VPC with public, private and protected subnets
 
-        NAT Gateway setup
+        NAT Gateway in each AZ
 
     Bastion Host
 
-        EC2 instance in a private subnet
+        ARM (Graviton) in a private subnet
 
-        Used for secure management access via SSM 
+        Accesses the EKS cluster via an attached IAM role — no access keys
+
+        Authenticates to AWS using AWS SSO (`aws sso login --profile doggy-admin`)
+
+        KMS-encrypted EBS volume
+
+    Storage
+
+        EFS file system mounted to the private subnets for persistent database storage
+
+    ECR
+
+        Elastic Container Registry for storing application container images
+
+    ALB
+
+        Application Load Balancer in public subnets, forwarding traffic to the GitLab instance running on the bastion
 
 🚀 Deployment
 
     You must have some things set up before you can run the start up script 
+        1. Install the AWS CLI (steps vary by OS — see the [AWS docs](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)).
 
-        1. Create a key, secret key pair on a user that has the appropriate permissions to run kubectl, access SSM, and assume identities. I used the AWS provided "AdministratorAccess" permissions, the internet strongly advises me not to use the root account. 
+        2. **Set up IAM Identity Center** (if you haven't already):
 
-        Either create a user, or use one you already have with robust permissions, and in the IAM console create a key pair for them under "Security Credentials". 
-        
-        (This is also advised against and you will get a warning, AWS advises that you grant permissions by assigning roles, not by using access keys, if I had created the bastion first and then deployed the cluster from there through the pipeline, rather than by deploying from a personal computer, you would probably not need to use an access key. But you can deactivate the key after you are done.)
+            1. In the AWS console, go to **IAM Identity Center** and enable it.
+            2. Create a user for yourself and assign it the `AdministratorAccess` permission set on your account.
+            3. Note the **AWS access portal URL** shown on the IAM Identity Center dashboard (it looks like `https://d-xxxxxxxxxx.awsapps.com/start`).
 
-        Configure the profile of this user on your personal computer. You'll need to install the AWS CLI, this is done differently depending on your OS, so I'll leave that to you. 
+        3 **Configure the local profile:**
 
-        these are the commands to set up an AWS profile 
+```bash
+aws configure sso
+```
 
-            aws configure --profile doggy-demo-profile 
+This will prompt you for:
 
-        This will prompt you for the <access key ID> <Secret Access key> <default region name> <default output format>
+| Prompt | Value |
+|---|---|
+| SSO session name | `doggy-session` |
+| SSO start URL | your IAM Identity Center portal URL |
+| SSO region | `us-east-1` |
+| SSO registration scopes | `sso:account:access` |
+| Account ID | your 12-digit AWS account ID |
+| Role name | `AdministratorAccess` |
+| Default region | `us-east-1` |
+| Default output format | `json` |
+| Profile name | `doggy-admin` |
 
-        the access key and secret access key will be the ones you just made in the console. The default region will be "us-east-1" and output can be "yaml" or "json" whichever you prefer. I like Yaml. 
+This writes a profile called `doggy-admin` to `~/.aws/config` — the same profile name used on the bastion, so the mental model is consistent throughout.
 
-        2. Create an API key on OpenAI and save it to a secret with the key value pair being "key, <apikey>" it is important that you make the value "key" becuase that is how i coded it in the alert manager script (though writing this now you can save secrets as single strings and that would have been better, you can see in "KubernetesArchitecture/alerting/prometheus-webhook.py). 
+        4. **Log in before running any commands:**
 
-        I'll leave it up to you to collect the apikey from open AI, if create a user at https://openai.com/api/ they have made it very easy to create an API key. 
+```bash
+aws sso login --profile doggy-admin
+```
 
-        You will need to load money onto OpenAI to use the platform, I configured my app to use the cheapest option, 2 dollars should be more than enough for a demonstration. 
+This opens a browser to complete the SSO login. Tokens are cached locally and valid for the session duration configured in IAM Identity Center (typically 8–12 hours).
 
-        Once you have the key and the funds loaded, take that key to AWS secrets manager in the AWS console. You don't want this key to get out into the open so it is loaded into the application from the ARN of the key. 
-    
-    Once this is done... 
+        5. S3 bucket for nested templates
 
-        git clone https://github.com/DoggyApp/CloudFormationArchitecture.git
-        cd CloudFormationArchitecture
+The CloudFormation package command uploads nested templates to S3. Create the bucket if it doesn't exist:
 
-        aws cloudformation package \
-            --template-file master.yaml \
-            --s3-bucket doggy-template-build-terminal \
-            --output-template-file packaged-root-template.yaml \ 
-            --profile doggy-demo-profile
+```bash
+aws s3 mb s3://doggy-template-build-terminal --region us-east-1 --profile doggy-admin
+```
 
-        aws cloudformation validate-template \
-            --template-body file://packaged-root-template.yaml \
-            --profile doggy-demo-profile
+        6. OpenAI API key in Secrets Manager
 
-        aws cloudformation deploy \
-          --template-file packaged-root-template.yaml \
-          --stack-name doggy-stack \
-          --capabilities CAPABILITY_NAMED_IAM \
-          --region us-east-1 \ 
-          --parameter-overrides \ 
-            AdminAccessKey=<access_key> \ # same one used in this doggy-demo-profile 
-            AdminSecretKey=<secret_access_key> \ # """"
-            email=<email> \ # use the email you would like to recieve alerts to 
-            AwsId=<AwsId> \ # your AWS ID 
-            OpenAiARN=<SecretARN> # the ARN of the secret you created above 
+The alerting pod uses OpenAI. Create an account at [https://openai.com/api/](https://openai.com/api/), generate an API key, and load a small amount of credit (a couple of dollars is more than enough for a demo).
 
-    The script should take it from here to deploy everything, there is an ansible script that setsup the environment on the start up of the EC2 management instance between that and EKS spinning up, it will take around 30 min to get everything up and running. But you should recieve an email confirming the subscription to "doggy-alerts". 
+Store the key in AWS Secrets Manager. The secret should store the key as a single plaintext string (or as a key/value pair with key `key`):
 
-    In the EC2 startup script I define some useful functions in the .bashrc file. One is 
+```bash
+aws secretsmanager create-secret \
+  --name openai-key \
+  --secret-string '{"openai-key":"<your-openai-key>"}' \
+  --region us-east-1 \
+  --profile doggy-admin
+```
 
-        startup 
+Note the ARN that is returned — you will pass it as `OpenAISecret` during deployment.
 
-    This will automatically run the Ansible script to setup the environment. 
+---
 
-    the other is 
+### Deploy
 
-        teardown 
+```bash
+git clone https://github.com/DoggyApp/CloudFormationArchitecture.git
+cd CloudFormationArchitecture
+```
 
-    This will delete the entire environment including subscriptions (if you tear it down without confirming the subscription you will be unable to delete it, though the AWS garbage collector will delete it within 2 to 5 days of the SNS topic being deleted, but will be mildly annoying for that time. So be warned!) 
+Package nested templates to S3:
 
-    for a walk though of parusing that environment look to the KubernetesArchitecture README! 
+```bash
+aws cloudformation package \
+  --template-file master.yaml \
+  --s3-bucket doggy-template-build-terminal \
+  --output-template-file packaged-root-template.yaml \
+  --profile doggy-admin
+```
 
-    Remeber to deavtivate the access key when you are done! AWS will not automatically deactivate them if they go unused, but they will ping a security recommnedation on your IAM page when you next look at it. 
+Validate the packaged template:
 
-🛠️ Troubleshooting 
+```bash
+aws cloudformation validate-template \
+  --template-body file://packaged-root-template.yaml \
+  --profile doggy-admin
+```
 
-    If you go to the CloudFormation console in AWS you will be able to see all of the stacks and where they fail. If you click on the failed stack, then on "events" you will be able to see which resource failed to deploy, at the top of the stack will be an error message with more information on why, often they are permission errors. You can use these errors to direct you in fixing the issue. 
+Deploy the stack:
 
-🛡️ Security 
+```bash
+aws cloudformation deploy \
+  --template-file packaged-root-template.yaml \
+  --stack-name doggy-stack \
+  --capabilities CAPABILITY_NAMED_IAM \
+  --region us-east-1 \
+  --parameter-overrides \
+    Email=<your-alert-email> \
+    AWSID=<your-aws-account-id> \
+    OpenAISecret=<arn-of-openai-secret> \
+  --profile doggy-admin
+```
 
-    🔐 Private subnets are used to restrict access to the Kubernetes cluster and worker nodes 
-    are placed in the private subet. 
+No access keys are passed as stack parameters. The bastion host authenticates to AWS using the IAM role attached to the instance and AWS SSO — credentials are never stored in the template or passed on the command line.
 
-    🔐 Security group on mgmt instance blocks all traffic, only allowing SSM, and is placed in
-    a private subnet to ensure no public access. 
+The full stack — EKS cluster, bastion, EFS, ALB, ECR, and all supporting resources — takes around 30 minutes to come up. Check for the mgmt instance in EC2 intances, it will take a further 10 minutes for Python 10 to install, you will know that it is complete when you login and the python environment is present (shown in the terminal as (python 10 <user> $)). 
 
-    🔐 Security group on Kubernetes cluster blocks all traffic, except TCP originating from mgmt 
-    instance security group. 
+---
 
-    🔐 Mgmt instance role only given access to doggy-app-cluster resource. 
+### Alternatively: deploy via CodeBuild
 
-    🔐 Access Key and Secret Access Key (needed to access kubernetes cluster) stored as secrets 
-    and pulled from AWS secrets manager during build. 
+The `buildspec.yml` in this repo is designed to run the package, validate, and deploy steps inside an AWS CodeBuild project. CodeBuild runs under its own IAM service role, so no access keys are needed at all. The pipeline reads environment variables (`EMAIL`, `AWS_ID`) and pulls the OpenAI secret ARN directly from Secrets Manager.
 
-    🔐 KMS used to encrypt block storage on mgmt instance. 
+---
 
-    🔐 AWS profile uses admin user, not root, all users are locked behind MFA. 
+### After deployment — managing the cluster
 
-    🔐 Only admin user has permission to assume role of the pipeline and access Kube Cluster. 
+Connect to the bastion using SSM Session Manager:
+
+```bash
+aws ssm start-session --target <mgmt-instance-id> --profile doggy-admin
+```
+
+The bastion's `.bashrc` exports `AWS_PROFILE=doggy-admin` and immediately runs `aws sso login --profile doggy-admin` on login, so the SSO flow completes in the terminal before you run anything. This is the same profile used locally — the bastion SSO config mirrors what `aws configure sso` set up on your machine.
+
+Several shortcut functions are available in `.bashrc`:
+
+| Command | What it does |
+|---|---|
+| `setadmin` | Runs the Ansible playbook to grant admin access to the cluster and removes the pipeline itself (the creating entity) from the RBAC|
+| `setupkube` | Runs the full Ansible setup: monitoring, alerting, ingress, application |
+| `setupgit` | Runs the Ansible playbook to configure GitLab |
+| `setkube` | Alias — updates kubeconfig for the EKS cluster |
+| `teardown` | Deletes the entire environment including SNS subscriptions |
+
+> **Warning:** Run `teardown` only after confirming your SNS subscription. If you tear down before confirming, the unconfirmed subscription cannot be deleted and will linger for 2–5 days until AWS garbage-collects it.
 
 
+Contiue on to Kubenetes Architecture for the next steps in the deployment process. 
+---
 
+🛠️ Troubleshooting
 
-    
+Open the CloudFormation console in AWS and navigate to your stack. Clicking on a failed nested stack and selecting **Events** shows which resource failed and the error message at the top of the event list. The most common causes are permission errors on the CodeBuild or EC2 IAM roles.
+
+---
+
+🔐 Security
+
+    🔒 Worker nodes and the bastion are placed in private subnets with no public IP addresses.
+    🔒 The bastion security group blocks all inbound traffic; access is exclusively through AWS Systems Manager (SSM), which requires no open ports.
+    🔒 The EKS cluster security group only accepts TCP traffic originating from the bastion security group.
+    🔒 The bastion IAM role grants only what is needed: `eks:DescribeCluster`, `eks:AccessKubernetesApi`, `sts:GetCallerIdentity` scoped to the specific cluster ARN, plus `AmazonSSMManagedInstanceCore`.
+    🔒 No access keys are passed into the stack. The bastion authenticates to AWS using its attached IAM role and AWS SSO.
+    🔒 The OpenAI API key is stored in AWS Secrets Manager and accessed at runtime by ARN — it is never stored in code or passed as a plaintext parameter.
+    🔒 EBS volumes on the bastion are encrypted with a KMS customer-managed key.
+    🔒 IAM Identity Center (SSO) is used for all human access — locally and on the bastion. No long-lived access keys are created at any point in the setup or deployment process.
+    🔒 IAM roles are used for all service access (CodeBuild, EC2 instance profile).
+    🔒 MFA is enforced through IAM Identity Center.
