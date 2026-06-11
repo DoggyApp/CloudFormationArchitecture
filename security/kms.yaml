@@ -64,7 +64,7 @@ Resources:
               - 'kms:ScheduleKeyDeletion'
               - 'kms:CancelKeyDeletion'
             Resource: '*'
-          - Sid: Allow attachment of persistent resources 
+          - Sid: Allow attachment of persistent resources
             Effect: Allow
             Principal:
               AWS: 'arn:aws:iam::109798190983:user/admin'
@@ -73,9 +73,27 @@ Resources:
               - 'kms:ListGrants'
               - 'kms:RevokeGrant'
             Resource: '*'
-            Condition: 
-              Bool: 
+            Condition:
+              Bool:
                 kms:GrantIsForAWSResource: 'true'
+          - Sid: Allow CodeBuild role to manage key
+            Effect: Allow
+            Principal:
+              AWS: 'arn:aws:iam::109798190983:role/service-role/codebuild-master-artifact-service-role'
+            Action:
+              - 'kms:Create*'
+              - 'kms:Describe*'
+              - 'kms:Enable*'
+              - 'kms:List*'
+              - 'kms:Put*'
+              - 'kms:Update*'
+              - 'kms:Revoke*'
+              - 'kms:Disable*'
+              - 'kms:Get*'
+              - 'kms:Delete*'
+              - 'kms:ScheduleKeyDeletion'
+              - 'kms:CancelKeyDeletion'
+            Resource: '*'
       Tags: 
         - Key: Name 
           Value: !Join ['-', [!Ref 'AWS::StackName', key, ec2 ]]
